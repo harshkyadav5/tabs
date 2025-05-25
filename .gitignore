@@ -1,0 +1,35 @@
+# Node modules
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+client/.env
+server/.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Misc
+*.log
+
+# PostgreSQL (if using local dump files)
+*.sql
+
+# Tailwind Standalone CLI (optional, if you're using a build script)
+tailwind.config.js

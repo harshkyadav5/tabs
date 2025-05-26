@@ -25,8 +25,17 @@ export default function Navbar() {
           px-8 h-16
         "
       >
-        <div className="font-montserrat text-2xl font-semibold text-gray-900 dark:text-gray-100">
-          Tabs
+        <div className="p-2 flex items-center">
+          <img
+            src="./src/assets/tabs-logo-light-1.svg"
+            alt="logo"
+            className="max-h-full max-w-[120px] object-contain dark:hidden"
+          />
+          <img
+            src="./src/assets/tabs-logo-dark-1.svg"
+            alt="logo"
+            className="max-h-full max-w-[120px] object-contain hidden dark:block"
+          />
         </div>
 
         <div className="flex items-center">

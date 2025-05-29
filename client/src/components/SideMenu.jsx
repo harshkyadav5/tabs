@@ -13,9 +13,12 @@ const toolItems = [
   { label: "Color Picker", icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m13.435 7l-6.276 6.276m0 0l-2.332 2.332c-.901.901-1.352 1.352-1.59 1.925C3 18.107 3 18.744 3 20.02V21h.98c1.276 0 1.913 0 2.487-.237c.573-.238 1.024-.689 1.925-1.59l5.897-5.897m-7.13 0h7.13m0 0L17 10.565m2.209-2.176L20.82 10m-1.611-1.611l.861-.862c.293-.293.44-.439.541-.582a2.1 2.1 0 0 0 0-2.434c-.102-.143-.248-.289-.54-.582c-.293-.292-.44-.438-.582-.54a2.1 2.1 0 0 0-2.434 0c-.143.102-.29.248-.582.54l-.862.862M19.21 8.39l-3.6-3.6M14 3.18l1.611 1.611" color="currentColor"/></svg> },
 ];
 
-const fileManagementItems = [
-  { label: "Archive", icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><path d="M2 16c0-2.339 0-3.508.536-4.362a3.5 3.5 0 0 1 1.102-1.101C4.492 10 5.66 10 8 10h8c2.339 0 3.508 0 4.362.537a3.5 3.5 0 0 1 1.102 1.1C22 12.493 22 13.662 22 16s0 3.508-.537 4.362a3.5 3.5 0 0 1-1.1 1.102C19.507 22 18.338 22 16 22H8c-2.339 0-3.508 0-4.362-.537a3.5 3.5 0 0 1-1.102-1.1C2 19.507 2 18.338 2 16m18-6c0-1.4 0-2.1-.273-2.635a2.5 2.5 0 0 0-1.092-1.093C18.1 6 17.4 6 16 6H8c-1.4 0-2.1 0-2.635.272a2.5 2.5 0 0 0-1.093 1.093C4 7.9 4 8.6 4 10m14-4c0-1.886 0-2.828-.586-3.414S15.886 2 14 2h-4c-1.886 0-2.828 0-3.414.586S6 4.114 6 6"/><path d="M15 14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2"/></g></svg> },
-  { label: "Recycle Bin", icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/></svg> },
+const archivedItems = [
+  { label: "Archive", count: 34, icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><path d="M2 16c0-2.339 0-3.508.536-4.362a3.5 3.5 0 0 1 1.102-1.101C4.492 10 5.66 10 8 10h8c2.339 0 3.508 0 4.362.537a3.5 3.5 0 0 1 1.102 1.1C22 12.493 22 13.662 22 16s0 3.508-.537 4.362a3.5 3.5 0 0 1-1.1 1.102C19.507 22 18.338 22 16 22H8c-2.339 0-3.508 0-4.362-.537a3.5 3.5 0 0 1-1.102-1.1C2 19.507 2 18.338 2 16m18-6c0-1.4 0-2.1-.273-2.635a2.5 2.5 0 0 0-1.092-1.093C18.1 6 17.4 6 16 6H8c-1.4 0-2.1 0-2.635.272a2.5 2.5 0 0 0-1.093 1.093C4 7.9 4 8.6 4 10m14-4c0-1.886 0-2.828-.586-3.414S15.886 2 14 2h-4c-1.886 0-2.828 0-3.414.586S6 4.114 6 6"/><path d="M15 14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2"/></g></svg> },
+];
+
+const deletedItems = [
+  { label: "Recycle Bin", count: 7, icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/></svg> },
 ];
 
 
@@ -23,25 +26,25 @@ export default function SideMenu() {
   return (
     <aside className="fixed top-0 left-0 h-full w-80 p-10 flex flex-col justify-between">
       
-      <div className="mt-16">
-        <div className="flex justify-between items-center px-1">
-            <ul className="space-y-1">
+      <div className="mt-16 overflow-scroll">
+        <div className="flex items-center px-1">
+            <ul className="space-y-1 w-[100%]">
               <li>
                 <Link
                   to="/"
-                  className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium
+                  className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium
                     text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
                 >
-                  {/* <span className="text-lg">{item.icon}</span> */}
                   <span>For You</span>
+                  <div className="text-sm">
+                      <span className="inline-block bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded">
+                        4 new
+                      </span>
+                  </div>
                 </Link>
               </li>
             </ul>
-            <div className="text-sm text-gray-800 dark:text-gray-200">
-                <span className="inline-block bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded">
-                4 new
-                </span>
-            </div>
+            
         </div>
 
         <div className="mb-1">
@@ -98,15 +101,42 @@ export default function SideMenu() {
             </div>
 
           <ul className="space-y-1">
-            {fileManagementItems.map((item) => (
+            {archivedItems.map((item) => (
               <li key={item.label}>
                 <Link
                   to="/"
-                  className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium
+                  className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium
                     text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
                 >
-                  <span className="text-lg">{item.icon}</span>
-                  <span>{item.label}</span>
+                  <div className="flex items-center space-x-3">
+                    <span className="text-lg">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </div>
+                  <div className="text-sm">
+                      <span className="inline-block text-gray-500 px-2 py-0.5 rounded">
+                        {item.count}
+                      </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+
+            {deletedItems.map((item) => (
+              <li key={item.label}>
+                <Link
+                  to="/"
+                  className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium
+                    text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                >
+                  <div className="flex items-center space-x-3">
+                    <span className="text-lg">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </div>
+                  <div className="text-sm">
+                      <span className="inline-block text-red-400 px-2 py-0.5 rounded">
+                        {item.count}
+                      </span>
+                  </div>
                 </Link>
               </li>
             ))}
@@ -114,7 +144,7 @@ export default function SideMenu() {
         </div>
       </div>
 
-      <footer className="text-xs text-center text-gray-500 dark:text-gray-400 pt-6 border-t border-white/20 dark:border-white/10">
+      <footer className="text-xs text-center text-gray-500 dark:text-gray-400 pt-6">
         © 2025 Tabs
       </footer>
     </aside>

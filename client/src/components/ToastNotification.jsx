@@ -4,13 +4,13 @@ const ToastNotification = ({ message, type, onClose }) => {
   const getToastStyles = (type) => {
     switch (type) {
       case "success":
-        return "bg-gradient-to-r from-green-400 via-teal-500 to-blue-600 bg-opacity-80 text-white";
+        return "bg-green-100/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-green-500";
       case "warning":
-        return "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 bg-opacity-80 text-black";
+        return "bg-yellow-100/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-yellow-500";
       case "error":
-        return "bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-600 bg-opacity-80 text-white";
+        return "bg-red-100/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-red-500";
       default:
-        return "bg-white/40 backdrop-blur-sm w-70 h-12 text-white";
+        return "bg-white/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-gray-500";
     }
   };
 
@@ -18,76 +18,19 @@ const ToastNotification = ({ message, type, onClose }) => {
     switch (type) {
       case "success":
         return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-2xl text-green-500"
-          >
-            <path d="M9 11l3 3L22 4" />
-            <path d="M21 12H3" />
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="text-2xl text-green-500 h-6 w-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12s4.477 10 10 10s10-4.477 10-10"/><path d="m8 12.5l2.5 2.5L16 9"/></g></svg>
         );
       case "warning":
         return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-2xl text-yellow-500"
-          >
-            <path d="M12 9v4m0 4h.01M2 12l10-9 10 9-10 9L2 12z" />
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="text-2xl text-yellow-500 h-6 w-6" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.322 9.683c2.413-4.271 3.62-6.406 5.276-6.956a4.45 4.45 0 0 1 2.804 0c1.656.55 2.863 2.685 5.276 6.956c2.414 4.27 3.62 6.406 3.259 8.146c-.2.958-.69 1.826-1.402 2.48C19.241 21.5 16.827 21.5 12 21.5s-7.241 0-8.535-1.19a4.66 4.66 0 0 1-1.402-2.48c-.362-1.74.845-3.876 3.259-8.147M11.992 16h.009M12 13V9" color="currentColor"/></svg>
         );
       case "error":
         return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-2xl text-red-500"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12" y2="16" />
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="text-2xl text-red-500 h-6 w-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><path d="M15.5 8.5L12 12m0 0l-3.5 3.5M12 12l3.5 3.5M12 12L8.5 8.5"/><circle cx="12" cy="12" r="10"/></g></svg>
         );
       default:
         return (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-2xl text-gray-500"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12" y2="16" />
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" className="text-2xl text-gray-500 h-6 w-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><circle cx="12" cy="12" r="10"/><path d="M11.992 15h.009M12 12V8"/></g></svg>
         );
     }
   };
@@ -110,9 +53,9 @@ const ToastNotification = ({ message, type, onClose }) => {
         {getToastIcon(type)}
       </div>
 
-      <div className="flex-grow text-sm">
+      <div className="flex-grow text-base">
         {/* {message} */}
-        Demo messagex
+        Demo message
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
@@ -39,36 +40,40 @@ export default function Navbar() {
 
         <div className="flex items-center">
           <div className="flex items-center space-x-4">
+            <Link to="/login">
+              <button
+                className="
+                  font-montserrat text-sm font-semibold
+                  px-4 py-2
+                  bg-gray-900 text-white
+                  border border-black dark:border-gray-100
+                  dark:bg-gray-100 dark:text-black
+                  rounded-lg shadow-sm
+                  hover:bg-gray-700 dark:hover:bg-gray-300
+                  transition-colors duration-200
+                "
+              >
+                Login
+              </button>
+            </Link>
+          </div>
+
+          <Link to="/signup">
             <button
               className="
+                ml-2
                 font-montserrat text-sm font-semibold
                 px-4 py-2
-                bg-gray-900 text-white
-                border border-black dark:border-gray-100
-                dark:bg-gray-100 dark:text-black
-                rounded-lg shadow-sm
-                hover:bg-gray-700 dark:hover:bg-gray-300
+                border border-gray-900 text-gray-900
+                dark:border-gray-100 dark:text-gray-100
+                rounded-lg
+                hover:bg-gray-200 dark:hover:bg-gray-800
                 transition-colors duration-200
               "
             >
-              Login
+              Sign Up
             </button>
-          </div>
-
-          <button
-            className="
-              ml-2
-              font-montserrat text-sm font-semibold
-              px-4 py-2
-              border border-gray-900 text-gray-900
-              dark:border-gray-100 dark:text-gray-100
-              rounded-lg
-              hover:bg-gray-200 dark:hover:bg-gray-800
-              transition-colors duration-200
-            "
-          >
-            Sign Up
-          </button>
+          </Link>
 
           <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-3" />
 

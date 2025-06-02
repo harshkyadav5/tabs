@@ -16,6 +16,12 @@ const signup = async (req, res) => {
     const lowerCaseUsername = username.toLowerCase();
     const lowerCaseEmail = email.toLowerCase();
 
+    const regex = /^[a-z0-9_.]+$/;
+    const isValidUsername = regex.test(lowerCaseUsername);
+
+    if(!isValidUsername)
+        return res.status(400).json({ error: "Username format is not valid" });
+
     try {
         const usernameCheck = await findUserByUsername(lowerCaseUsername);
 
@@ -49,25 +55,25 @@ const signup = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
+    const { emailOrUsername, password } = req.body;
 
-    if(!email || !password)
+    if(!emailOrUsername || !password)
         return res.status(400).json({ error: "Both fields are required." });
 
-    const lowerCaseEmail = email;
+    const containsAt = emailOrUsername.includes("@");
 
     try {
-        const userRes = await findUserByEmail(lowerCaseEmail);
+        const userRes = (containsAt ? await findUserByEmail(emailOrUsername) : await findUserByUsername(emailOrUsername));
 
         if(!userRes)
-            return res.status(400).json({ error: "Invalid email or password." });
+            return res.status(400).json({ error: "Invalid login credentials." });
 
         const user = userRes;
 
         const isMatch = await bcrypt.compare(password, user.password_hash);
 
         if(!isMatch)
-            return res.status(400).json({ error: "Invalid email or password." });
+            return res.status(400).json({ error: "Invalid credentials." });
 
         return res.status(200).json("Login successful");
     } catch(err) {
@@ -77,3 +83,11 @@ const login = async (req, res) => {
 }
 
 export { signup, login }
+
+
+// to validate the username to only contain 'a-z', '0-9', '_' and '.'
+
+// function isValidUsername(username) {
+//     const regex = /^[a-z0-9_.]+$/;
+//     return regex.test(username);
+// }

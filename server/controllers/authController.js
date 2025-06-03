@@ -54,7 +54,7 @@ const signup = async (req, res) => {
     }
 }
 
-const login = async (req, res) => {
+const signin = async (req, res) => {
     const { emailOrUsername, password } = req.body;
 
     if(!emailOrUsername || !password)
@@ -66,7 +66,7 @@ const login = async (req, res) => {
         const userRes = (containsAt ? await findUserByEmail(emailOrUsername) : await findUserByUsername(emailOrUsername));
 
         if(!userRes)
-            return res.status(400).json({ error: "Invalid login credentials." });
+            return res.status(400).json({ error: "Invalid credentials." });
 
         const user = userRes;
 
@@ -75,14 +75,14 @@ const login = async (req, res) => {
         if(!isMatch)
             return res.status(400).json({ error: "Invalid credentials." });
 
-        return res.status(200).json("Login successful");
+        return res.status(200).json("Sign in successful");
     } catch(err) {
-        console.error("Login error", err);
+        console.error("Sign in error", err);
         return res.status(500).json({ error: "Server error. Please try again later." });
     }
 }
 
-export { signup, login }
+export { signup, signin }
 
 
 // to validate the username to only contain 'a-z', '0-9', '_' and '.'

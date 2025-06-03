@@ -40,7 +40,7 @@ export default function Navbar() {
 
         <div className="flex items-center">
           <div className="flex items-center space-x-4">
-            <Link to="/login">
+            <Link to="/signin">
               <button
                 className="
                   font-montserrat text-sm font-semibold
@@ -53,7 +53,7 @@ export default function Navbar() {
                   transition-colors duration-200
                 "
               >
-                Login
+                Sign In
               </button>
             </Link>
           </div>

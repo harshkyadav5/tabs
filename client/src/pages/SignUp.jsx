@@ -51,7 +51,7 @@ export default function SignUp() {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white to-slate-300 dark:from-black dark:to-gray-900 transition-colors duration-300 px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md p-6 rounded-2xl shadow-xl
+        className="w-full max-w-md p-6 rounded-4xl shadow-lg
                   bg-white/40 dark:bg-black/40
                   backdrop-blur-md backdrop-saturate-150
                   border border-white/20 dark:border-white/10"
@@ -146,9 +146,9 @@ export default function SignUp() {
 
         <p className="text-sm text-center text-gray-600 dark:text-gray-400 mt-4">
           Already have an account?{" "}
-          {/* <Link to="/login" className="text-indigo-600 hover:underline">
-            Log in
-          </Link> */}
+          <Link to="/signin" className="text-indigo-600 hover:underline">
+            Sign In
+          </Link>
         </p>
       </form>
     </div>

@@ -7,33 +7,46 @@ const showHideToggle = [
 ];
 
 export default function SignIn() {
-    const [formData, setFormData] = useState({
+    const [form, setForm] = useState({
         email: "",
         password: "",
     });
     
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("");
+    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
-        setFormData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const validate = () => {
+        const newErrors = {};
+        if (!form.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+            newErrors.email = "Invalid email address";
+        }
+        if (!form.password) {
+            newErrors.password = "Password is required";
+        } else if (form.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters";
+        }
+        return newErrors;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(!formData.email || !formData.password) {
-            setError("Please fill in all fields.");
-            return;
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+        } else {
+            setErrors({});
+            console.log("Signup form submitted:", form);
         }
-        setError("");
-        console.log("Sign in Data:", formData);
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-slate-100 transition-colors duration-300 px-4">
+        <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-zinc-900 transition-colors duration-300 px-4">
             <div className="grid grid-rows-[1fr_4fr] w-full max-w-5xl h-fit p-10 rounded-4xl bg-white dark:bg-black">
                 <div className="pr-5">
                     <div className="h-full">
@@ -48,9 +61,6 @@ export default function SignIn() {
                     onSubmit={handleSubmit}
                     className="self-center grid grid-rows-[2fr_1fr]"
                 >
-                    {error && (
-                        <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
-                    )}
                     <div className="grid grid-cols-2">
                         <div>
                             <h2 className="text-4xl tracking-wide text-black dark:text-white text-left">
@@ -66,13 +76,13 @@ export default function SignIn() {
                                     type="email"
                                     name="email"
                                     id="email"
-                                    value={formData.email}
+                                    value={form.email}
                                     onChange={handleChange}
                                     className="w-full px-4 py-3.5 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
                                     placeholder="Enter your email"
                                 />
-                                {error.username && (
-                                    <p className="text-sm text-red-500 mt-1">{error.username}</p>
+                                {errors.email && (
+                                    <p className="text-sm text-red-500 mt-1">{errors.email}</p>
                                 )}
                             </div>
 
@@ -84,7 +94,7 @@ export default function SignIn() {
                                     <input
                                         name="password"
                                         id="password"
-                                        value={formData.password}
+                                        value={form.password}
                                         onChange={handleChange}
                                         className="w-full px-4 py-3.5 pr-16 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
                                         type={showPassword ? "text" : "password"}
@@ -98,8 +108,8 @@ export default function SignIn() {
                                         {showPassword ? showHideToggle[0].icon : showHideToggle[1].icon}
                                     </button>
                                 </div>
-                                {error.password && (
-                                    <p className="text-sm text-red-500 mt-1">{error.password}</p>
+                                {errors.password && (
+                                    <p className="text-sm text-red-500 mt-1">{errors.password}</p>
                                 )}
                             </div>
                         </div>

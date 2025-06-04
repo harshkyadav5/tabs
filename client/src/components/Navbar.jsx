@@ -7,7 +7,7 @@ export default function Navbar() {
     <>
       <div
         className="
-          fixed inset-0
+          fixed inset-0 select-none
           bg-gradient-to-br
           from-slate-50 to-gray-200
           dark:from-neutral-900 dark:to-slate-800
@@ -17,7 +17,7 @@ export default function Navbar() {
 
       <nav
         className="
-          fixed top-0 left-0 right-0 z-50
+          fixed top-0 left-0 right-0 z-50 select-none
           bg-white/30 dark:bg-black/30
           backdrop-blur-md
           border-b border-gray-300 dark:border-gray-700
@@ -26,16 +26,18 @@ export default function Navbar() {
         "
       >
         <div className="p-2 flex items-center">
-          <img
-            src="./src/assets/tabs-logo-light-1.svg"
-            alt="logo"
-            className="max-h-full max-w-[120px] object-contain dark:hidden"
-          />
-          <img
-            src="./src/assets/tabs-logo-dark-1.svg"
-            alt="logo"
-            className="max-h-full max-w-[120px] object-contain hidden dark:block"
-          />
+          <Link to="/">
+            <img
+              src="./src/assets/tabs-logo-light-1.svg"
+              alt="logo"
+              className="max-h-full max-w-[120px] object-contain dark:hidden"
+            />
+            <img
+              src="./src/assets/tabs-logo-dark-1.svg"
+              alt="logo"
+              className="max-h-full max-w-[120px] object-contain hidden dark:block"
+            />
+          </Link>
         </div>
 
         <div className="flex items-center">

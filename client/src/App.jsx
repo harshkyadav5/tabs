@@ -1,9 +1,14 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Home from "./pages/Home";
+import Music from "./pages/Music";
+import Notes from "./pages/Notes";
+import Bookmarks from "./pages/Bookmarks";
+import HomeLayout from "./layouts/HomeLayout";
+import SimpleLayout from "./layouts/SimpleLayout";
 
 export default function App() {
   const location = useLocation();
@@ -15,9 +20,18 @@ export default function App() {
       {!isAuthPage && <Navbar />}
 
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
+        </Route>
+
+        <Route element={<SimpleLayout />}>
+          <Route path="/music" element={<Music />} />
+        </Route>
       </Routes>
     </div>
   );

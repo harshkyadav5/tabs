@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+
 
 const featureItems = [
   { label: "Bookmarks", destination: '/bookmarks', icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 17.98V9.709c0-3.634 0-5.45 1.172-6.58S8.229 2 12 2s5.657 0 6.828 1.129C20 4.257 20 6.074 20 9.708v8.273c0 2.306 0 3.459-.773 3.871c-1.497.8-4.304-1.867-5.637-2.67c-.773-.465-1.16-.698-1.59-.698s-.817.233-1.59.698c-1.333.803-4.14 3.47-5.637 2.67C4 21.44 4 20.287 4 17.981" color="currentColor"/></svg> },
@@ -23,8 +24,24 @@ const deletedItems = [
 
 
 export default function SideMenu() {
+  const location = useLocation();
+
+  const linkClass = (path) =>
+    `flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium transition ${
+      location.pathname === path
+        ? 'bg-gray-300 dark:bg-gray-800 text-indigo-600 dark:text-indigo-300'
+        : 'text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800'
+    }`;
+
+  const linkWithCountClass = (path) =>
+    `flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium transition ${
+      location.pathname === path
+        ? 'bg-gray-300 dark:bg-gray-800 text-indigo-600 dark:text-indigo-300'
+        : 'text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800'
+    }`;
+
   return (
-    <aside className="fixed top-0 left-0 h-full w-80 p-10 flex flex-col justify-between select-none">
+    <aside className="h-full w-80 p-10 pr-5 flex flex-col justify-between select-none">
       
       <div className="mt-16 overflow-scroll">
         <div className="flex items-center px-1">
@@ -32,8 +49,9 @@ export default function SideMenu() {
               <li>
                 <Link
                   to="/"
-                  className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                    text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  // className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
+                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  className={linkWithCountClass('/')}
                 >
                   <span>For You</span>
                   <div className="text-sm">
@@ -60,8 +78,9 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                    text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  // className="flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
+                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  className={linkClass(item.destination)}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.label}</span>
@@ -84,8 +103,9 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                    text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  // className="flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
+                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  className={linkClass(item.destination)}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.label}</span>
@@ -105,8 +125,9 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                    text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  // className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
+                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  className={linkWithCountClass(item.destination)}
                 >
                   <div className="flex items-center space-x-3">
                     <span className="text-lg">{item.icon}</span>
@@ -125,8 +146,9 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                    text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  // className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
+                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
+                  className={linkWithCountClass(item.destination)}
                 >
                   <div className="flex items-center space-x-3">
                     <span className="text-lg">{item.icon}</span>

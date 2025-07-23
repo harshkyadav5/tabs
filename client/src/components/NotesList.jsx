@@ -137,20 +137,85 @@ export default function NotesList({ notes }) {
             >
               &times;
             </button>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-              {selectedNote.title}
-            </h2>
-            <p className="text-sm text-gray-500 mb-4">
-              Created: {selectedNote.createdAt} • Last Modified: {selectedNote.modifiedAt}
-            </p>
-            <textarea
-              className="w-full min-h-[240px] p-3 border rounded-md text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800"
-              defaultValue={selectedNote.content}
-            />
-            <div className="mt-4 text-right">
-              <button className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-900 transition">
-                Save Changes
-              </button>
+
+            <div className="space-y-4">
+              <input
+                type="text"
+                className="w-full text-xl font-semibold text-gray-900 border-b focus:outline-none pb-1"
+                value={selectedNote.title}
+                onChange={(e) =>
+                  setSelectedNote({ ...selectedNote, title: e.target.value })
+                }
+              />
+
+              <textarea
+                className="w-full min-h-[200px] p-3 border rounded-md text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800"
+                value={selectedNote.content}
+                onChange={(e) =>
+                  setSelectedNote({ ...selectedNote, content: e.target.value })
+                }
+              />
+
+              <div className="flex flex-wrap gap-2">
+                <input
+                  type="text"
+                  placeholder="Tags (comma-separated)"
+                  className="flex-1 border px-3 py-2 rounded-md text-sm"
+                  value={(selectedNote.tags || []).join(", ")}
+                  onChange={(e) =>
+                    setSelectedNote({
+                      ...selectedNote,
+                      tags: e.target.value.split(",").map((t) => t.trim()),
+                    })
+                  }
+                />
+
+                <input
+                  type="text"
+                  placeholder="Folder"
+                  className="flex-1 border px-3 py-2 rounded-md text-sm"
+                  value={selectedNote.folder || ""}
+                  onChange={(e) =>
+                    setSelectedNote({ ...selectedNote, folder: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-sm text-gray-600 mt-2">
+                <span>Created: {selectedNote.createdAt}</span>
+                <span>Last Modified: {selectedNote.modifiedAt}</span>
+              </div>
+
+              <div className="flex justify-between items-center mt-4">
+                <label className="flex items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={selectedNote.pinned || false}
+                    onChange={(e) =>
+                      setSelectedNote({ ...selectedNote, pinned: e.target.checked })
+                    }
+                  />
+                  Pin this note
+                </label>
+
+                <button
+                  onClick={() => {
+                    const updatedNote = {
+                      ...selectedNote,
+                      modifiedAt: new Date().toISOString().slice(0, 16),
+                    };
+                    const updatedNotes = notes.map((n) =>
+                      n.createdAt === selectedNote.createdAt ? updatedNote : n
+                    );
+                    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+                    window.location.reload();
+                    // update logic
+                  }}
+                  className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-900 transition"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
           </div>
         </div>

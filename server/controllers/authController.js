@@ -1,4 +1,5 @@
 import { createUser, findUserByEmail, findUserByUsername } from "../models/userModel.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import path from 'path';
@@ -75,7 +76,18 @@ const signin = async (req, res) => {
         if(!isMatch)
             return res.status(400).json({ error: "Invalid credentials." });
 
-        return res.status(200).json("Sign in successful");
+        const token = jwt.sign(
+            { userId: user.id }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: "7d" }
+        );
+        return res.status(200).json({ token, user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            profilePicture: user.profile_picture
+        }});
+
     } catch(err) {
         console.error("Sign in error", err);
         return res.status(500).json({ error: "Server error. Please try again later." });

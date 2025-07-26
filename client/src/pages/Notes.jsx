@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FolderItem from "../components/FolderItem";
 import NotesList from "../components/NotesList";
 
@@ -61,6 +61,33 @@ export default function Notes() {
   const [newNote, setNewNote] = useState({ title: "", content: "", folder: "" });
 
   const [showFolderPicker, setShowFolderPicker] = useState(false);
+
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(false);
+  const folderScrollRef = React.useRef(null);
+
+  const handleScroll = () => {
+    const el = folderScrollRef.current;
+    if (!el)
+      return;
+
+    const scrollLeft = el.scrollLeft;
+    const maxScrollLeft = el.scrollWidth - el.clientWidth;
+
+    setAtStart(scrollLeft <= 1);
+    setAtEnd(scrollLeft >= maxScrollLeft - 1);
+  };
+
+  useEffect(() => {
+    const el = folderScrollRef.current;
+    if (!el)
+      return;
+
+    handleScroll();
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
 
   const [folders, setFolders] = useState([
     { name: "Work" },
@@ -149,7 +176,18 @@ export default function Notes() {
           </button>
         </div>
 
-        <div className="flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0 mask-to-l">
+        <div
+          ref={folderScrollRef}
+          className={`flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0 transition-all duration-200 ${
+            !atStart && !atEnd
+              ? "mask-to-l-r"
+              : !atStart
+              ? "mask-to-r"
+              : !atEnd
+              ? "mask-to-l"
+              : ""
+          }`}
+        >
           <FolderItem
             icon={folderi}
             overlay={star}

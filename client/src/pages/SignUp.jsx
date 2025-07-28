@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
+import ProfilePicSelector from "../components/ProfilePicSelector";
 
 const showHideToggle = [
   { label: "Show", icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M21.544 11.045c.304.426.456.64.456.955c0 .316-.152.529-.456.955C20.178 14.871 16.689 19 12 19c-4.69 0-8.178-4.13-9.544-6.045C2.152 12.529 2 12.315 2 12c0-.316.152-.529.456-.955C3.822 9.129 7.311 5 12 5c4.69 0 8.178 4.13 9.544 6.045"/><path d="M15 12a3 3 0 1 0-6 0a3 3 0 0 0 6 0"/></g></svg> },
@@ -7,15 +9,20 @@ const showHideToggle = [
 ];
 
 export default function SignUp() {
+  const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const [selectedPic, setSelectedPic] = useState(null);
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,14 +49,70 @@ export default function SignUp() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-    } else {
-      setErrors({});
-      console.log("Signup form submitted:", form);
+      showToast("Please fix the highlighted errors", "warning");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/check-availability", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: form.username,
+          email: form.email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.usernameTaken) validationErrors.username = "Username already in use";
+      if (data.emailTaken) validationErrors.email = "Email already in use";
+
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        showToast("Username or Email already taken", "error");
+      } else {
+        setErrors({});
+        showToast("Account details look good!", "success");
+        setStep(2);
+      }
+    } catch (err) {
+      console.error("Availability check error:", err);
+      setErrors({ general: "Server error. Please try again later." });
+      showToast("Server error. Please try again later.", "error");
+    }
+  };
+
+  const handleFinalSubmit = async () => {
+    try {
+      const payload = {
+        ...form,
+        profilePicture: selectedPic,
+      };
+
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
+
+      showToast("Account created successfully!", "success");
+      navigate("/signin");
+    } catch (err) {
+      console.error("Signup error:", err);
+      showToast(err.message || "Something went wrong during signup", "error");
     }
   };
 
@@ -65,10 +128,11 @@ export default function SignUp() {
               />
           </div>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="self-center grid grid-rows-[4fr_1fr]"
-        >
+        {step === 1 ? (
+          <form
+            onSubmit={handleNext}
+            className="self-center grid grid-rows-[4fr_1fr]"
+          >
           <div className="grid grid-cols-2">
             <div>
               <h2 className="text-4xl tracking-wide text-black dark:text-white text-left">
@@ -167,19 +231,26 @@ export default function SignUp() {
 
           <div className="flex gap-5 items-baseline-last justify-end">
             <span>
-              <Link to="/signin" className="px-4 py-2 tracking-wide text-indigo-600 hover:bg-indigo-100 rounded-2xl transition-colors duration-300 font-medium">
+              <Link to="/signin" className="px-4 py-2 tracking-wide text-indigo-600 hover:bg-indigo-100 rounded-2xl transition-colors duration-300 font-medium border-2 border-white hover:border-indigo-100">
                 Sign In
               </Link>
             </span>
-
             <button
               type="submit"
-              className="px-6 py-2 tracking-wide text-white bg-indigo-600 hover:bg-indigo-800 rounded-2xl transition-colors duration-300 font-medium"
+              className="px-6 py-2 tracking-wide text-white bg-indigo-600 hover:bg-indigo-800 rounded-2xl"
             >
-              Sign Up
+              Next
             </button>
-          </div>
-        </form>
+            </div>
+          </form>
+        ) : (
+          <ProfilePicSelector
+            selectedPic={selectedPic}
+            setSelectedPic={setSelectedPic}
+            onSubmit={handleFinalSubmit}
+            onBack={() => setStep(1)}
+          />
+        )}
       </div>
     </div>
   );

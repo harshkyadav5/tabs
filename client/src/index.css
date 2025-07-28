@@ -32,6 +32,34 @@
   --font-montserrat: "Montserrat", sans-serif;
   --font-music: 'Helvetica', 'Arial', 'sans-serif';
   --text-size-15: 1.0625rem;
+
+  --animate-toast-in: toast-in 0.25s ease-in-out;
+  @keyframes toast-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    80% {
+      opacity: 0.9;
+      transform: translateY(-2px) scale(1);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  --animate-toast-out: toast-out 0.5s ease-in-out;
+  @keyframes toast-out {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+  }
 }
 
 .blur-blob {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import axios from "axios";
 
 const showHideToggle = [
@@ -15,6 +16,8 @@ export default function SignIn() {
   const [apiError, setApiError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,14 +47,16 @@ export default function SignIn() {
 
     try {
       const res = await axios.post("http://localhost:5000/api/auth/signin", form);
-      console.log("Login success:", res.data);
-
       login(res.data.user, res.data.token);
+
+      showToast("Login successful!", "success");
 
       navigate("/");
     } catch (err) {
-      console.error("Login error:", err.response?.data || err.message);
-      setApiError(err.response?.data?.error || "Login failed");
+      const errorMsg = err.response?.data?.error || "Login failed";
+      setApiError(errorMsg);
+
+      showToast(errorMsg, "error");
     }
   };
 

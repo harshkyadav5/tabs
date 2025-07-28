@@ -94,7 +94,26 @@ const signin = async (req, res) => {
     }
 }
 
-export { signup, signin }
+const checkAvailability = async (req, res) => {
+  const { username, email } = req.body;
+
+  if (!username || !email)
+    return res.status(400).json({ error: "Username and email required." });
+
+  const lowerUsername = username.toLowerCase();
+  const lowerEmail = email.toLowerCase();
+
+  const usernameExists = await findUserByUsername(lowerUsername);
+  const emailExists = await findUserByEmail(lowerEmail);
+
+  return res.status(200).json({
+    usernameTaken: !!usernameExists,
+    emailTaken: !!emailExists,
+  });
+};
+
+
+export { signup, signin, checkAvailability }
 
 
 // to validate the username to only contain 'a-z', '0-9', '_' and '.'

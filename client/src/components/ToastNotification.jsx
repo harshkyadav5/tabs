@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const ToastNotification = ({ message, type, onClose }) => {
+  const [exiting, setExiting] = useState(false);
+
   const getToastStyles = (type) => {
     switch (type) {
       case "success":
@@ -37,7 +39,10 @@ const ToastNotification = ({ message, type, onClose }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      onClose();
+      setExiting(true);
+      setTimeout(() => {
+        onClose();
+      }, 300);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -45,8 +50,8 @@ const ToastNotification = ({ message, type, onClose }) => {
 
   return (
     <div
-      className={`fixed bottom-10 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg transition-all duration-500 ease-in-out
-      ${getToastStyles(type)} animate-toast-in flex items-center space-x-3`}
+      className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg transition-all duration-500 ease-in-out
+      ${getToastStyles(type)} ${exiting ? "animate-toast-out" : "animate-toast-in"} flex items-center space-x-3`}
     >
 
       <div className="flex-shrink-0">
@@ -54,8 +59,7 @@ const ToastNotification = ({ message, type, onClose }) => {
       </div>
 
       <div className="flex-grow text-base">
-        {/* {message} */}
-        Demo message
+        {message}
       </div>
     </div>
   );

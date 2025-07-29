@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Music from "./pages/Music";
 import Notes from "./pages/Notes";
 import Bookmarks from "./pages/Bookmarks";
+import Clipboard from "./pages/Clipboard";
 import HomeLayout from "./layouts/HomeLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
 
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
+          <Route path="/clipboard" element={<Clipboard />} />
         </Route>
 
         <Route element={<SimpleLayout />}>

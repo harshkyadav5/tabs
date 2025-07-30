@@ -8,6 +8,7 @@ import Music from "./pages/Music";
 import Notes from "./pages/Notes";
 import Bookmarks from "./pages/Bookmarks";
 import Clipboard from "./pages/Clipboard";
+import ColorPicker from "./pages/ColorPicker";
 import HomeLayout from "./layouts/HomeLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
 
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/notes" element={<Notes />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/clipboard" element={<Clipboard />} />
+          <Route path="/color-picker" element={<ColorPicker />} />
         </Route>
 
         <Route element={<SimpleLayout />}>

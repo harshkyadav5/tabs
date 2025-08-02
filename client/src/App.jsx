@@ -9,6 +9,8 @@ import Notes from "./pages/Notes";
 import Bookmarks from "./pages/Bookmarks";
 import Clipboard from "./pages/Clipboard";
 import ColorPicker from "./pages/ColorPicker";
+import Archive from "./pages/Archive";
+import RecycleBin from "./pages/RecycleBin";
 import HomeLayout from "./layouts/HomeLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
 
@@ -31,6 +33,8 @@ export default function App() {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/clipboard" element={<Clipboard />} />
           <Route path="/color-picker" element={<ColorPicker />} />
+          <Route path="/recycle-bin" element={<RecycleBin />} />
+          <Route path="/archive" element={<Archive />} />
         </Route>
 
         <Route element={<SimpleLayout />}>

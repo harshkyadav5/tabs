@@ -8,6 +8,7 @@ import Music from "./pages/Music";
 import Notes from "./pages/Notes";
 import Bookmarks from "./pages/Bookmarks";
 import Clipboard from "./pages/Clipboard";
+import ScreenshotGallery from "./pages/ScreenshotGallery";
 import ColorPicker from "./pages/ColorPicker";
 import Archive from "./pages/Archive";
 import RecycleBin from "./pages/RecycleBin";
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/notes" element={<Notes />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/clipboard" element={<Clipboard />} />
+          <Route path="/screenshot" element={<ScreenshotGallery />} />
           <Route path="/color-picker" element={<ColorPicker />} />
           <Route path="/recycle-bin" element={<RecycleBin />} />
           <Route path="/archive" element={<Archive />} />

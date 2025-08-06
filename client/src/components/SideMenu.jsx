@@ -29,15 +29,15 @@ export default function SideMenu() {
   const linkClass = (path) =>
     `flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium transition ${
       location.pathname === path
-        ? 'bg-gray-300 dark:bg-gray-800 text-indigo-600 dark:text-indigo-300'
-        : 'text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800'
+        ? 'bg-gray-300 text-indigo-600'
+        : 'text-gray-800 hover:bg-gray-300'
     }`;
 
   const linkWithCountClass = (path) =>
     `flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium transition ${
       location.pathname === path
-        ? 'bg-gray-300 dark:bg-gray-800 text-indigo-600 dark:text-indigo-300'
-        : 'text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800'
+        ? 'bg-gray-300 text-indigo-600'
+        : 'text-gray-800 hover:bg-gray-300'
     }`;
 
   return (
@@ -49,13 +49,11 @@ export default function SideMenu() {
               <li>
                 <Link
                   to="/"
-                  // className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
                   className={linkWithCountClass('/')}
                 >
                   <span>For You</span>
                   <div className="text-sm">
-                      <span className="inline-block bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded">
+                      <span className="inline-block bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded">
                         4 new
                       </span>
                   </div>
@@ -67,10 +65,10 @@ export default function SideMenu() {
 
         <div className="mb-1">
             <div className="inline-flex items-center justify-left w-full">
-                <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 pl-2 mr-2 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-gray-500 pl-2 mr-2 uppercase tracking-wider">
                     Features
                 </span>
-                <hr className="w-64 h-px my-6 rounded-xs bg-gray-500 border-0 dark:bg-gray-700" />
+                <hr className="w-64 h-px my-6 rounded-xs bg-gray-500 border-0" />
             </div>
 
           <ul className="space-y-1">
@@ -78,8 +76,6 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  // className="flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
                   className={linkClass(item.destination)}
                 >
                   <span className="text-lg">{item.icon}</span>
@@ -92,10 +88,10 @@ export default function SideMenu() {
 
         <div className="mb-1">
             <div className="inline-flex items-center justify-left w-full">
-                <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 pl-2 mr-2 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-gray-500 pl-2 mr-2 uppercase tracking-wider">
                     Tools
                 </span>
-                <hr className="w-64 h-px my-6 rounded-xs bg-gray-500 border-0 dark:bg-gray-700" />
+                <hr className="w-64 h-px my-6 rounded-xs bg-gray-500 border-0" />
             </div>
 
           <ul className="space-y-1">
@@ -103,8 +99,6 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  // className="flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
                   className={linkClass(item.destination)}
                 >
                   <span className="text-lg">{item.icon}</span>
@@ -117,7 +111,7 @@ export default function SideMenu() {
 
         <div className="mb-1">
             <div className="inline-flex items-center justify-left w-full">
-                <hr className="w-64 h-px my-6 rounded-xs bg-gray-500 border-0 dark:bg-gray-700" />
+                <hr className="w-64 h-px my-6 rounded-xs bg-gray-500 border-0" />
             </div>
 
           <ul className="space-y-1">
@@ -125,8 +119,6 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  // className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
                   className={linkWithCountClass(item.destination)}
                 >
                   <div className="flex items-center space-x-3">
@@ -146,8 +138,6 @@ export default function SideMenu() {
               <li key={item.label}>
                 <Link
                   to={item.destination}
-                  // className="flex justify-between items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium
-                  //   text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition"
                   className={linkWithCountClass(item.destination)}
                 >
                   <div className="flex items-center space-x-3">
@@ -166,7 +156,7 @@ export default function SideMenu() {
         </div>
       </div>
 
-      <footer className="text-xs text-center text-gray-500 dark:text-gray-400 pt-6">
+      <footer className="text-xs text-center text-gray-500 pt-6">
         © 2025 Tabs
       </footer>
     </aside>

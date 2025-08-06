@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 
@@ -33,19 +32,14 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="fixed inset-0 select-none bg-gradient-to-br from-slate-50 to-gray-200 dark:from-neutral-900 dark:to-slate-800 -z-10" />
-      <nav className="fixed top-0 left-0 right-0 z-50 select-none bg-white/30 dark:bg-black/30 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 flex items-center justify-between px-8 h-16">
+      <div className="fixed inset-0 select-none bg-gradient-to-br from-slate-50 to-gray-200 -z-10" />
+      <nav className="fixed top-0 left-0 right-0 z-50 select-none bg-white/30 backdrop-blur-md border-b border-gray-300 flex items-center justify-between px-8 h-16">
         <div className="p-2 flex items-center">
           <Link to="/">
             <img
               src="./src/assets/tabs-logo-light-1.svg"
               alt="logo"
-              className="max-h-full max-w-[120px] object-contain dark:hidden"
-            />
-            <img
-              src="./src/assets/tabs-logo-dark-1.svg"
-              alt="logo"
-              className="max-h-full max-w-[120px] object-contain hidden dark:block"
+              className="max-h-full max-w-[120px] object-contain"
             />
           </Link>
         </div>
@@ -53,11 +47,11 @@ export default function Navbar() {
         <div className="flex items-center relative" ref={dropdownRef}>
           {user ? (
             <>
-              <div className="relative group">
+              <div className="relative group pr-2">
                 <img
                   src={`/profile-pics/${user.profilePicture}`}
                   alt="Profile"
-                  className="h-10 w-10 rounded-full border-2 border-gray-400 dark:border-gray-500 cursor-pointer"
+                  className="h-10 w-10 rounded-full border-2 border-gray-400 cursor-pointer"
                   onClick={() => setDropdownOpen((prev) => !prev)}
                 />
                 
@@ -69,15 +63,15 @@ export default function Navbar() {
               </div>
 
               {dropdownOpen && (
-                <div className="absolute top-12 right-0 mt-2 w-40 bg-white dark:bg-gray-700 p-2 border border-white/20 dark:border-white/10 ring-1 ring-white dark:ring-black ring-opacity-5 focus:outline-none rounded-xl shadow-xl z-50 flex flex-col gap-y-1">
+                <div className="absolute top-12 right-0 mt-2 w-40 bg-white p-2 border border-white/20 ring-1 ring-white ring-opacity-5 focus:outline-none rounded-xl shadow-xl z-50 flex flex-col gap-y-1">
                   <button
                     onClick={() => {
                       setDropdownOpen(false);
                       navigate("/profile");
                     }}
-                    className="w-full text-left px-4 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="w-full text-left px-4 py-2 text-sm rounded-lg hover:bg-gray-100"
                   >
-                    <div className="flex items-center space-x-2 dark:text-white">
+                    <div className="flex items-center space-x-2">
                       {icons['profile']}
                       <span className="capitalize">Profile</span>
                     </div>
@@ -88,9 +82,9 @@ export default function Navbar() {
                       logout();
                       showToast("Logged out successfully", "success");
                     }}
-                    className="w-full text-left px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-900"
+                    className="w-full text-left px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-100"
                   >
-                    <div className="flex items-center space-x-2 dark:text-white">
+                    <div className="flex items-center space-x-2">
                       {icons['logout']}
                       <span className="capitalize">Logout</span>
                     </div>
@@ -101,20 +95,17 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/signin">
-                <button className="font-montserrat text-sm font-semibold px-4 py-2 bg-gray-900 text-white border border-black dark:border-gray-100 dark:bg-gray-100 dark:text-black rounded-lg shadow-sm hover:bg-gray-700 dark:hover:bg-gray-300 transition-colors duration-200">
+                <button className="font-montserrat text-sm font-semibold px-4 py-2 bg-gray-900 text-white border border-black rounded-lg shadow-sm hover:bg-gray-700 transition-colors duration-200">
                   Sign In
                 </button>
               </Link>
               <Link to="/signup">
-                <button className="ml-2 font-montserrat text-sm font-semibold px-4 py-2 border border-gray-900 text-gray-900 dark:border-gray-100 dark:text-gray-100 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200">
+                <button className="ml-2 font-montserrat text-sm font-semibold px-4 py-2 border border-gray-900 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors duration-200">
                   Sign Up
                 </button>
               </Link>
             </>
           )}
-
-          <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-3" />
-          <ThemeToggle />
         </div>
       </nav>
     </>

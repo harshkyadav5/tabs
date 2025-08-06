@@ -39,13 +39,13 @@ export default function ColorCard({ color }) {
       ></div>
 
       
-      <div className="flex flex-col gap-1 text-sm text-gray-700 dark:text-gray-200">
+      <div className="flex flex-col gap-1 text-sm text-gray-700">
         {/* HEX */}
         <div className="flex justify-between items-center">
           <span className="font-semibold">Hex</span>
           <div
             onClick={() => copyToClipboard(color.hex_code)}
-            className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition group/hoverable"
+            className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100 transition group/hoverable"
             title="Copy hex"
           >
             { copy }
@@ -58,7 +58,7 @@ export default function ColorCard({ color }) {
           <span className="font-semibold">RGB</span>
           <div
             onClick={() => copyToClipboard(color.rgb_code)}
-            className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition group/hoverable"
+            className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100 transition group/hoverable"
             title="Copy RGB"
           >
             { copy }
@@ -72,7 +72,7 @@ export default function ColorCard({ color }) {
           </span>
         )}
 
-        <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+        <div className="text-xs text-gray-500 mt-2">
           <div>Created: {formatDate(color.created_at)}</div>
           <div>Updated: {formatDate(color.modified_at)}</div>
         </div>
@@ -91,11 +91,11 @@ export default function ColorCard({ color }) {
         </button>
 
         {showMenu && (
-          <div className="absolute right-0 mt-2 w-36 bg-white border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-md z-30 text-sm overflow-hidden">
-            <button className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 text-left">
+          <div className="absolute right-0 mt-2 w-36 bg-white border border-zinc-200 rounded-lg shadow-md z-30 text-sm overflow-hidden">
+            <button className="w-full px-4 py-2 hover:bg-gray-100 text-left">
               Edit
             </button>
-            <button className="w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 text-left">
+            <button className="w-full px-4 py-2 hover:bg-gray-100 text-left">
               Delete
             </button>
           </div>

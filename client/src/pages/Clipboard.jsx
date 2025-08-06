@@ -182,7 +182,7 @@ export default function Clipboard() {
   return (
     <div className="w-full space-y-8">
       <div className="flex justify-between items-center py-6 px-4">
-        <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Clipboard</h1>
+        <h1 className="text-xl font-semibold text-gray-800">Clipboard</h1>
         <button
           onClick={() => setShowNewItemModal(true)}
           className="px-4 py-2 text-sm bg-black text-white rounded-md hover:bg-gray-900 transition"
@@ -197,24 +197,24 @@ export default function Clipboard() {
             {col.map((item) => (
               <div
                 key={item.id}
-                className="relative bg-white dark:bg-zinc-900 border border-gray-100 dark:border-gray-700 hover:border-gray-300 rounded-2xl p-5 group cursor-pointer transition flex flex-col"
+                className="relative bg-white border border-gray-100 hover:border-gray-300 rounded-2xl p-5 group cursor-pointer transition flex flex-col"
               >
                 <div className="flex justify-between items-start mb-2">
                   {editingItemId === item.id ? (
                     <input
                       value={editedDescription}
                       onChange={(e) => setEditedDescription(e.target.value)}
-                      className="text-base font-semibold text-gray-900 dark:text-white bg-transparent border-b border-gray-300 dark:border-gray-700 focus:outline-none w-full"
+                      className="text-base font-semibold text-gray-900 bg-transparent border-b border-gray-300 focus:outline-none w-full"
                     />
                   ) : (
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+                    <h3 className="text-base font-semibold text-gray-900 truncate">
                       {item.description || "Untitled"}
                     </h3>
                   )}
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleCopy(item.content)}
-                      className="opacity-0 group-hover:opacity-100 transition text-gray-400 hover:text-black dark:hover:text-white p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="opacity-0 group-hover:opacity-100 transition text-gray-400 hover:text-black p-1.5 rounded-full hover:bg-gray-100"
                       title="Copy"
                     >
                       {copyIcon}
@@ -228,7 +228,7 @@ export default function Clipboard() {
                           setDropdownPosition({ x: rect.right, y: rect.bottom });
                           setShowMenuId(showMenuId === item.id ? null : item.id);
                         }}
-                        className="text-gray-400 hover:text-gray-700 dark:hover:text-white rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="text-gray-400 hover:text-gray-700 rounded-full p-1 hover:bg-gray-100"
                       >
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                           <circle cx="5" cy="12" r="2" />
@@ -242,13 +242,13 @@ export default function Clipboard() {
 
                 {showMenuId === item.id && (
                   <div
-                    className="fixed z-50 mt-2 w-36 bg-white dark:bg-zinc-800 rounded-xl shadow-md ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"
+                    className="fixed z-50 mt-2 w-36 bg-white rounded-xl shadow-md ring-1 ring-gray-200 overflow-hidden"
                     style={{ top: dropdownPosition.y, left: dropdownPosition.x }}
                   >
-                    <ul className="text-sm text-gray-800 dark:text-gray-100">
+                    <ul className="text-sm text-gray-800">
                       <li
                         onClick={() => togglePin(item.id)}
-                        className="px-4 py-2 hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer"
+                        className="px-4 py-2 hover:bg-gray-50 cursor-pointer"
                       >
                         {item.is_pinned ? "Unpin" : "Pin"}
                       </li>
@@ -256,21 +256,21 @@ export default function Clipboard() {
                         onClick={() =>
                           editingItemId === item.id ? handleSaveEdit() : handleStartEdit(item)
                         }
-                        className="px-4 py-2 hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer"
+                        className="px-4 py-2 hover:bg-gray-50 cursor-pointer"
                       >
                         {editingItemId === item.id ? "💾 Save" : "✏️ Edit"}
                       </li>
                       {editingItemId === item.id && (
                         <li
                           onClick={handleCancelEdit}
-                          className="px-4 py-2 hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer"
+                          className="px-4 py-2 hover:bg-gray-50 cursor-pointer"
                         >
                           ❌ Cancel
                         </li>
                       )}
                       <li
                         onClick={() => handleDelete(item.id)}
-                        className="px-4 py-2 hover:bg-gray-50 dark:hover:bg-zinc-700 text-red-500 cursor-pointer"
+                        className="px-4 py-2 hover:bg-gray-50 text-red-500 cursor-pointer"
                       >
                         🗑 Delete
                       </li>
@@ -283,15 +283,15 @@ export default function Clipboard() {
                     value={editedContent}
                     onChange={(e) => setEditedContent(e.target.value)}
                     rows={4}
-                    className="text-sm text-gray-600 dark:text-gray-300 bg-transparent border border-gray-200 dark:border-gray-700 p-2 w-full resize-none rounded-md"
+                    className="text-sm text-gray-600 bg-transparent border border-gray-200 p-2 w-full resize-none rounded-md"
                   />
                 ) : (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 overflow-hidden line-clamp-6">
+                  <p className="text-sm text-gray-600 mb-3 overflow-hidden line-clamp-6">
                     {item.content}
                   </p>
                 )}
 
-                <div className="text-[11px] text-gray-400 dark:text-gray-500 space-y-1 mt-auto">
+                <div className="text-[11px] text-gray-400 space-y-1 mt-auto">
                   <div>Created: {new Date(item.created_at).toLocaleString()}</div>
                   <div>Modified: {new Date(item.modified_at).toLocaleString()}</div>
                 </div>
@@ -307,8 +307,8 @@ export default function Clipboard() {
 
       {showNewItemModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl p-6 w-[90%] max-w-md">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-[90%] max-w-md">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
               Add New Clipboard Item
             </h2>
 
@@ -317,7 +317,7 @@ export default function Clipboard() {
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
               placeholder="Description"
-              className="w-full mb-3 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-transparent text-gray-800 dark:text-white focus:outline-none"
+              className="w-full mb-3 px-4 py-2 border border-gray-300 rounded-md bg-transparent text-gray-800 focus:outline-none"
             />
 
             <textarea
@@ -325,13 +325,13 @@ export default function Clipboard() {
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
               placeholder="Paste your content here..."
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-transparent text-gray-700 dark:text-gray-200 focus:outline-none resize-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md bg-transparent text-gray-700 focus:outline-none resize-none"
             />
 
             <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={() => setShowNewItemModal(false)}
-                className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:underline"
+                className="px-4 py-2 text-sm text-gray-700s hover:underline"
               >
                 Cancel
               </button>

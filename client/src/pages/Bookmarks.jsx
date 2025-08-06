@@ -174,7 +174,7 @@ export default function Bookmarks() {
             <button className="p-2 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200">
               {addBookmark}
             </button>
-            <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-2" />
+            <div className="h-6 w-px bg-gray-300 mx-2" />
             <button className="p-2 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200">
               {addFolder}
             </button>

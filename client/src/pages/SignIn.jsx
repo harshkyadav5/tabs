@@ -61,8 +61,8 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-zinc-900 transition-colors duration-300 px-4">
-      <div className="grid grid-rows-[1fr_4fr] w-full max-w-5xl h-fit p-10 rounded-4xl bg-white dark:bg-black">
+    <div className="flex justify-center items-center min-h-screen bg-slate-100 transition-colors duration-300 px-4">
+      <div className="grid grid-rows-[1fr_4fr] w-full max-w-5xl h-fit p-10 rounded-4xl bg-white">
         <div className="pr-5">
           <div className="h-full">
             <img src="./src/assets/tabs-logo.svg" alt="logo" className="max-h-full max-w-[80px]" />
@@ -72,11 +72,11 @@ export default function SignIn() {
         <form onSubmit={handleSubmit} className="self-center grid grid-rows-[2fr_1fr]">
           <div className="grid grid-cols-2">
             <div>
-              <h2 className="text-4xl tracking-wide text-black dark:text-white text-left">Sign in</h2>
+              <h2 className="text-4xl tracking-wide text-black text-left">Sign in</h2>
             </div>
             <div>
               <div className="mb-4">
-                <label htmlFor="emailOrUsername" className="block pl-3 text-sm font-medium text-black dark:text-gray-200 mb-1">
+                <label htmlFor="emailOrUsername" className="block pl-3 text-sm font-medium text-black mb-1">
                   Email or Username
                 </label>
                 <input
@@ -85,14 +85,14 @@ export default function SignIn() {
                   id="emailOrUsername"
                   value={form.emailOrUsername}
                   onChange={handleChange}
-                  className="w-full px-4 py-3.5 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3.5 rounded-2xl tracking-wider border border-gray-300 bg-white text-black outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Enter email or username"
                 />
                 {errors.emailOrUsername && <p className="text-sm text-red-500 mt-1">{errors.emailOrUsername}</p>}
               </div>
 
               <div className="mb-4">
-                <label htmlFor="password" className="block pl-3 text-sm font-medium text-black dark:text-gray-200 mb-1">
+                <label htmlFor="password" className="block pl-3 text-sm font-medium text-black mb-1">
                   Password
                 </label>
                 <div className="relative">
@@ -102,13 +102,13 @@ export default function SignIn() {
                     value={form.password}
                     onChange={handleChange}
                     type={showPassword ? "text" : "password"}
-                    className="w-full px-4 py-3.5 pr-16 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3.5 pr-16 rounded-2xl tracking-wider border border-gray-300 bg-white text-black outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
+                    className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
                   >
                     {showPassword ? showHideToggle[0].icon : showHideToggle[1].icon}
                   </button>

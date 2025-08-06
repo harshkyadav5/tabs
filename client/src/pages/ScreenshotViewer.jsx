@@ -39,7 +39,7 @@ export default function ScreenshotViewer({ image, onBack }) {
           </button>
         </div>
 
-        <div className="text-center text-sm text-gray-600 dark:text-gray-300">
+        <div className="text-center text-sm text-gray-600">
           <div className="font-medium text-gray-800">
             {
               new Intl.DateTimeFormat('en-US', {
@@ -55,7 +55,7 @@ export default function ScreenshotViewer({ image, onBack }) {
           <div className="text-xs">{image.id} of 5</div>
         </div>
 
-        <div className="flex items-center gap-1 text-gray-800 dark:text-white">
+        <div className="flex items-center gap-1 text-gray-800">
           <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="Info" onClick={() => setShowInfo(true)}>{infoIcon}</button>
           <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="Favorite">{heartIcon}</button>
           <a href={image.image_url} download title="Download">{downloadIcon}</a>

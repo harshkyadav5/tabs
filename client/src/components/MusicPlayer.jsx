@@ -92,7 +92,7 @@ export default function MusicPlayer({ track }) {
   return (
     <div
       id="music-player"
-      className={`fixed bottom-0 left-0 w-full z-50 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-700 transition-all duration-300 ${
+      className={`fixed bottom-0 left-0 w-full z-50 bg-white border-t border-zinc-200 transition-all duration-300 ${
         isFullscreen ? "h-screen flex flex-col items-center justify-center gap-6 p-6" : "p-2 flex items-center justify-between"
       }`}
     >
@@ -103,8 +103,8 @@ export default function MusicPlayer({ track }) {
           <img src={cover} alt={title} className="w-64 h-64 rounded-xl object-cover shadow-lg" />
 
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-black dark:text-white">{title}</h2>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400">{artist}</p>
+            <h2 className="text-2xl font-semibold text-black">{title}</h2>
+            <p className="text-lg text-zinc-600">{artist}</p>
           </div>
 
           <div className="w-full max-w-xl">
@@ -115,9 +115,9 @@ export default function MusicPlayer({ track }) {
               step="0.1"
               value={currentTime}
               onChange={seekAudio}
-              className="w-full h-[6px] accent-zinc-500 dark:accent-white"
+              className="w-full h-[6px] accent-zinc-500"
             />
-            <div className="flex justify-between text-xs mt-1 text-zinc-500 dark:text-zinc-400">
+            <div className="flex justify-between text-xs mt-1 text-zinc-500">
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
@@ -126,7 +126,7 @@ export default function MusicPlayer({ track }) {
           <div className="flex items-center gap-6 mt-4">
             <button className="text-zinc-400">{shuffle}</button>
             <button className="text-zinc-400">{previous}</button>
-            <button onClick={togglePlay} className="text-black dark:text-white scale-125">
+            <button onClick={togglePlay} className="text-black scale-125">
               {isPlaying ? pause : play}
             </button>
             <button className="text-zinc-400">{next}</button>
@@ -142,12 +142,12 @@ export default function MusicPlayer({ track }) {
               step="0.01"
               value={volume}
               onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="w-[100px] accent-zinc-500 dark:accent-white"
+              className="w-[100px] accent-zinc-500"
             />
             {volume_high}
           </div>
 
-          <button onClick={toggleFullscreen} className="text-sm text-zinc-500 dark:text-zinc-400 mt-4">
+          <button onClick={toggleFullscreen} className="text-sm text-zinc-500 mt-4">
             Exit Fullscreen
           </button>
         </>
@@ -156,27 +156,27 @@ export default function MusicPlayer({ track }) {
           <div className="flex items-center gap-4 px-4">
             <button className="text-zinc-400">{shuffle}</button>
             <button className="text-zinc-400">{previous}</button>
-            <button onClick={togglePlay} className="text-black dark:text-white">
+            <button onClick={togglePlay} className="text-black">
               {isPlaying ? pause : play}
             </button>
             <button className="text-zinc-400">{next}</button>
             <button className="text-zinc-400">{repeat}</button>
           </div>
 
-          <div className="flex items-center w-[500px] max-w-full h-14 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-700">
+          <div className="flex items-center w-[500px] max-w-full h-14 bg-white rounded-lg border border-zinc-200">
             <img src={cover} alt={title} className="h-14 w-14 rounded-l object-cover" />
 
             <div className="flex flex-col w-full">
               <div className="flex flex-row justify-between items-end truncate">
                 <span className="w-[30px] text-right text-[10px]">{formatTime(currentTime)}</span>
                 <div className="flex flex-col items-center truncate">
-                  <h3 className="text-sm font-semibold text-black dark:text-white truncate">{title}</h3>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{artist}</p>
+                  <h3 className="text-sm font-semibold text-black truncate">{title}</h3>
+                  <p className="text-xs text-zinc-500 truncate">{artist}</p>
                 </div>
                 <span className="w-[30px] text-left text-[10px]">{formatTime(duration)}</span>
               </div>
 
-              <div className="flex items-center text-[10px] text-zinc-500 dark:text-zinc-400">
+              <div className="flex items-center text-[10px] text-zinc-500">
                 <input
                   type="range"
                   min="0"
@@ -184,7 +184,7 @@ export default function MusicPlayer({ track }) {
                   step="0.1"
                   value={currentTime}
                   onChange={seekAudio}
-                  className="w-full h-[3px] accent-zinc-500 dark:accent-white"
+                  className="w-full h-[3px] accent-zinc-500"
                 />
               </div>
             </div>
@@ -199,7 +199,7 @@ export default function MusicPlayer({ track }) {
               step="0.01"
               value={volume}
               onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="w-[80px] h-1 accent-zinc-500 dark:accent-white"
+              className="w-[80px] h-1 accent-zinc-500"
             />
             {volume_high}
             <button onClick={toggleFullscreen} className="text-zinc-400">

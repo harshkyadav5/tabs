@@ -117,8 +117,8 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-zinc-900 transition-colors duration-300 px-4">
-      <div className="grid grid-rows-[1fr_6.5fr] w-full max-w-5xl h-fit p-10 rounded-4xl bg-white dark:bg-black">
+    <div className="flex justify-center items-center min-h-screen bg-slate-100 transition-colors duration-300 px-4">
+      <div className="grid grid-rows-[1fr_6.5fr] w-full max-w-5xl h-fit p-10 rounded-4xl bg-white">
         <div className="pr-5">
             <div className="h-full">
               <img
@@ -135,21 +135,21 @@ export default function SignUp() {
           >
           <div className="grid grid-cols-2">
             <div>
-              <h2 className="text-4xl tracking-wide text-black dark:text-white text-left">
+              <h2 className="text-4xl tracking-wide text-black text-left">
                 Create Account
               </h2>
             </div>
 
             <div>
               <div className="mb-4">
-                <label className="block tracking-wider pl-3 text-sm font-medium text-black dark:text-gray-200 mb-1">
+                <label className="block tracking-wider pl-3 text-sm font-medium text-black mb-1">
                   Username
                 </label>
                 <input
                   name="username"
                   value={form.username}
                   onChange={handleChange}
-                  className="w-full px-4 py-3.5 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3.5 rounded-2xl tracking-wider border border-gray-300 bg-white text-black outline-none focus:ring-2 focus:ring-indigo-500"
                   type="text"
                   placeholder="Enter your username"
                 />
@@ -159,14 +159,14 @@ export default function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label className="block tracking-wider pl-3 text-sm font-medium text-black dark:text-gray-200 mb-1">
+                <label className="block tracking-wider pl-3 text-sm font-medium text-black mb-1">
                   Email
                 </label>
                 <input
                   name="email"
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3.5 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-3.5 rounded-2xl tracking-wider border border-gray-300 bg-white text-black outline-none focus:ring-2 focus:ring-indigo-500"
                   type="email"
                   placeholder="Enter your email"
                 />
@@ -176,7 +176,7 @@ export default function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label className="block tracking-wider pl-3 text-sm font-medium text-black dark:text-gray-200 mb-1">
+                <label className="block tracking-wider pl-3 text-sm font-medium text-black mb-1">
                   Password
                 </label>
                 <div className="relative">
@@ -184,14 +184,14 @@ export default function SignUp() {
                     name="password"
                     value={form.password}
                     onChange={handleChange}
-                    className="w-full px-4 py-3.5 pr-16 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3.5 pr-16 rounded-2xl tracking-wider border border-gray-300 bg-white text-black outline-none focus:ring-2 focus:ring-indigo-500"
                     type={showPassword1 ? "text" : "password"}
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword1((prev) => !prev)}
-                    className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
+                    className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
                   >
                     {showPassword1 ? showHideToggle[0].icon : showHideToggle[1].icon}
                   </button>
@@ -202,7 +202,7 @@ export default function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label className="block tracking-wider pl-3 text-sm font-medium text-black dark:text-gray-200 mb-1">
+                <label className="block tracking-wider pl-3 text-sm font-medium text-black mb-1">
                   Re-enter Password
                 </label>
                 <div className="relative">
@@ -210,14 +210,14 @@ export default function SignUp() {
                     name="confirmPassword"
                     value={form.confirmPassword}
                     onChange={handleChange}
-                    className="w-full px-4 py-3.5 pr-16 rounded-2xl tracking-wider border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#121212] text-black dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-4 py-3.5 pr-16 rounded-2xl tracking-wider border border-gray-300 bg-white text-black outline-none focus:ring-2 focus:ring-indigo-500"
                     type={showPassword2 ? "text" : "password"}
                     placeholder="Re-enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword2((prev) => !prev)}
-                    className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
+                    className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
                   >
                     {showPassword2 ? showHideToggle[0].icon : showHideToggle[1].icon}
                   </button>

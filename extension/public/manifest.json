@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Tabs Extension",
+  "description": "Access Clipboard, Color Picker, Notes and more from Tabs.",
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icons/tabs-logo.png",
+      "48": "icons/tabs-logo.png",
+      "128": "icons/tabs-logo.png"
+    }
+  },
+  "icons": {
+    "16": "icons/tabs-logo.png",
+    "48": "icons/tabs-logo.png",
+    "128": "icons/tabs-logo.png"
+  },
+  "permissions": [],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

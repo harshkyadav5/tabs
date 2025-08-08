@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-dm-sans: "DM Sans", sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-music: 'Helvetica', 'Arial', 'sans-serif';
+  --text-size-15: 1.0625rem;
+
+  --rg-shadow-gradient-fuchsia: linear-gradient(123deg, #d14600 0%, #c300e0 50%, #6842ff 100%);
+  --rg-shadow-gradient-indigo: linear-gradient(123deg, #006ce0 0%, #295eff 50%, #6842ff 100%);
+  --rg-shadow-gradient-orange: linear-gradient(123deg, #d600ba 0%, #eb003b 50%, #d14600 100%);
+  --rg-shadow-gradient-teal: linear-gradient(123deg, #008559 0%, #007e94 50%, #006ce0 100%);
+  --rg-shadow-gradient-blue: linear-gradient(123deg, #008559 0%, #006ce0 50%, #6842ff 100%);
+  --rg-shadow-gradient-violet: linear-gradient(123deg, #962eff 0%, #006ce0 50%, #007e94 100%);
+  --rg-shadow-gradient-purple: linear-gradient(123deg, #d600ba 0%, #6842ff 50%, #007e94 100%);
+}

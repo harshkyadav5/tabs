@@ -15,4 +15,32 @@
   --rg-shadow-gradient-blue: linear-gradient(123deg, #008559 0%, #006ce0 50%, #6842ff 100%);
   --rg-shadow-gradient-violet: linear-gradient(123deg, #962eff 0%, #006ce0 50%, #007e94 100%);
   --rg-shadow-gradient-purple: linear-gradient(123deg, #d600ba 0%, #6842ff 50%, #007e94 100%);
+
+  --animate-toast-in: toast-in 0.25s ease-in-out;
+  @keyframes toast-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    80% {
+      opacity: 0.9;
+      transform: translateY(-2px) scale(1);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  --animate-toast-out: toast-out 0.5s ease-in-out;
+  @keyframes toast-out {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+  }
 }

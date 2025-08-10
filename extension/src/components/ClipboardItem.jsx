@@ -13,7 +13,7 @@ export default function ClipboardItem({ item, onCopy, onEditDescription }) {
   };
 
   return (
-    <div className="break-inside-avoid group relative rounded-xl bg-gradient-to-br from-white to-slate-50 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 p-4">
+    <div className="break-inside-avoid group relative rounded-xl bg-gray-100 border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 p-4">
       
       <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <button

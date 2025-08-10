@@ -23,7 +23,7 @@ export default function Dropdown({ options, selected, onSelect, placeholder = "S
         {selected ? selected.label : placeholder}
       </button>
       {isOpen && (
-        <ul className="absolute -top-61 z-20 p-1 w-full bg-white border border-slate-300 rounded-xl shadow-md max-h-60 overflow-auto">
+        <ul className="absolute bottom-12 z-20 p-1 w-full bg-white border border-slate-300 rounded-xl shadow-md max-h-60 overflow-auto">
           {options.map((option) => (
             <li
               key={option.value}

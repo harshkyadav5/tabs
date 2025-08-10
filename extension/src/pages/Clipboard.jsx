@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import ClipboardItem from "../components/ClipboardItem";
+import { useToast } from "../context/ToastContext";
 
 const dummyClipboard = [
   { id: 1, description: "Email Template", content: "Hello, thank you for reaching out..." },
@@ -12,9 +13,11 @@ const dummyClipboard = [
 
 export default function Clipboard() {
   const [items, setItems] = useState(dummyClipboard);
+  const { showToast } = useToast();
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
+    showToast("Copied to Clipboard!", "success");
   };
 
   const handleEditDescription = (id, newDescription) => {
@@ -25,7 +28,7 @@ export default function Clipboard() {
 
   return (
     <div className="bg-slate-100 relative w-[600px] p-5 overflow-hidden font-montserrat">
-      <div className="z-10 p-8 rounded-2xl bg-white shadow-lg h-full">
+      <div className="p-8 rounded-2xl bg-white shadow-lg h-full">
         <Navbar />
 
         <div className="mt-4 columns-3 gap-3 space-y-3">

@@ -51,7 +51,7 @@ const ToastNotification = ({ message, type, onClose }) => {
   return (
     <div
       className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg transition-all duration-500 ease-in-out
-      ${getToastStyles(type)} ${exiting ? "animate-toast-out" : "animate-toast-in"} flex items-center space-x-3`}
+      ${getToastStyles(type)} ${exiting ? "animate-toast-out" : "animate-toast-in"} flex items-center space-x-3 z-500`}
     >
 
       <div className="flex-shrink-0">

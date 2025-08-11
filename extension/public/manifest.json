@@ -16,7 +16,7 @@
     "48": "icons/tabs-logo.png",
     "128": "icons/tabs-logo.png"
   },
-  "permissions": [],
+  "permissions": ["tabs"],
   "background": {
     "service_worker": "background.js"
   }

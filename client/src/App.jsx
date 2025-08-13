@@ -1,6 +1,7 @@
-import React from "react";
+import { React, useState} from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import MusicNavbar from "./components/MusicNavbar";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
@@ -19,10 +20,13 @@ export default function App() {
   const location = useLocation();
 
   const isAuthPage = location.pathname === "/signin" || location.pathname === "/signup";
+  const isMusicPage = location.pathname === "/music";
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-slate-300 transition-colors duration-300">
-      {!isAuthPage && <Navbar />}
+      {!isAuthPage && !isMusicPage && <Navbar />}
+      {isMusicPage && <MusicNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
 
       <Routes>
         <Route path="/signin" element={<SignIn />} />
@@ -40,7 +44,7 @@ export default function App() {
         </Route>
 
         <Route element={<SimpleLayout />}>
-          <Route path="/music" element={<Music />} />
+          <Route path="/music" element={<Music query={searchQuery} />} />
         </Route>
       </Routes>
     </div>

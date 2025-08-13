@@ -28,8 +28,8 @@ export default function MusicCard({ title, artist, image, onPlay }) {
             <div className="grid grid-cols-4 gap-1 w-full absolute bottom-0">
                 <div className="col-span-3 p-5 pr-0 tracking-wide truncate mask-to-l">
                     <div>
-                        <h3 className="text-size-15 font-semibold font-music text-white drop-shadow-sm/40">{title}</h3>
-                        <p className="font-dm-sans text-sm text-gray-400 drop-shadow-white/40">{artist}</p>
+                        <h3 className="text-size-15 font-semibold font-montserrat text-white drop-shadow-sm/40">{title}</h3>
+                        <p className="font-dm-sans text-sm text-white/80 drop-shadow-sm/40">{artist}</p>
                     </div>
                 </div>
                 <div className="p-5 absolute bottom-0 right-0">

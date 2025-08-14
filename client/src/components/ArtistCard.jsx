@@ -6,7 +6,7 @@ export default function ArtistCard({ name, image, onClick }) {
   return (
     <div className="aspect-[7/10] min-w-[300px] max-w-[300px] rounded-3xl shadow-md overflow-hidden relative group">
       {/* Artist image */}
-      <img src={image} alt={name} className="w-full h-full object-cover rounded-3xl" />
+      <img src={image} alt={name} className="w-full h-full object-cover" />
 
       {/* Center play button */}
       <div className="p-5 absolute top-0 left-0 w-full h-full flex justify-center items-center">

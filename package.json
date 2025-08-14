@@ -3,6 +3,9 @@
     "concurrently": "^9.1.2"
   },
   "scripts": {
-      "dev": "concurrently \"npm run dev --prefix client\" \"nodemon server/server.js\""
+    "dev": "concurrently \"npm run dev --prefix client\" \"nodemon server/server.js\""
+  },
+  "dependencies": {
+    "colorthief": "^2.6.0"
   }
 }

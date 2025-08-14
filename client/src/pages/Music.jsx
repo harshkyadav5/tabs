@@ -40,6 +40,18 @@ export default function Music({ query }) {
   const [loading, setLoading] = useState(false);
   const [loadingNewReleases, setLoadingNewReleases] = useState(false);
 
+  const [activeTrack, setActiveTrack] = useState(null);
+
+  const handlePlayTrack = (track) => {
+    setActiveTrack({
+      title: track.name,
+      artist: track.artists?.map((a) => a.name).join(", "),
+      audioUrl: track.preview_url,
+      cover: track.album?.images,
+      // cover: track.album?.images?.[0]?.url,
+    });
+  };
+
   // Fetch search results
   useEffect(() => {
     if (!query) return;
@@ -52,6 +64,7 @@ export default function Music({ query }) {
           setArtists(data.artists?.items || []);
           setPlaylists(data.playlists?.items || []);
           setAlbums(data.albums?.items || []);
+          console.log(data);
         })
         .catch((err) => console.error("Error fetching music:", err))
         .finally(() => setLoading(false));
@@ -74,7 +87,7 @@ export default function Music({ query }) {
 
   return (
     <>
-    <div className="flex flex-col h-[calc(100vh-156px)] py-2 pt-8 mx-3 mb-3 rounded-4xl space-y-6 bg-gradient-to-br from-slate-100 to-slate-200 shadow-[-8px_-4px_20px_rgba(0,0,0,0.1)] overflow-auto">
+    <div className="flex flex-col h-[calc(100vh-145px)] py-2 pt-8 mx-3 rounded-t-4xl space-y-6 bg-gradient-to-br from-slate-100 to-slate-200 shadow-[-8px_-4px_20px_rgba(0,0,0,0.1)] overflow-auto">
       <GlowingBackground />
 
       {/* Search Results */}
@@ -95,7 +108,17 @@ export default function Music({ query }) {
                     title={track.name}
                     artist={track.artists?.map((a) => a.name).join(", ")}
                     image={track.album?.images?.[0]?.url}
+                    onPlay={() => handlePlayTrack(track)}
                   />
+                  // <div className="flex flex-col">
+                  //   <MusicCard
+                  //       key={track.id}
+                  //       title={track.name}
+                  //       artist={track.artists?.map((a) => a.name).join(", ")}
+                  //       image={track.album?.images?.[0]?.url}
+                  //     />
+                  //   <audio src={track.preview_url} controls></audio>
+                  // </div>
                 ))}
             </div>
           </section>
@@ -180,12 +203,7 @@ export default function Music({ query }) {
     </div>
     {/* Player */}
     <MusicPlayer
-      track={{
-        title: "Sunflower",
-        artist: "Post Malone, Swae Lee",
-        audioUrl: "/audio/sunflower.mp3",
-        cover: "./src/assets/song2.jpg",
-      }}
+      track={activeTrack}
     />
     </>
   );

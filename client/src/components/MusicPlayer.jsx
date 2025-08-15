@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import ColorThief from "colorthief";
 import CustomSlider from "./CustomSlider";
 import ScrollingText from "./ScrollingText";
+import musicPlaceholder from "../assets/Music.png";
+import tabsLogo from "../assets/tabs-logo.png";
 
 const shuffle = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.558 4l.897.976c.401.436.602.654.531.839S20.632 6 20.065 6c-1.27 0-2.788-.205-3.954.473c-.72.42-1.223 1.152-2.072 2.527M3 18h1.58c1.929 0 2.893 0 3.706-.473c.721-.42 1.223-1.152 2.072-2.527m9.2 5l.897-.976c.401-.436.602-.654.531-.839S20.632 18 20.065 18c-1.27 0-2.788.205-3.954-.473c-.813-.474-1.348-1.346-2.418-3.09l-2.99-4.875C9.635 7.82 9.1 6.947 8.287 6.473S6.51 6 4.581 6H3" color="currentColor"/></svg>;
 
@@ -31,7 +33,7 @@ export default function MusicPlayer({ track }) {
   const [volume, setVolume] = useState(0.5);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [bgGradient, setBgGradient] = useState(
-    "linear-gradient(to bottom, #000000, #222222)"
+    "linear-gradient(to bottom, #cfd8dc, #aab6b9)"
   );
   const imgRef = useRef(null);
 
@@ -147,7 +149,111 @@ export default function MusicPlayer({ track }) {
   };
 
   if (!track) {
-    return null; // Don't render the player if no track is selected
+    return (
+      <div
+        id="music-player"
+        className={`fixed bottom-0 left-0 w-full z-50 bg-white transition-all duration-300 font-montserrat tracking-wide ${
+          isFullscreen ? "h-screen flex flex-col items-center justify-center gap-6" : "p-2 flex items-center justify-between border-t border-zinc-200"
+        }`}
+      >
+
+        {isFullscreen ? (
+          <div
+            className="flex flex-col justify-center items-center gap-6 w-full h-full"
+            style={{
+              background: bgGradient,
+              transition: "background 0.5s ease",
+            }}
+          >
+
+            <div className="w-140 h-140 bg-gray-50/30 rounded-3xl scale-90 flex justify-center items-center">
+              <img src={musicPlaceholder} alt="Music" className="w-80 h-80 opacity-30 rounded-3xl object-cover transition-all duration-400 z-10 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]"/>
+            </div>
+
+            <div className="text-center z-10 w-125">
+              <ScrollingText
+                text="Song Title"
+                className="text-2xl font-semibold text-white/80"
+                width={500}
+              />
+              <ScrollingText
+                text="Artist"
+                className="text-lg font-medium text-white/70"
+                width={500}
+              />
+            </div>
+
+            <div className="max-w-xl z-10 w-125">
+              <CustomSlider
+                value={0}
+                max={100}
+              />
+              <div className="flex justify-between text-xs mt-1 z-10">
+                <span className="text-white/70">--:--</span>
+                <span className="text-white/70">--:--</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-4 z-10">
+              <button className="hover:bg-white/20 rounded-xl p-2 text-white/70 hover:text-white active:text-white/90 active:scale-85 transition-all duration-200">{shuffle}</button>
+              <button className="hover:bg-white/20 rounded-xl p-2 text-white/70 hover:text-white active:text-white/90 active:scale-85 transition-all duration-200">{previous}</button>
+              <button onClick={togglePlay} className="hover:bg-white/20 rounded-xl p-2 text-white/70 hover:text-white/90 active:text-white active:scale-105 scale-125 transition-all duration-200">
+                {isPlaying ? pause : play}
+              </button>
+              <button className="hover:bg-white/20 rounded-xl p-2 text-white/70 hover:text-white active:text-white/90 active:scale-85 transition-all duration-200">{next}</button>
+              <button className="hover:bg-white/20 rounded-xl p-2 text-white/70 hover:text-white active:text-white/90 active:scale-85 transition-all duration-200">{repeat}</button>
+            </div>
+
+            <button onClick={toggleFullscreen} className="text-sm text-white/70 mt-4 z-10 hover:text-white/90 transition-all duration-200">
+              Exit Fullscreen
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-4 px-4">
+              <button className="text-zinc-400">{shuffle}</button>
+              <button className="text-zinc-400">{previous}</button>
+              <button onClick={togglePlay} className="text-black">
+                {isPlaying ? pause : play}
+              </button>
+              <button className="text-zinc-400">{next}</button>
+              <button className="text-zinc-400">{repeat}</button>
+            </div>
+
+            <div className="flex items-center w-[500px] max-w-full h-14 bg-white rounded-lg">
+              <div className="h-14 w-14 flex justify-center items-center rounded-l-lg bg-[#434343]/20">
+                <img src={musicPlaceholder} alt="Tabs Music" className="h-6 w-6 object-cover contrast-10 opacity-85"/>
+              </div>
+
+              <div className="flex justify-center items-center w-full h-full bg-[#6f6e6e]/15 rounded-r-lg">
+                    <img
+                      src={tabsLogo}
+                      alt="Tabs Music"
+                      className="max-h-full max-w-[60px] object-contain grayscale opacity-80"
+                    />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 px-4">
+              {volume_mute}
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={volume}
+                onChange={(e) => setVolume(parseFloat(e.target.value))}
+                className="w-[80px] h-1 accent-zinc-500"
+              />
+              {volume_high}
+              <button onClick={toggleFullscreen} className="text-zinc-400">
+                {full_screen}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    );
   }
 
   const { title, artist, audioUrl, cover } = track;
@@ -255,7 +361,7 @@ export default function MusicPlayer({ track }) {
           </div>
 
           <div className="flex items-center w-[500px] max-w-full h-14 bg-white rounded-lg border border-zinc-200">
-            <img src={cover?.[2]?.url} alt={title} className="h-14 w-14 rounded-l object-cover" />
+            <img src={cover?.[2]?.url} alt={title} className="h-14 w-14 rounded-l-lg object-cover" />
 
             <div className="flex flex-col w-full">
               <div className="flex flex-row justify-between items-end truncate">

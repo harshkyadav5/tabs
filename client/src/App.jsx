@@ -1,5 +1,5 @@
-import { React, useState} from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
+import { Routes, Route, useLocation, useParams } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import MusicNavbar from "./components/MusicNavbar";
 import SignIn from "./pages/SignIn";
@@ -16,17 +16,21 @@ import RecycleBin from "./pages/RecycleBin";
 import HomeLayout from "./layouts/HomeLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
 
+const MusicPageWrapper = () => {
+  const { query } = useParams();
+  return <Music query={query} />;
+};
+
 export default function App() {
   const location = useLocation();
 
   const isAuthPage = location.pathname === "/signin" || location.pathname === "/signup";
-  const isMusicPage = location.pathname === "/music";
-  const [searchQuery, setSearchQuery] = useState("");
+  const isMusicPage = location.pathname.startsWith("/music");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-slate-300 transition-colors duration-300">
       {!isAuthPage && !isMusicPage && <Navbar />}
-      {isMusicPage && <MusicNavbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
+      {isMusicPage && <MusicNavbar />}
 
       <Routes>
         <Route path="/signin" element={<SignIn />} />
@@ -44,7 +48,8 @@ export default function App() {
         </Route>
 
         <Route element={<SimpleLayout />}>
-          <Route path="/music" element={<Music query={searchQuery} />} />
+          <Route path="/music" element={<Music />} />
+          <Route path="/music/search/:query" element={<MusicPageWrapper />} />
         </Route>
       </Routes>
     </div>

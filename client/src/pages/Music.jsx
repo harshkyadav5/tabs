@@ -3,6 +3,8 @@ import GlowingBackground from "../components/GlowingBackground";
 import MusicCard from "../components/MusicCard";
 import ArtistCard from "../components/ArtistCard";
 import MusicPlayer from "../components/MusicPlayer";
+import SkeletonMusicCard from "../components/SkeletonMusicCard";
+import SkeletonArtistCard from "../components/SkeletonArtistCard";
 
 const useHorizontalScroll = () => {
   const scrollRef = useRef(null);
@@ -28,8 +30,12 @@ const useHorizontalScroll = () => {
   return { scrollRef, atStart, atEnd };
 };
 
-export default function Music({ query }) {
+export default function Music() {
   const trendingScroll = useHorizontalScroll();
+
+  const urlPath = window.location.pathname;
+  const pathParts = urlPath.split('/');
+  const query = pathParts.length > 3 ? decodeURIComponent(pathParts.pop()) : "";
 
   const [tracks, setTracks] = useState([]);
   const [albums, setAlbums] = useState([]);
@@ -57,14 +63,14 @@ export default function Music({ query }) {
     if (!query) return;
     const timeout = setTimeout(() => {
       setLoading(true);
-      fetch(`http://localhost:5000/api/music?q=${encodeURIComponent(query)}`)
+      // fetch(`http://localhost:5000/api/music?q=${encodeURIComponent(query)}`)
+      fetch(`http://localhost:5000/api/music/search/${encodeURIComponent(query)}`)
         .then((res) => res.json())
         .then((data) => {
           setTracks(data.tracks?.items || []);
           setArtists(data.artists?.items || []);
           setPlaylists(data.playlists?.items || []);
           setAlbums(data.albums?.items || []);
-          console.log(data);
         })
         .catch((err) => console.error("Error fetching music:", err))
         .finally(() => setLoading(false));
@@ -100,8 +106,9 @@ export default function Music({ query }) {
               ref={trendingScroll.scrollRef}
               className="flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0"
             >
-              {loading && <p className="text-gray-500">Loading...</p>}
-              {!loading &&
+              {loading ? (
+                [...Array(10)].map((_, index) => <SkeletonMusicCard key={index} />)
+              ) : (
                 tracks.map((track) => (
                   <MusicCard
                     key={track.id}
@@ -110,16 +117,8 @@ export default function Music({ query }) {
                     image={track.album?.images?.[0]?.url}
                     onPlay={() => handlePlayTrack(track)}
                   />
-                  // <div className="flex flex-col">
-                  //   <MusicCard
-                  //       key={track.id}
-                  //       title={track.name}
-                  //       artist={track.artists?.map((a) => a.name).join(", ")}
-                  //       image={track.album?.images?.[0]?.url}
-                  //     />
-                  //   <audio src={track.preview_url} controls></audio>
-                  // </div>
-                ))}
+                ))
+              )}
             </div>
           </section>
 
@@ -130,13 +129,17 @@ export default function Music({ query }) {
               ref={trendingScroll.scrollRef}
               className="flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0"
             >
-              {artists.map((artist) => (
-                <ArtistCard
+              {loading ? (
+                [...Array(10)].map((_, index) => <SkeletonArtistCard key={index} />)
+              ) : (
+                artists.map((artist) => (
+                  <ArtistCard
                   key={artist.id}
                   name={artist.name}
                   image={artist.images?.[0]?.url}
                 />
-              ))}
+                ))
+              )}
             </div>
           </section>
 
@@ -147,14 +150,18 @@ export default function Music({ query }) {
               ref={trendingScroll.scrollRef}
               className="flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0"
             >
-              {albums.map((album) => (
-                <MusicCard
-                  key={album.id}
-                  title={album.name}
-                  artist={album.artists?.map((a) => a.name).join(", ")}
-                  image={album.images?.[0]?.url}
-                />
-              ))}
+              {loading ? (
+                [...Array(10)].map((_, index) => <SkeletonMusicCard key={index} />)
+              ) : (
+                albums.map((album) => (
+                  <MusicCard
+                    key={album.id}
+                    title={album.name}
+                    artist={album.artists?.map((a) => a.name).join(", ")}
+                    image={album.images?.[0]?.url}
+                  />
+                ))
+              )}
             </div>
           </section>
 
@@ -165,14 +172,18 @@ export default function Music({ query }) {
               ref={trendingScroll.scrollRef}
               className="flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0"
             >
-              {playlists.map((playlist) => (
-                <MusicCard
-                  key={playlist.id}
-                  title={playlist.name}
-                  artist={playlist.owner?.display_name}
-                  image={playlist.images?.[0]?.url}
-                />
-              ))}
+              {loading ? (
+                [...Array(10)].map((_, index) => <SkeletonMusicCard key={index} />)
+              ) : (
+                playlists.map((playlist) => (
+                  <MusicCard
+                    key={playlist.id}
+                    title={playlist.name}
+                    artist={playlist.owner?.display_name}
+                    image={playlist.images?.[0]?.url}
+                  />
+                ))
+              )}
             </div>
           </section>
         </>
@@ -186,16 +197,18 @@ export default function Music({ query }) {
             ref={trendingScroll.scrollRef}
             className="flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0 mask-to-l"
           >
-            {loadingNewReleases && <p className="text-gray-500">Loading...</p>}
-            {!loadingNewReleases &&
-              newReleases.map((album) => (
-                <MusicCard
-                  key={album.id}
-                  title={album.name}
-                  artist={album.artists?.map((a) => a.name).join(", ")}
-                  image={album.images?.[0]?.url}
-                />
-              ))}
+            {loadingNewReleases ? (
+                [...Array(10)].map((_, index) => <SkeletonMusicCard key={index} />)
+              ) : (
+                newReleases.map((album) => (
+                  <MusicCard
+                    key={album.id}
+                    title={album.name}
+                    artist={album.artists?.display_name}
+                    image={album.images?.[0]?.url}
+                  />
+                ))
+              )}
           </div>
         </section>
       )}

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getMusic = async (req, res) => {
   try {
-    const searchTerm = req.query.q || "trending";
+    const searchTerm = req.params.query;
     const url = `${process.env.SPOTIFY_API_URL}/search`;
 
     const response = await axios.get(url, {

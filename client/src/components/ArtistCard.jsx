@@ -4,7 +4,7 @@ const play = <svg xmlns="http://www.w3.org/2000/svg" className="w-15 h-15" width
 
 export default function ArtistCard({ name, image, onClick }) {
   return (
-    <div className="aspect-[7/10] min-w-[300px] max-w-[300px] rounded-3xl shadow-md overflow-hidden relative group">
+    <div className="aspect-[7/10] min-w-[300px] max-w-[300px] rounded-3xl shadow-md overflow-hidden relative group bg-gray-400/50">
       {/* Artist image */}
       <img src={image} alt={name} className="w-full h-full object-cover" />
 

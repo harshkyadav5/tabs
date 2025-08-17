@@ -1,24 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function ScrollingText({
-  text,
-  className = "",
-  width = 240,
-  speed = 30, // px/sec
-  gap = 100,
-  startDelay = 5000,
-  loopPause = 3000 // pause between loops in ms
-}) {
+export default function ScrollingText({ text, className = "", width = 240, speed = 30, gap = 100, startDelay = 5000, loopPause = 3000 }) {
   const containerRef = useRef(null);
   const textRef = useRef(null);
   const styleElRef = useRef(null);
   const animNameRef = useRef(`marquee_${Math.random().toString(36).slice(2)}`);
   const [textWidth, setTextWidth] = useState(0);
   const [isOverflowing, setIsOverflowing] = useState(false);
-  const [phase, setPhase] = useState("idle"); // idle | startWait | scrolling
-  const [animActive, setAnimActive] = useState(false); // controls actual scroll
+  const [phase, setPhase] = useState("idle");
+  const [animActive, setAnimActive] = useState(false);
 
-  // Measure text and detect overflow
   useEffect(() => {
     const measure = () => {
       if (!textRef.current || !containerRef.current) return;
@@ -59,7 +50,7 @@ export default function ScrollingText({
     if (phase !== "scrolling" || !isOverflowing || !textWidth) return;
 
     const scrollDistance = textWidth + gap;
-    const duration = (scrollDistance / speed) * 1000; // ms
+    const duration = (scrollDistance / speed) * 1000;
     const name = animNameRef.current;
 
     const injectKeyframes = () => {

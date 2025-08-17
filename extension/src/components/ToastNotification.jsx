@@ -6,13 +6,13 @@ const ToastNotification = ({ message, type, onClose }) => {
   const getToastStyles = (type) => {
     switch (type) {
       case "success":
-        return "bg-green-100/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-green-500";
+        return "bg-green-100/80 backdrop-blur-sm max-w-110 min-h-12 text-green-500";
       case "warning":
-        return "bg-yellow-100/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-yellow-500";
+        return "bg-yellow-100/80 backdrop-blur-sm max-w-110 min-h-12 text-yellow-500";
       case "error":
-        return "bg-red-100/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-red-500";
+        return "bg-red-100/80 backdrop-blur-sm max-w-110 min-h-12 text-red-500";
       default:
-        return "bg-white/50 backdrop-blur-sm min-w-90 max-w-110 min-h-12 text-gray-500";
+        return "bg-white/80 backdrop-blur-sm max-w-110 min-h-12 text-gray-500";
     }
   };
 

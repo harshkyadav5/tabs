@@ -1,11 +1,6 @@
 import React, { useRef, useState } from "react";
 
-export default function CustomSlider({
-  value,
-  max,
-  onChange,
-  showThumb = true
-}) {
+export default function CustomSlider({ value, max, onChange, showThumb = true }) {
   const sliderRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -40,11 +35,11 @@ export default function CustomSlider({
         alignItems: "center"
       }}
     >
-      {/* Track background */}
+      
       <div
         className="w-full bg-white/20 rounded-full relative transition-[height] duration-200"
         style={{
-          height: isDragging ? "6px" : "4px", // inner growth instead of outer container
+          height: isDragging ? "6px" : "4px",
         }}
       >
         {/* Filled track */}

@@ -4,7 +4,7 @@ export default function InfoModal({ image, onClose }) {
   const close = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth={2} d="m18 6l-6 6m0 0l-6 6m6-6l6 6m-6-6L6 6" color="currentColor"/></svg>;
 
   return (
-      <div className="absolute top-9 right-2 bg-white shadow-2xl rounded-xl border border-white overflow-hidden z-30 w-[360px] max-w-full p-5">
+      <div className="absolute top-9 right-2 bg-white/80 backdrop-blur-lg shadow-[0_8px_32px_#00000029] rounded-xl border border-white overflow-hidden z-30 w-[360px] max-w-full p-5">
         <div className="flex items-center mb-4">
           <button
             onClick={onClose}
@@ -45,7 +45,7 @@ export default function InfoModal({ image, onClose }) {
             </p>
           </div>
 
-          <div className="border border-gray-200 rounded-lg bg-slate-100 p-3 space-y-2">
+          <div className="border border-gray-200 rounded-lg bg-slate-100/90 p-3 space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Format</span>
               <span className="text-xs px-2 py-0.5 bg-gray-200 rounded">

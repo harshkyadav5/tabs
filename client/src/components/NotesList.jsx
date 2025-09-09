@@ -1,10 +1,13 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import MenuModal from "./MenuModal";
 
 const tagColors = {
   "#idea": "bg-blue-100 text-blue-800",
   "#todo": "bg-yellow-100 text-yellow-800",
   "#draft": "bg-gray-100 text-gray-700",
 };
+
+const trashIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth={1.5} d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/></svg>;
 
 export default function NotesList({ notes }) {
   const [search, setSearch] = useState("");
@@ -209,7 +212,6 @@ export default function NotesList({ notes }) {
                     );
                     localStorage.setItem("notes", JSON.stringify(updatedNotes));
                     window.location.reload();
-                    // update logic
                   }}
                   className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-900 transition"
                 >
@@ -234,7 +236,12 @@ function NoteCard({ note, onClick, dropdownOpen, toggleDropdown, dropdownRef }) 
         <h3 className="text-base font-semibold text-gray-900 truncate">
           {note.title}
         </h3>
-        <div className="relative" ref={dropdownRef} onClick={(e) => e.stopPropagation()}>
+
+        <div
+          className="relative"
+          ref={dropdownRef}
+          onClick={(e) => e.stopPropagation()}
+        >
           <button
             onClick={toggleDropdown}
             className="text-gray-400 hover:text-gray-700 rounded-full p-1 hover:bg-gray-100"
@@ -245,17 +252,33 @@ function NoteCard({ note, onClick, dropdownOpen, toggleDropdown, dropdownRef }) 
               <circle cx="19" cy="12" r="2" />
             </svg>
           </button>
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-md ring-1 ring-gray-200 z-50 overflow-hidden">
-              <ul className="text-sm text-gray-800">
-                <li className="px-4 py-2 hover:bg-gray-50 cursor-pointer">✏️ Edit</li>
-                <li className="px-4 py-2 hover:bg-gray-50 cursor-pointer">🗑 Delete</li>
-                <li className="px-4 py-2 hover:bg-gray-50 cursor-pointer">📥 Archive</li>
-              </ul>
-            </div>
-          )}
+
+          <MenuModal
+            isOpen={dropdownOpen}
+            onClose={toggleDropdown}
+            position="right-0 mt-2"
+            items={[
+              {
+                icon: "✏️",
+                label: "Edit",
+                onClick: () => console.log("Edit", note),
+              },
+              {
+                icon: "📥",
+                label: "Archive",
+                onClick: () => console.log("Archive", note),
+              },
+              {
+                icon: "🗑",
+                label: "Delete",
+                warning: true,
+                onClick: () => console.log("Delete", note),
+              },
+            ]}
+          />
         </div>
       </div>
+
       <p className="text-sm text-gray-600 line-clamp-3 mb-3">
         {note.content}
       </p>

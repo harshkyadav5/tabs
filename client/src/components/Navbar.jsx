@@ -63,7 +63,7 @@ export default function Navbar() {
               </div>
 
               {dropdownOpen && (
-                <div className="absolute top-12 right-0 mt-2 w-40 bg-white p-2 border border-white/20 ring-1 ring-white ring-opacity-5 focus:outline-none rounded-xl shadow-xl z-50 flex flex-col gap-y-1">
+                <div className="absolute top-12 right-0 mt-2 w-40 bg-white p-2 border border-white/20 ring-1 ring-white ring-opacity-5 focus:outline-none rounded-xl shadow-[0_8px_32px_#00000029] z-50 flex flex-col gap-y-1">
                   <button
                     onClick={() => {
                       setDropdownOpen(false);

@@ -78,7 +78,7 @@ export default function ScreenshotViewer({ image, onBack }) {
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute top-9 right-2 w-60 bg-white shadow-2xl rounded-xl border border-white overflow-hidden z-30"
+          className="absolute top-9 right-2 w-60 bg-white shadow-[0_8px_32px_#00000029] rounded-xl border border-white overflow-hidden z-30"
         >
           <ul className="text-sm p-1">
             {[

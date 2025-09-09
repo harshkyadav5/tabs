@@ -47,7 +47,7 @@ export default function RecycleBin() {
       {trashedItems.length === 0 ? (
         <div className="text-gray-500">No items in the trash.</div>
       ) : (
-        <div className="w-full border border-gray-200 rounded-lg overflow-hidden">
+        <div className="w-full bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
           
           <div className="bg-gray-100 text-sm text-gray-700 font-medium grid grid-cols-6 gap-4 px-4 py-2">
             <div>Type</div>
@@ -66,7 +66,7 @@ export default function RecycleBin() {
             return (
               <div
                 key={item.id}
-                className={`grid grid-cols-6 gap-4 items-start px-4 py-3 text-sm border-t border-gray-200 ${bgColor}`}
+                className={`grid grid-cols-6 gap-4 items-start px-4 py-3 text-sm border-t border-gray-200 ${bgColor} hover:bg-gray-100/90 transition-all duration-200`}
               >
                 <div className="capitalize font-medium text-gray-800">
                   {item.type}

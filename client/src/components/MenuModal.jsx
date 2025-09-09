@@ -18,7 +18,7 @@ export default function MenuModal({ isOpen, onClose, items, width = "w-60", posi
   return (
     <div
       ref={menuRef}
-      className={`absolute ${position} ${width} bg-white shadow-2xl rounded-xl border border-white overflow-hidden z-30`}
+      className={`absolute ${position} ${width} bg-white/80 backdrop-blur-lg shadow-[0_8px_32px_#00000029] rounded-xl border border-white overflow-hidden z-30`}
     >
       <ul className="text-sm p-1">
         {items.map(({ icon, label, warning, onClick }, i) => (
@@ -30,8 +30,8 @@ export default function MenuModal({ isOpen, onClose, items, width = "w-60", posi
             }}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition ${
               warning
-                ? "text-red-500 hover:bg-red-50"
-                : "text-black hover:bg-gray-200"
+                ? "text-red-500 hover:bg-red-100"
+                : "text-black hover:bg-gray-300/70"
             }`}
           >
             <div className={warning ? "text-red-500" : "text-blue-500"}>

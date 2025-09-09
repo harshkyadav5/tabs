@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-export default function MenuModal({ isOpen, onClose, items, position = "top-9 right-2" }) {
+export default function MenuModal({ isOpen, onClose, items, width = "w-60", position = "top-9 right-2" }) {
   const menuRef = useRef();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function MenuModal({ isOpen, onClose, items, position = "top-9 ri
   return (
     <div
       ref={menuRef}
-      className={`absolute ${position} w-60 bg-white shadow-2xl rounded-xl border border-gray-200 overflow-hidden z-30`}
+      className={`absolute ${position} ${width} bg-white shadow-2xl rounded-xl border border-white overflow-hidden z-30`}
     >
       <ul className="text-sm p-1">
         {items.map(({ icon, label, warning, onClick }, i) => (

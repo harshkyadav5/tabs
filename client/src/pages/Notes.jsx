@@ -106,7 +106,7 @@ export default function Notes() {
       createdAt: "2025-06-30",
       modifiedAt: "2025-07-04",
       tags: ["#backend", "#api", "#todo"],
-      pinned: false,
+      is_pinned: false,
       folder: "Development"
     },
     {
@@ -115,7 +115,7 @@ export default function Notes() {
       createdAt: "2025-07-01",
       modifiedAt: "2025-07-05",
       tags: ["#react", "#optimization"],
-      pinned: true,
+      is_pinned: true,
       folder: "Frontend"
     },
     {
@@ -124,7 +124,7 @@ export default function Notes() {
       createdAt: "2025-06-25",
       modifiedAt: "2025-07-03",
       tags: ["#devops", "#docker"],
-      pinned: false,
+      is_pinned: false,
       folder: "Deployment"
     },
     {
@@ -133,7 +133,7 @@ export default function Notes() {
       createdAt: "2025-07-02",
       modifiedAt: "2025-07-06",
       tags: ["#ai", "#idea"],
-      pinned: false,
+      is_pinned: false,
       folder: "R&D"
     },
     {
@@ -142,7 +142,7 @@ export default function Notes() {
       createdAt: "2025-07-03",
       modifiedAt: "2025-07-05",
       tags: ["#bugfix", "#log"],
-      pinned: false,
+      is_pinned: false,
       folder: "QA"
     },
   ]);
@@ -364,7 +364,7 @@ export default function Notes() {
                         createdAt: now,
                         modifiedAt: now,
                         tags: tags,
-                        pinned: false,
+                        is_pinned: false,
                         folder: newNote.folder || "",
                       },
                     ]);

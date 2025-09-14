@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const featureItems = [
   { label: "Bookmarks", destination: '/bookmarks', icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 17.98V9.709c0-3.634 0-5.45 1.172-6.58S8.229 2 12 2s5.657 0 6.828 1.129C20 4.257 20 6.074 20 9.708v8.273c0 2.306 0 3.459-.773 3.871c-1.497.8-4.304-1.867-5.637-2.67c-.773-.465-1.16-.698-1.59-.698s-.817.233-1.59.698c-1.333.803-4.14 3.47-5.637 2.67C4 21.44 4 20.287 4 17.981" color="currentColor"/></svg> },
@@ -22,76 +23,122 @@ const deletedItems = [
 ];
 
 export default function Profile() {
+  const { user } = useAuth();
+
   return (
-    <div className="max-w-6xl mx-auto p-6 flex gap-8">
-      <div className="w-1/3 flex flex-col items-center text-center sticky top-6 self-start">
-        <img
-          src="/profile-pics/default.png"
-          alt="Profile"
-          className="w-28 h-28 rounded-full object-cover border"
-        />
-        <h2 className="mt-4 text-xl font-semibold">Name</h2>
-        <p className="text-gray-500 text-sm">name@email.com</p>
-        <p className="text-gray-400 text-xs">Joined May 2025</p>
-      </div>
-
-      <div className="w-2/3 space-y-8 overflow-y-auto pr-2">
-        
-        <div>
-          <h3 className="text-lg font-semibold mb-3">Account Info</h3>
-          <div className="space-y-2 text-sm text-gray-700">
-            <p><span className="font-medium">Name:</span>Name</p>
-            <p><span className="font-medium">Username:</span>username</p>
-            <p><span className="font-medium">Email:</span>name@email.com</p>
-            <p><span className="font-medium">Password:</span>••••••••</p>
-          </div>
-          <div className="flex gap-3 mt-4">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-xl shadow-sm hover:bg-blue-500 hover:shadow transition text-sm">
-							Edit Info
-						</button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-xl shadow-sm hover:bg-blue-500 hover:shadow transition text-sm">
-							Change Password
-						</button>
-          </div>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Your Data</h3>
-
-          <div className="grid grid-cols-2 gap-4">
-						{[...featureItems, ...toolItems, ...archivedItems, ...deletedItems].map((item, i) => (
-							<Link
-								to={item.destination}
-								key={i}
-								className="p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl shadow-sm flex items-center gap-3 transition"
-							>
-								<div className="text-gray-600">{item.icon}</div>
-								<div>
-									<p className="text-sm font-medium text-gray-800">{item.label}</p>
-									{item.count !== undefined && (
-										<p className="text-xs text-gray-500">{item.count} items</p>
-									)}
+		<div className="pt-18 bg-white z-0 w-full mx-auto self-center">
+			<div className="max-w-6xl mx-auto p-6 flex flex-col md:flex-row md:gap-8 gap-6 antialiased">
+				
+				<div className="flex flex-col items-start w-full md:w-64 lg:w-74 gap-4 md:sticky md:top-24 self-start md:flex-shrink-0 md:basis-auto">
+					{user ? (
+						<>
+							<div className="flex md:flex-col md:justify-center items-center text-left gap-4 self-start">
+								<img
+									src={`/profile-pics/${user.profilePicture}`}
+									alt="Profile"
+									className="w-[25%] h-auto sm:w-28 sm:h-28 md:w-64 md:h-64 lg:w-74 lg:h-74 rounded-full object-cover shadow-md ring-2 ring-gray-200 transition-all duration-200"
+								/>
+								<div className="text-left">
+									<h2 className="mt-1 text-2xl font-semibold">{user.username.toUpperCase()}</h2>
+									<p className="text-gray-500 text-xl">{user.email}</p>
+									<p className="text-gray-400 text-lg mt-1">
+										Joined{" "}
+										{new Date(user.createdAt).toLocaleDateString("en-US", {
+											year: "numeric",
+											month: "long",
+											day: "numeric",
+										})}
+									</p>
 								</div>
-							</Link>
-						))}
-					</div>
-          <div className="flex space-x-3 mt-6">
-            <button className="px-4 py-2 bg-green-600 text-white rounded-xl shadow-sm hover:bg-green-500 hover:shadow transition text-sm">
-  						Export Data
-						</button>
-            <button className="px-4 py-2 bg-gray-600 text-white rounded-xl shadow-sm hover:bg-gray-500 hover:shadow transition text-sm">
-  						Import Data
-						</button>
-          </div>
+							</div>
 
-          <div className="mt-6">
-            <h4 className="text-red-600 font-semibold">Danger Zone</h4>
-            <button className="mt-2 px-4 py-2 bg-red-600 text-white rounded-xl shadow-sm hover:bg-red-500 hover:shadow transition text-sm">
-							Delete Account
-						</button>
-          </div>
-        </div>
-      </div>
-    </div>
+							<div className="w-full mt-2">
+								<button className="px-4 py-2 w-full bg-[#f7f9fb] text-[#25292e] font-semibold rounded-xl border border-[#d1d9e0] hover:bg-[#f3f5f7] text-sm">
+									Edit Profile
+								</button>
+							</div>
+						</>
+					) : (
+						<>
+							<img
+								src="/profile-pics/profile-picture.jpg"
+								alt="Profile"
+								className="w-[25%] h-auto sm:w-28 sm:h-28 md:w-64 md:h-64 lg:w-74 lg:h-74 rounded-full object-cover shadow-md ring-2 ring-gray-200 transition-all duration-200"
+							/>
+							<div className="text-left">
+								<h2 className="mt-1 text-lg sm:text-xl font-semibold">Name</h2>
+								<p className="text-gray-500 text-sm sm:text-base">name@email.com</p>
+								<p className="text-gray-400 text-xs sm:text-sm mt-1">Joined May 2025</p>
+							</div>
+						</>
+					)}
+				</div>
+
+				<div className="flex-1 space-y-8 overflow-y-auto p-6 border border-[#d1d9e0] rounded-2xl">
+					{/* Your Data */}
+					<div>
+						<h3 className="text-2xl mb-4">Your Data</h3>
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
+							{[...featureItems, ...toolItems, ...archivedItems, ...deletedItems].map((item, i) => (
+								<Link
+									to={item.destination}
+									key={i}
+									className="p-3 md:p-4 bg-gray-50 hover:bg-gray-100 rounded-xl md:rounded-2xl shadow-sm flex items-center gap-3 transition"
+								>
+									<div className="text-gray-600">{item.icon}</div>
+									<div>
+										<p className="text-sm font-medium text-gray-800">{item.label}</p>
+										{item.count !== undefined && (
+											<p className="text-xs text-gray-500">{item.count} items</p>
+										)}
+									</div>
+								</Link>
+							))}
+						</div>
+
+						<div className="flex flex-wrap gap-3 mt-6">
+							<button className="px-4 py-2 bg-green-600 text-white rounded-xl shadow-sm hover:bg-green-500 hover:shadow transition text-sm">
+								Export Data
+							</button>
+							<button className="px-4 py-2 bg-gray-600 text-white rounded-xl shadow-sm hover:bg-gray-500 hover:shadow transition text-sm">
+								Import Data
+							</button>
+						</div>
+
+						<div className="mt-6">
+							<h4 className="text-2xl mb-4">Danger Zone</h4>
+							<div className="border border-red-200 rounded-xl divide-y divide-[#d1d9e0]">
+								{/* Delete Data */}
+								<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-3 gap-2">
+									<div className="flex flex-col">
+										<span className="text-sm font-medium text-gray-800">Delete Data</span>
+										<span className="text-xs text-gray-500">
+											Clear your saved bookmarks, notes, clipboard, and other data.
+										</span>
+									</div>
+									<button className="px-4 py-2 mt-2 sm:mt-0 bg-[#f7f9fb] text-red-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-red-700 hover:text-white transition text-sm w-fit sm:w-auto whitespace-nowrap">
+										Delete Data
+									</button>
+								</div>
+
+								{/* Delete Account */}
+								<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-3 gap-2">
+									<div className="flex flex-col">
+										<span className="text-sm font-medium text-gray-800">Delete Account</span>
+										<span className="text-xs text-gray-500">
+											Permanently remove your account and all associated data.
+										</span>
+									</div>
+									<button className="px-4 py-2 mt-2 sm:mt-0 bg-[#f7f9fb] text-red-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-red-700 hover:text-white transition text-sm w-fit sm:w-auto whitespace-nowrap">
+										Delete Account
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
   );
 }
+

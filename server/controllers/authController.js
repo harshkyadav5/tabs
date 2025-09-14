@@ -85,7 +85,8 @@ const signin = async (req, res) => {
             id: user.id,
             username: user.username,
             email: user.email,
-            profilePicture: user.profile_picture
+            profilePicture: user.profile_picture,
+            createdAt: user.created_at
         }});
 
     } catch(err) {

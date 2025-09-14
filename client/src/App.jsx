@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import MusicNavbar from "./components/MusicNavbar";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import Music from "./pages/Music";
 import Notes from "./pages/Notes";
@@ -25,16 +26,20 @@ export default function App() {
   const location = useLocation();
 
   const isAuthPage = location.pathname === "/signin" || location.pathname === "/signup";
+  const isProfilePage = location.pathname === "/profile";
   const isMusicPage = location.pathname.startsWith("/music");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-slate-300 transition-colors duration-300">
       {!isAuthPage && !isMusicPage && <Navbar />}
+      {!isAuthPage && !isProfilePage && !isMusicPage && <Navbar />}
       {isMusicPage && <MusicNavbar />}
 
       <Routes>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+
+        <Route path="/profile" element={<Profile />} />
 
         <Route element={<HomeLayout />}>
           <Route path="/" element={<Home />} />

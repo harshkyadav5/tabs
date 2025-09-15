@@ -22,6 +22,10 @@ const deletedItems = [
   { label: "Recycle Bin", count: 7, destination: '/recycle-bin', icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/></svg> },
 ];
 
+const importIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill={"none"}><path d="M2.99995 17C2.99995 17.93 2.99995 18.395 3.10217 18.7765C3.37957 19.8117 4.18821 20.6204 5.22349 20.8978C5.60499 21 6.06997 21 6.99995 21L16.9999 21C17.9299 21 18.3949 21 18.7764 20.8978C19.8117 20.6204 20.6203 19.8117 20.8977 18.7765C20.9999 18.395 20.9999 17.93 20.9999 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path><path d="M16.5 7.49993C16.5 7.49993 13.1858 2.99997 12 2.99996C10.8142 2.99995 7.50002 7.49996 7.50002 7.49996M12 3.99996V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>;
+
+const exportIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill={"none"}><path d="M2.99969 17.0002C2.99969 17.9302 2.99969 18.3952 3.10192 18.7767C3.37932 19.8119 4.18796 20.6206 5.22324 20.898C5.60474 21.0002 6.06972 21.0002 6.99969 21.0002L16.9997 21.0002C17.9297 21.0002 18.3947 21.0002 18.7762 20.898C19.8114 20.6206 20.6201 19.8119 20.8975 18.7767C20.9997 18.3952 20.9997 17.9302 20.9997 17.0002" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path><path d="M16.4998 11.5002C16.4998 11.5002 13.1856 16.0002 11.9997 16.0002C10.8139 16.0002 7.49976 11.5002 7.49976 11.5002M11.9997 15.0002V3.00016" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>;
+
 export default function Profile() {
   const { user } = useAuth();
 
@@ -32,7 +36,7 @@ export default function Profile() {
 				<div className="flex flex-col items-start w-full md:w-64 lg:w-74 gap-4 md:sticky md:top-24 self-start md:flex-shrink-0 md:basis-auto">
 					{user ? (
 						<>
-							<div className="flex md:flex-col md:justify-center items-center text-left gap-4 self-start">
+							<div className="flex md:flex-col md:justify-center items-center md:items-start text-left gap-4 self-start">
 								<img
 									src={`/profile-pics/${user.profilePicture}`}
 									alt="Profile"
@@ -97,11 +101,17 @@ export default function Profile() {
 						</div>
 
 						<div className="flex flex-wrap gap-3 mt-6">
-							<button className="px-4 py-2 bg-green-600 text-white rounded-xl shadow-sm hover:bg-green-500 hover:shadow transition text-sm">
-								Export Data
+							<button className="flex items-center gap-3 px-4 py-2 bg-[#f7f9fb] text-gray-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-gray-700 hover:text-white transition text-sm whitespace-nowrap">
+								<div>
+									{exportIcon}
+								</div>
+								<span className="truncate">Export Data</span>
 							</button>
-							<button className="px-4 py-2 bg-gray-600 text-white rounded-xl shadow-sm hover:bg-gray-500 hover:shadow transition text-sm">
-								Import Data
+							<button className="flex items-center gap-3 px-4 py-2 bg-[#f7f9fb] text-green-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-green-700 hover:text-white transition text-sm whitespace-nowrap">
+								<div>
+									{importIcon}
+								</div>
+								<span className="truncate">Import Data</span>
 							</button>
 						</div>
 

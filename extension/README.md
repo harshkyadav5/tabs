@@ -41,3 +41,16 @@ extension/
 ├── package.json        # Dependencies and scripts
 ├── vite.config.js      # Vite configuration
 └── eslint.config.js    # ESLint configuration
+```
+
+## ⚙️ Tech Stack  
+
+- **Framework**: React.js + Vite  
+- **Styling**: Tailwind CSS  
+- **State Management**: React Context API & Hooks  
+- **Background Services**: background.js for events and persistent tasks  
+
+## 📌 Future Enhancements  
+
+- Real-time sync with web app dashboard  
+- Offline clipboard and notes support  

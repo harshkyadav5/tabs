@@ -31,8 +31,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-slate-300 transition-colors duration-300">
-      {!isAuthPage && !isMusicPage && <Navbar />}
       {!isAuthPage && !isProfilePage && !isMusicPage && <Navbar />}
+      {isProfilePage && <Navbar />}
       {isMusicPage && <MusicNavbar />}
 
       <Routes>

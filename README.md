@@ -31,11 +31,31 @@ tabs-app/
 ## Client (Web App)  
 
 - Built with **React + Vite + Tailwind CSS**  
-- Pages, components, layouts, hooks, services, and utils organized in src/  
+- Pages, components, layouts, hooks, services, and utils organized in `src/`  
 - Handles authentication, dashboard, notes, bookmarks, clipboard, and color picker  
 
-## Extension (Browser Extension)
+
+## Extension (Browser Extension)  
 
 - Built with **React + Vite**  
 - Provides quick access to bookmarks, clipboard, and other productivity tools  
-- Includes manifest.json, icons, background script
+- Includes `manifest.json`, icons, background script  
+
+
+## Server (Backend)  
+
+- **Express.js** for API development
+- **PostgreSQL** as the database  
+- Controllers for auth, clipboard, music recognition, and suggestions  
+- Middleware for authentication  
+- Routes for modular API endpoints  
+- `db/schema.sql` contains initial database schema  
+
+
+## ⚙️ Tech Stack  
+
+- **Frontend**: React.js, Vite, Tailwind CSS
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL
+- **Extension**: React.js + Vite
+- **Other Tools**: JWT Authentication, Winston (logging), REST APIs

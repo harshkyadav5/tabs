@@ -24,4 +24,18 @@ tabs-app/
 ├── extension/    # Browser extension (React + Vite)
 ├── server/       # Express.js backend + PostgreSQL
 ├── package.json  # Root dependencies
-└── README.md     # Project documentation
+└── README.md     # Project documentation  
+```
+---
+
+## Client (Web App)  
+
+- Built with **React + Vite + Tailwind CSS**  
+- Pages, components, layouts, hooks, services, and utils organized in src/  
+- Handles authentication, dashboard, notes, bookmarks, clipboard, and color picker  
+
+## Extension (Browser Extension)
+
+- Built with **React + Vite**  
+- Provides quick access to bookmarks, clipboard, and other productivity tools  
+- Includes manifest.json, icons, background script

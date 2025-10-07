@@ -59,3 +59,68 @@ tabs-app/
 - **Database**: PostgreSQL
 - **Extension**: React.js + Vite
 - **Other Tools**: JWT Authentication, Winston (logging), REST APIs
+
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18+ 
+- PostgreSQL 12+
+- Chrome browser (for extension)
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/tabs-app.git
+cd tabs-app
+```
+
+### 2. Database Setup
+```bash
+# Create PostgreSQL database
+createdb tabs_app
+
+# Run schema
+psql -d tabs_app -f server/db/schema.sql
+```
+
+### 3. Environment Configuration
+Create `.env` files in both `client/` and `server/` directories:
+
+**server/.env**
+```env
+DATABASE_URL=postgresql://username:password@localhost:5432/tabs_app
+JWT_SECRET=your-super-secret-jwt-key
+PORT=5000
+SPOTIFY_API_URL=https://api.spotify.com/v1
+```
+
+**client/.env**
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+### 4. Install Dependencies
+```bash
+# Install server dependencies
+cd server
+npm install
+
+# Install client dependencies
+cd ../client
+npm install
+
+# Install extension dependencies
+cd ../extension
+npm install
+```
+
+### 5. Start Development Servers
+```bash
+npm run dev
+
+### 6. Build Extension
+```bash
+cd extension
+npm run build
+```
+
+Then load the `extension/dist` folder as an unpacked extension in Chrome.

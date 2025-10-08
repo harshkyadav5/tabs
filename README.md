@@ -124,3 +124,47 @@ npm run build
 ```
 
 Then load the `extension/dist` folder as an unpacked extension in Chrome.
+
+## 🔧 API Endpoints
+
+### Authentication
+- `POST /api/auth/signup` - User registration
+- `POST /api/auth/signin` - User login
+- `GET /api/auth/me` - Get current user
+
+### Bookmarks
+- `GET /api/bookmarks` - Get user bookmarks
+- `POST /api/bookmarks` - Create bookmark
+- `PUT /api/bookmarks/:id` - Update bookmark
+- `DELETE /api/bookmarks/:id` - Delete bookmark
+- `PATCH /api/bookmarks/:id/view` - Increment view count
+
+### Notes
+- `GET /api/notes` - Get user notes
+- `POST /api/notes` - Create note
+- `PUT /api/notes/:id` - Update note
+- `DELETE /api/notes/:id` - Delete note
+
+### Clipboard
+- `GET /api/clipboard` - Get clipboard items
+- `POST /api/clipboard` - Create clipboard item
+- `PUT /api/clipboard/:id` - Update clipboard item
+- `DELETE /api/clipboard/:id` - Delete clipboard item
+
+### Screenshots
+- `GET /api/screenshots` - Get screenshots
+- `POST /api/screenshots` - Create screenshot
+- `PATCH /api/screenshots/:id/favorite` - Toggle favorite
+
+### Colors
+- `GET /api/colors` - Get saved colors
+- `POST /api/colors` - Save color
+- `PUT /api/colors/:id` - Update color
+- `DELETE /api/colors/:id` - Delete color
+
+### Archive & Trash
+- `GET /api/archive` - Get archived items
+- `POST /api/archive` - Archive item
+- `DELETE /api/archive/:entityType/:entityId` - Unarchive item
+- `GET /api/trash` - Get trash items
+- `POST /api/trash/:entityType/:entityId/restore` - Restore item

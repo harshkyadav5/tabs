@@ -116,6 +116,7 @@ npm install
 ### 5. Start Development Servers
 ```bash
 npm run dev
+```
 
 ### 6. Build Extension
 ```bash

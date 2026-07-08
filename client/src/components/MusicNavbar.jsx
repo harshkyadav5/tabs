@@ -2,14 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { ProfileIcon, LogoutIcon } from "./icons";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const icons = {
-  profile: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.578 15.482c-1.415.842-5.125 2.562-2.865 4.715C4.816 21.248 6.045 22 7.59 22h8.818c1.546 0 2.775-.752 3.878-1.803c2.26-2.153-1.45-3.873-2.865-4.715a10.66 10.66 0 0 0-10.844 0M16.5 6.5a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0" color="currentColor"/></svg>
-  ),
-  logout: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m11 3l-.663.234c-2.578.91-3.868 1.365-4.602 2.403S5 8.043 5 10.777v2.445c0 2.735 0 4.102.735 5.14c.734 1.039 2.024 1.494 4.602 2.404L11 21m10-9H11m10 0c0-.7-1.994-2.008-2.5-2.5M21 12c0 .7-1.994 2.008-2.5 2.5" color="currentColor"/></svg>
-  ),
   search: (
     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.5 17.5L22 22m-2-11a9 9 0 1 0-18 0a9 9 0 0 0 18 0" color="currentColor"/></svg>
   ),
@@ -28,15 +24,7 @@ export default function MusicNavbar() {
 
   const { showToast } = useToast();
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useOutsideClick(dropdownRef, () => setDropdownOpen(false));
 
   useEffect(() => {
     if (!localSearchQuery) {
@@ -121,7 +109,7 @@ export default function MusicNavbar() {
                     className="w-full text-left px-4 py-2 text-sm rounded-lg hover:bg-gray-100"
                   >
                     <div className="flex items-center space-x-2">
-                      {icons['profile']}
+                      <ProfileIcon />
                       <span className="capitalize">Profile</span>
                     </div>
                   </button>
@@ -134,7 +122,7 @@ export default function MusicNavbar() {
                     className="w-full text-left px-4 py-2 text-sm rounded-lg text-red-600 hover:bg-red-100"
                   >
                     <div className="flex items-center space-x-2">
-                      {icons['logout']}
+                      <LogoutIcon />
                       <span className="capitalize">Logout</span>
                     </div>
                   </button>

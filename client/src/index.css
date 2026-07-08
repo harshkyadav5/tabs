@@ -33,6 +33,25 @@
   --font-music: 'Helvetica', 'Arial', 'sans-serif';
   --text-size-15: 1.0625rem;
 
+  --color-primary: #4f46e5;        /* indigo-600 */
+  --color-primary-hover: #4338ca;  /* indigo-700 */
+  --color-primary-soft: #eef2ff;   /* indigo-50 */
+  --color-danger: #dc2626;         /* red-600 */
+  --color-danger-hover: #b91c1c;   /* red-700 */
+  --color-danger-soft: #fee2e2;    /* red-100 */
+
+  --color-music-accent: #f43f5e;      /* rose-500 */
+  --color-music-accent-soft: #ec4899; /* pink-500, gradient partner */
+  --color-music-surface: #111827;     /* gray-900 */
+
+  --radius-btn: 0.75rem;   /* was rounded-xl */
+  --radius-card: 1rem;     /* was rounded-2xl */
+  --radius-panel: 1.5rem;  /* was rounded-3xl/4xl, e.g. auth forms */
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.10);
+  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.16);
+
   --animate-toast-in: toast-in 0.25s ease-in-out;
   @keyframes toast-in {
     0% {
@@ -107,4 +126,8 @@
 
 * {
   box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-dm-sans);
 }

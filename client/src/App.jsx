@@ -30,7 +30,7 @@ export default function App() {
   const isMusicPage = location.pathname.startsWith("/music");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-slate-300 transition-colors duration-300">
+    <div className="min-h-screen transition-colors duration-300">
       {!isAuthPage && !isProfilePage && !isMusicPage && <Navbar />}
       {isProfilePage && <Navbar />}
       {isMusicPage && <MusicNavbar />}

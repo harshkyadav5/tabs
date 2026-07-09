@@ -23,10 +23,10 @@ export default function ColorCard({ color }) {
     });
 
   return (
-    <div className="relative group rounded-3xl border border-gray-300/50 bg-white/50 p-4 shadow-sm hover:shadow-[0_4px_22px_#00000029] hover:border-gray-300 transition-all duration-200">
-      
+    <div className="relative group rounded-card border border-gray-300/50 bg-white/50 p-4 shadow-card hover:shadow-card-hover hover:border-gray-300 transition-all duration-200">
+
       <div
-        className="w-full h-24 rounded-2xl mb-4 border border-gray-200/50"
+        className="w-full h-24 rounded-card mb-4 border border-gray-200/50"
         style={{ backgroundColor: color.hex_code }}
       />
 
@@ -36,7 +36,7 @@ export default function ColorCard({ color }) {
           <span className="font-semibold">Hex</span>
           <div
             onClick={() => copyToClipboard(color.hex_code)}
-            className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100 transition group/hoverable"
+            className="flex items-center gap-1 px-2 py-1 rounded-btn cursor-pointer hover:bg-gray-100 transition group/hoverable"
             title="Copy hex"
           >
             {copy}
@@ -49,7 +49,7 @@ export default function ColorCard({ color }) {
           <span className="font-semibold">RGB</span>
           <div
             onClick={() => copyToClipboard(color.rgb_code)}
-            className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-100 transition group/hoverable"
+            className="flex items-center gap-1 px-2 py-1 rounded-btn cursor-pointer hover:bg-gray-100 transition group/hoverable"
             title="Copy RGB"
           >
             {copy}

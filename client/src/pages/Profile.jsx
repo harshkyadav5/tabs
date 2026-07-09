@@ -57,7 +57,7 @@ export default function Profile() {
 							</div>
 
 							<div className="w-full mt-2">
-								<button className="px-4 py-2 w-full bg-[#f7f9fb] text-[#25292e] font-semibold rounded-xl border border-[#d1d9e0] hover:bg-[#f3f5f7] text-sm">
+								<button className="px-4 py-2 w-full bg-[#f7f9fb] text-[#25292e] font-semibold rounded-btn border border-[#d1d9e0] hover:bg-[#f3f5f7] text-sm">
 									Edit Profile
 								</button>
 							</div>
@@ -78,7 +78,7 @@ export default function Profile() {
 					)}
 				</div>
 
-				<div className="flex-1 space-y-8 overflow-y-auto p-6 border border-[#d1d9e0] rounded-2xl">
+				<div className="flex-1 space-y-8 overflow-y-auto p-6 border border-[#d1d9e0] rounded-card">
 					{/* Your Data */}
 					<div>
 						<h3 className="text-2xl mb-4">Your Data</h3>
@@ -87,9 +87,9 @@ export default function Profile() {
 								<Link
 									to={item.destination}
 									key={i}
-									className="p-4 bg-white border border-gray-200 rounded-2xl flex items-center gap-4 transition hover:bg-gray-50 hover:border-gray-300"
+									className="p-4 bg-white border border-gray-200 rounded-card flex items-center gap-4 transition hover:bg-gray-50 hover:border-gray-300"
 								>
-									<div className={`flex items-center justify-center w-12 h-12 rounded-2xl ${item.color}`}>
+									<div className={`flex items-center justify-center w-12 h-12 rounded-card ${item.color}`}>
 										{item.icon}
 									</div>
 
@@ -104,13 +104,13 @@ export default function Profile() {
 						</div>
 
 						<div className="flex flex-wrap gap-3 mt-6">
-							<button className="flex items-center gap-3 px-4 py-2 bg-[#f7f9fb] text-gray-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-gray-700 hover:text-white transition text-sm whitespace-nowrap">
+							<button className="flex items-center gap-3 px-4 py-2 bg-[#f7f9fb] text-gray-700 font-semibold rounded-btn border border-[#d1d9e0] hover:bg-gray-700 hover:text-white transition text-sm whitespace-nowrap">
 								<div>
 									{exportIcon}
 								</div>
 								<span className="truncate">Export Data</span>
 							</button>
-							<button className="flex items-center gap-3 px-4 py-2 bg-[#f7f9fb] text-green-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-green-700 hover:text-white transition text-sm whitespace-nowrap">
+							<button className="flex items-center gap-3 px-4 py-2 bg-[#f7f9fb] text-green-700 font-semibold rounded-btn border border-[#d1d9e0] hover:bg-green-700 hover:text-white transition text-sm whitespace-nowrap">
 								<div>
 									{importIcon}
 								</div>
@@ -120,7 +120,7 @@ export default function Profile() {
 
 						<div className="mt-6">
 							<h4 className="text-2xl mb-4">Danger Zone</h4>
-							<div className="border border-red-200 rounded-xl divide-y divide-[#d1d9e0]">
+							<div className="border border-red-200 rounded-btn divide-y divide-[#d1d9e0]">
 								{/* Delete Data */}
 								<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 py-3 gap-2">
 									<div className="flex flex-col">
@@ -129,7 +129,7 @@ export default function Profile() {
 											Clear your saved bookmarks, notes, clipboard, and other data.
 										</span>
 									</div>
-									<button className="px-4 py-2 mt-2 sm:mt-0 bg-[#f7f9fb] text-red-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-red-700 hover:text-white transition text-sm w-fit sm:w-auto whitespace-nowrap">
+									<button className="px-4 py-2 mt-2 sm:mt-0 bg-[#f7f9fb] text-red-700 font-semibold rounded-btn border border-[#d1d9e0] hover:bg-red-700 hover:text-white transition text-sm w-fit sm:w-auto whitespace-nowrap">
 										Delete Data
 									</button>
 								</div>
@@ -142,7 +142,7 @@ export default function Profile() {
 											Permanently remove your account and all associated data.
 										</span>
 									</div>
-									<button className="px-4 py-2 mt-2 sm:mt-0 bg-[#f7f9fb] text-red-700 font-semibold rounded-xl border border-[#d1d9e0] hover:bg-red-700 hover:text-white transition text-sm w-fit sm:w-auto whitespace-nowrap">
+									<button className="px-4 py-2 mt-2 sm:mt-0 bg-[#f7f9fb] text-red-700 font-semibold rounded-btn border border-[#d1d9e0] hover:bg-red-700 hover:text-white transition text-sm w-fit sm:w-auto whitespace-nowrap">
 										Delete Account
 									</button>
 								</div>

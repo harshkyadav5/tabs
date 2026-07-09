@@ -2,7 +2,7 @@ import React from "react";
 
 const SkeletonMusicCard = () => {
   return (
-    <div className="aspect-[1/1] min-w-[300px] max-w-[300px] rounded-3xl shadow-md overflow-hidden relative animate-pulse bg-gray-200">
+    <div className="aspect-[1/1] min-w-[300px] max-w-[300px] rounded-panel shadow-md overflow-hidden relative animate-pulse bg-gray-200">
       
       <div className="w-full h-full object-cover bg-gray-300"></div>
 

@@ -4,13 +4,13 @@ const play = <svg xmlns="http://www.w3.org/2000/svg" className="w-15 h-15" width
 
 export default function ArtistCard({ name, image, onClick }) {
   return (
-    <div className="aspect-[7/10] min-w-[300px] max-w-[300px] rounded-3xl shadow-md overflow-hidden relative group bg-gray-400/50">
+    <div className="aspect-[7/10] min-w-[300px] max-w-[300px] rounded-panel shadow-md overflow-hidden relative group bg-gray-400/50">
       {/* Artist image */}
       <img src={image} alt={name} className="w-full h-full object-cover" />
 
       {/* Center play button */}
       <div className="p-5 absolute top-0 left-0 w-full h-full flex justify-center items-center">
-          <button onClick={onClick} className="p-5 h-fit backdrop-blur-md bg-black/40 hover:bg-red-600 active:scale-95 text-slate-200 hover:text-white rounded-full transition duration-200 opacity-0 group-hover:opacity-100">
+          <button onClick={onClick} className="p-5 h-fit backdrop-blur-md bg-black/40 hover:bg-music-accent active:scale-95 text-slate-200 hover:text-white rounded-full transition duration-200 opacity-0 group-hover:opacity-100">
               { play }
           </button>
       </div>

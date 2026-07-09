@@ -71,7 +71,7 @@ export default function ScreenshotGallery() {
           <h1 className="text-3xl font-bold">Screenshots</h1>
           <button
             onClick={toggleFit}
-            className="px-4 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300"
+            className="px-4 py-1 text-sm rounded-btn bg-gray-200 hover:bg-gray-300"
           >
             Switch to {objectFit === "contain" ? "Cover" : "Contain"}
           </button>

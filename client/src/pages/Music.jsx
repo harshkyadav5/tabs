@@ -93,7 +93,7 @@ export default function Music() {
 
   return (
     <>
-    <div className="flex flex-col h-[calc(100vh-145px)] py-2 pt-8 mx-3 rounded-t-4xl space-y-6 bg-gradient-to-br from-slate-100 to-slate-200 shadow-[-8px_-4px_20px_rgba(0,0,0,0.1)] overflow-auto">
+    <div className="flex flex-col h-[calc(100vh-145px)] py-2 pt-8 mx-3 rounded-t-panel space-y-6 bg-gradient-to-br from-slate-100 to-slate-200 shadow-music-surface overflow-auto">
       <GlowingBackground />
 
       {/* Search Results */}

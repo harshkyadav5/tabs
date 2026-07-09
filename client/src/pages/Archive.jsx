@@ -40,7 +40,7 @@ export default function Archive() {
       {items.length === 0 ? (
         <div className="text-gray-500">No items in archive.</div>
       ) : (
-        <div className="w-full bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+        <div className="w-full bg-gray-50 border border-gray-200 rounded-card overflow-hidden">
           
           <div className="bg-gray-100 text-sm text-gray-700 font-medium grid grid-cols-5 gap-4 px-4 py-2">
             <div>Type</div>
@@ -79,13 +79,13 @@ export default function Archive() {
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => handleUnarchive(item.id)}
-                    className="px-3 py-1 text-xs rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+                    className="px-3 py-1 text-xs rounded-btn bg-blue-100 text-blue-700 hover:bg-blue-200"
                   >
                     Unarchive
                   </button>
                   <button
                     onClick={() => handlePermanentDelete(item.id)}
-                    className="px-3 py-1 text-xs rounded bg-red-100 text-red-700 hover:bg-red-200"
+                    className="px-3 py-1 text-xs rounded-btn bg-red-100 text-red-700 hover:bg-red-200"
                   >
                     Delete
                   </button>

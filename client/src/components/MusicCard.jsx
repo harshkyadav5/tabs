@@ -10,7 +10,7 @@ const ellipsis = <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" wid
 
 export default function MusicCard({ title, artist, image, onPlay }) {
   return (
-    <div className="aspect-[1/1] min-w-[300px] max-w-[300px] rounded-3xl shadow-md transition-shadow duration-200 overflow-hidden relative bg-gray-400/50">
+    <div className="aspect-[1/1] min-w-[300px] max-w-[300px] rounded-panel shadow-md transition-shadow duration-200 overflow-hidden relative bg-gray-400/50">
         <img src={image} alt={title} className="w-full h-full object-cover" />
 
         <div className="p-5 absolute top-0 left-0 w-full flex justify-end items-center">
@@ -34,7 +34,7 @@ export default function MusicCard({ title, artist, image, onPlay }) {
                 </div>
                 <div className="p-5 absolute bottom-0 right-0">
                     {/* {onPlay && ( */}
-                    <button onClick={onPlay} className="p-2 backdrop-blur-md bg-black/40 hover:bg-red-600 active:bg-red-600 text-slate-200 hover:text-white rounded-full transition duration-200">
+                    <button onClick={onPlay} className="p-2 backdrop-blur-md bg-black/40 hover:bg-music-accent active:bg-music-accent text-slate-200 hover:text-white rounded-full transition duration-200">
                         { play }
                     </button>
                     {/* )} */}

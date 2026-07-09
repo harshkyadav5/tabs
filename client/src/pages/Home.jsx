@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useContext, use } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { buildLocalSuggestions } from "../utils/suggestionsLocal";
+import Card from "../components/ui/Card";
 
 const Icons = {
   Bookmarks: (
@@ -50,7 +51,7 @@ const CARD_GRADIENTS = {
 
 export default function Home() {
   const navigate = useNavigate();
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -88,18 +89,17 @@ export default function Home() {
   const goToColors = () => navigate(`/colors`);
   const goToMusic = (id) => navigate(`/music?open=${id}`);
 
-  // Card builder: title, desc, action
-  const Card = ({ title, desc, onClick, hoverColor="indigo" }) => (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+  const SuggestionCard = ({ title, desc, onClick, hoverColor = "indigo" }) => (
+    <Card>
       <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
       <p className="text-sm text-gray-500 mb-4">{desc}</p>
       <button
         onClick={onClick}
-        className={`px-4 py-1.5 text-sm rounded-xl bg-gradient-to-r ${CARD_GRADIENTS[hoverColor] || CARD_GRADIENTS.indigo} text-white font-medium hover:opacity-90 transition`}
+        className={`px-4 py-1.5 text-sm rounded-btn bg-gradient-to-r ${CARD_GRADIENTS[hoverColor] || CARD_GRADIENTS.indigo} text-white font-medium hover:opacity-90 transition`}
       >
         View
       </button>
-    </div>
+    </Card>
   );
 
   if (loading) {
@@ -131,7 +131,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {data.bookmarks?.mostVisited && (
-            <Card
+            <SuggestionCard
               title="Most visited bookmark"
               desc={`${data.bookmarks.mostVisited.title || "Untitled"} — ${data.bookmarks.mostVisited.view_count ?? 0} views`}
               onClick={() => goToBookmark(data.bookmarks.mostVisited.id)}
@@ -139,7 +139,7 @@ export default function Home() {
             />
           )}
           {data.bookmarks?.savedButUnopened && (
-            <Card
+            <SuggestionCard
               title="Saved but unopened"
               desc={data.bookmarks.savedButUnopened.title || data.bookmarks.savedButUnopened.url}
               onClick={() => goToBookmark(data.bookmarks.savedButUnopened.id)}
@@ -147,7 +147,7 @@ export default function Home() {
             />
           )}
           {!data.bookmarks?.mostVisited && !data.bookmarks?.savedButUnopened && (
-            <Card title="No bookmarks yet" desc="Start saving links to see suggestions here." onClick={() => navigate("/bookmarks")} hoverColor="indigo"/>
+            <SuggestionCard title="No bookmarks yet" desc="Start saving links to see suggestions here." onClick={() => navigate("/bookmarks")} hoverColor="indigo"/>
           )}
         </div>
       </section>
@@ -159,7 +159,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {data.notes?.recent && (
-            <Card
+            <SuggestionCard
               title="Continue recent note"
               desc={data.notes.recent.title}
               onClick={() => goToNote(data.notes.recent.id)}
@@ -167,7 +167,7 @@ export default function Home() {
             />
           )}
           {data.notes?.todo && (
-            <Card
+            <SuggestionCard
               title="Notes tagged #todo"
               desc={data.notes.todo.title}
               onClick={() => goToNote(data.notes.todo.id)}
@@ -175,7 +175,7 @@ export default function Home() {
             />
           )}
           {!data.notes?.recent && !data.notes?.todo && (
-            <Card title="No notes yet" desc="Create your first note to get suggestions." onClick={() => navigate("/notes")} hoverColor="indigo"/>
+            <SuggestionCard title="No notes yet" desc="Create your first note to get suggestions." onClick={() => navigate("/notes")} hoverColor="indigo"/>
           )}
         </div>
       </section>
@@ -187,7 +187,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {data.clipboard?.pinned && (
-            <Card
+            <SuggestionCard
               title="Pinned clipboard"
               desc={data.clipboard.pinned.description || data.clipboard.pinned.preview}
               onClick={() => goToClipboard(data.clipboard.pinned.id)}
@@ -195,7 +195,7 @@ export default function Home() {
             />
           )}
           {data.clipboard?.recent && (
-            <Card
+            <SuggestionCard
               title="Most recent snippet"
               desc={data.clipboard.recent.description || data.clipboard.recent.preview}
               onClick={() => goToClipboard(data.clipboard.recent.id)}
@@ -203,7 +203,7 @@ export default function Home() {
             />
           )}
           {!data.clipboard?.pinned && !data.clipboard?.recent && (
-            <Card title="No snippets yet" desc="Copy something to your Clipboard to see it here." onClick={() => navigate("/clipboard")} hoverColor="indigo"/>
+            <SuggestionCard title="No snippets yet" desc="Copy something to your Clipboard to see it here." onClick={() => navigate("/clipboard")} hoverColor="indigo"/>
           )}
         </div>
       </section>
@@ -215,7 +215,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {data.screenshots?.favorite && (
-            <Card
+            <SuggestionCard
               title="Favorite screenshot"
               desc={data.screenshots.favorite.web_url}
               onClick={() => goToScreenshot(data.screenshots.favorite.id)}
@@ -223,7 +223,7 @@ export default function Home() {
             />
           )}
           {data.screenshots?.recent && (
-            <Card
+            <SuggestionCard
               title="Latest screenshot"
               desc={data.screenshots.recent.web_url}
               onClick={() => goToScreenshot(data.screenshots.recent.id)}
@@ -231,7 +231,7 @@ export default function Home() {
             />
           )}
           {!data.screenshots?.favorite && !data.screenshots?.recent && (
-            <Card title="No screenshots yet" desc="Capture a webpage to see it here." onClick={() => navigate("/screenshots")} hoverColor="purple"/>
+            <SuggestionCard title="No screenshots yet" desc="Capture a webpage to see it here." onClick={() => navigate("/screenshots")} hoverColor="purple"/>
           )}
         </div>
       </section>
@@ -243,7 +243,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {data.colors?.latest ? (
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+            <Card>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Latest color</h3>
               <div className="flex items-center gap-3 mb-4">
                 <div
@@ -256,12 +256,12 @@ export default function Home() {
                   <div>{data.colors.latest.hex_code} • {data.colors.latest.rgb_code}</div>
                 </div>
               </div>
-              <button onClick={() => goToColors()} className="px-4 py-1.5 text-sm rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium hover:opacity-90 transition">
+              <button onClick={() => goToColors()} className="px-4 py-1.5 text-sm rounded-btn bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium hover:opacity-90 transition">
                 View
               </button>
-            </div>
+            </Card>
           ) : (
-            <Card title="No colors yet" desc="Save a color to see it here." onClick={goToColors} hoverColor="indigo"/>
+            <SuggestionCard title="No colors yet" desc="Save a color to see it here." onClick={goToColors} hoverColor="indigo"/>
           )}
         </div>
       </section>
@@ -273,7 +273,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {data.music?.favorite && (
-            <Card
+            <SuggestionCard
               title="Favorite track"
               desc={`${data.music.favorite.track_name} — ${data.music.favorite.artist || "Unknown"}`}
               onClick={() => goToMusic(data.music.favorite.id)}
@@ -281,7 +281,7 @@ export default function Home() {
             />
           )}
           {data.music?.recent && (
-            <Card
+            <SuggestionCard
               title="Recently added"
               desc={`${data.music.recent.track_name} — ${data.music.recent.artist || "Unknown"}`}
               onClick={() => goToMusic(data.music.recent.id)}
@@ -289,7 +289,7 @@ export default function Home() {
             />
           )}
           {!data.music?.favorite && !data.music?.recent && (
-            <Card title="No tracks yet" desc="Add a track to see suggestions here." onClick={() => navigate("/music")} hoverColor="pink"/>
+            <SuggestionCard title="No tracks yet" desc="Add a track to see suggestions here." onClick={() => navigate("/music")} hoverColor="pink"/>
           )}
         </div>
       </section>
@@ -301,14 +301,14 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {(data.notes?.recent && data.bookmarks?.mostVisited) ? (
-            <Card
+            <SuggestionCard
               title="Note + Bookmark connection"
               desc={`Your note "${data.notes.recent.title}" pairs with "${data.bookmarks.mostVisited.title}"`}
               onClick={() => { goToNote(data.notes.recent.id); }}
               hoverColor="purple"
             />
           ) : (
-            <Card
+            <SuggestionCard
               title="No smart picks yet"
               desc="As you create more content, we’ll surface cross-feature links here."
               onClick={() => navigate("/notes")}

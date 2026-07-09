@@ -149,7 +149,7 @@ export default function Notes() {
 
   return (
     <aside className="w-full font-montserrat">
-      <div className="w-full rounded-4xl mb-8">
+      <div className="w-full rounded-panel mb-8">
         <div className="px-4 w-full flex justify-end">
           <div className="flex items-center border border-gray-400 bg-white/70 rounded-full p-3">
             <button
@@ -169,7 +169,7 @@ export default function Notes() {
         </div>
       </div>
 
-      <div className="w-full rounded-4xl mb-8 p-4 bg-white shadow-[0_3px_25px_rgba(0,0,0,0.15)]">
+      <div className="w-full rounded-panel mb-8 p-4 bg-white shadow-card">
         <div className="pb-4 flex justify-end">
           <button className="px-4 py-2 text-sm font-medium rounded-full text-gray-800 hover:bg-black/85 hover:text-white transition duration-200">
             View All
@@ -213,7 +213,7 @@ export default function Notes() {
       {/* Add Folder Modal */}
       {showAddFolder && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-white w-full max-w-sm rounded-xl shadow-xl p-6 relative border border-gray-100">
+          <div className="bg-white w-full max-w-sm rounded-card shadow-dropdown p-6 relative border border-gray-100">
             <button
               onClick={() => setShowAddFolder(false)}
               className="absolute top-3 right-4 text-gray-400 hover:text-gray-800 text-xl"
@@ -224,14 +224,14 @@ export default function Notes() {
             <input
               type="text"
               placeholder="Enter folder name"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/80"
+              className="w-full border border-gray-300 rounded-btn px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/80"
               value={newFolderName}
               onChange={(e) => setNewFolderName(e.target.value)}
             />
             <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={() => setShowAddFolder(false)}
-                className="px-4 py-2 text-sm rounded-md text-gray-500 hover:text-gray-700"
+                className="px-4 py-2 text-sm rounded-btn text-gray-500 hover:text-gray-700"
               >
                 Cancel
               </button>
@@ -243,7 +243,7 @@ export default function Notes() {
                     setShowAddFolder(false);
                   }
                 }}
-                className="px-4 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-900 transition"
+                className="px-4 py-2 text-sm font-medium rounded-btn bg-black text-white hover:bg-gray-900 transition"
               >
                 Add
               </button>
@@ -255,7 +255,7 @@ export default function Notes() {
       {/* Add Note Modal */}
       {showAddNote && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-white w-full max-w-3xl rounded-xl shadow-2xl p-8 relative border border-gray-100">
+          <div className="bg-white w-full max-w-3xl rounded-card shadow-dropdown p-8 relative border border-gray-100">
             <button
               onClick={() => setShowAddNote(false)}
               className="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-2xl"
@@ -269,14 +269,14 @@ export default function Notes() {
               <input
                 type="text"
                 placeholder="Note title"
-                className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/80"
+                className="w-full border border-gray-300 rounded-btn px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/80"
                 value={newNote.title}
                 onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
               />
 
               <textarea
                 placeholder="Write your note here..."
-                className="w-full border border-gray-300 rounded-md px-4 py-3 text-sm min-h-[160px] focus:outline-none focus:ring-2 focus:ring-black/80"
+                className="w-full border border-gray-300 rounded-btn px-4 py-3 text-sm min-h-[160px] focus:outline-none focus:ring-2 focus:ring-black/80"
                 value={newNote.content}
                 onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
               />
@@ -284,13 +284,13 @@ export default function Notes() {
               <div className="relative">
                 <button
                   onClick={() => setShowFolderPicker(true)}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm text-left text-gray-700 hover:border-black focus:outline-none focus:ring-2 focus:ring-black/80"
+                  className="w-full border border-gray-300 rounded-btn px-4 py-2 text-sm text-left text-gray-700 hover:border-black focus:outline-none focus:ring-2 focus:ring-black/80"
                 >
                   {newNote.folder ? `Folder: ${newNote.folder}` : "Select folder (optional)"}
                 </button>
 
                 {showFolderPicker && (
-                  <div className="absolute z-30 mt-2 w-full bg-white border border-gray-200 shadow-xl rounded-lg">
+                  <div className="absolute z-30 mt-2 w-full bg-white border border-gray-200 shadow-dropdown rounded-btn">
                     <div className="max-h-64 overflow-y-auto p-2">
                       {folders.length === 0 && (
                         <div className="text-sm text-gray-500 px-3 py-2">
@@ -304,7 +304,7 @@ export default function Notes() {
                             setNewNote({ ...newNote, folder: f.name });
                             setShowFolderPicker(false);
                           }}
-                          className={`w-full text-left px-4 py-2 rounded-md text-sm hover:bg-black/5 ${
+                          className={`w-full text-left px-4 py-2 rounded-btn text-sm hover:bg-black/5 ${
                             newNote.folder === f.name ? "bg-black/10 font-medium" : ""
                           }`}
                         >
@@ -327,7 +327,7 @@ export default function Notes() {
               <input
                 type="text"
                 placeholder="Add tags (comma separated, e.g. idea, todo)"
-                className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/80"
+                className="w-full border border-gray-300 rounded-btn px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black/80"
                 value={newNote.tagsInput || ""}
                 onChange={(e) =>
                   setNewNote({ ...newNote, tagsInput: e.target.value })
@@ -342,7 +342,7 @@ export default function Notes() {
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setShowAddNote(false)}
-                className="px-5 py-2 text-sm rounded-md text-gray-500 hover:text-gray-700"
+                className="px-5 py-2 text-sm rounded-btn text-gray-500 hover:text-gray-700"
               >
                 Cancel
               </button>
@@ -377,7 +377,7 @@ export default function Notes() {
                     setShowAddNote(false);
                   }
                 }}
-                className="px-6 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-900 transition"
+                className="px-6 py-2 text-sm font-medium rounded-btn bg-black text-white hover:bg-gray-900 transition"
               >
                 Add Note
               </button>

@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import MenuModal from "./MenuModal";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const tagColors = {
   "#idea": "bg-blue-100 text-blue-800",
@@ -22,15 +23,7 @@ export default function NotesList({ notes }) {
   const [dropdownNoteIndex, setDropdownNoteIndex] = useState(null);
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownNoteIndex(null);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useOutsideClick(dropdownRef, () => setDropdownNoteIndex(null));
 
   const filteredNotes = useMemo(() => {
     let result = [...notes];
@@ -68,16 +61,16 @@ export default function NotesList({ notes }) {
 
   return (
     <div className="w-full space-y-8">
-      <div className="flex flex-wrap gap-4 items-center bg-white p-4 rounded-xl border border-gray-200">
+      <div className="flex flex-wrap gap-4 items-center bg-white p-4 rounded-card border border-gray-200">
         <input
           type="text"
           placeholder="Search notes..."
-          className="border px-3 py-2 rounded-md w-full max-w-sm text-sm"
+          className="border px-3 py-2 rounded-btn w-full max-w-sm text-sm"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="border px-2 py-2 text-sm rounded-md"
+          className="border px-2 py-2 text-sm rounded-btn"
           value={tagFilter}
           onChange={(e) => setTagFilter(e.target.value)}
         >
@@ -87,7 +80,7 @@ export default function NotesList({ notes }) {
           ))}
         </select>
         <select
-          className="border px-2 py-2 text-sm rounded-md"
+          className="border px-2 py-2 text-sm rounded-btn"
           value={folderFilter}
           onChange={(e) => setFolderFilter(e.target.value)}
         >
@@ -98,7 +91,7 @@ export default function NotesList({ notes }) {
         </select>
         <button
           onClick={() => setSortNewest((prev) => !prev)}
-          className="text-sm px-3 py-2 border rounded-md"
+          className="text-sm px-3 py-2 border rounded-btn"
         >
           {sortNewest ? "Newest First" : "Oldest First"}
         </button>
@@ -137,7 +130,7 @@ export default function NotesList({ notes }) {
 
       {selectedNote && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white w-full max-w-2xl rounded-xl border border-gray-200 p-6 relative">
+          <div className="bg-white w-full max-w-2xl rounded-card border border-gray-200 shadow-dropdown p-6 relative">
             <button
               onClick={() => setSelectedNote(null)}
               className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl"
@@ -156,7 +149,7 @@ export default function NotesList({ notes }) {
               />
 
               <textarea
-                className="w-full min-h-[200px] p-3 border rounded-md text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800"
+                className="w-full min-h-[200px] p-3 border rounded-btn text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800"
                 value={selectedNote.content}
                 onChange={(e) =>
                   setSelectedNote({ ...selectedNote, content: e.target.value })
@@ -167,7 +160,7 @@ export default function NotesList({ notes }) {
                 <input
                   type="text"
                   placeholder="Tags (comma-separated)"
-                  className="flex-1 border px-3 py-2 rounded-md text-sm"
+                  className="flex-1 border px-3 py-2 rounded-btn text-sm"
                   value={(selectedNote.tags || []).join(", ")}
                   onChange={(e) =>
                     setSelectedNote({
@@ -180,7 +173,7 @@ export default function NotesList({ notes }) {
                 <input
                   type="text"
                   placeholder="Folder"
-                  className="flex-1 border px-3 py-2 rounded-md text-sm"
+                  className="flex-1 border px-3 py-2 rounded-btn text-sm"
                   value={selectedNote.folder || ""}
                   onChange={(e) =>
                     setSelectedNote({ ...selectedNote, folder: e.target.value })
@@ -217,7 +210,7 @@ export default function NotesList({ notes }) {
                     localStorage.setItem("notes", JSON.stringify(updatedNotes));
                     window.location.reload();
                   }}
-                  className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-900 transition"
+                  className="px-5 py-2 text-sm font-medium rounded-btn bg-black text-white hover:bg-gray-900 transition"
                 >
                   Save Changes
                 </button>
@@ -234,7 +227,7 @@ function NoteCard({ note, onClick, dropdownOpen, toggleDropdown, dropdownRef }) 
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-2xl border border-gray-100 hover:border-gray-300 transition cursor-pointer p-5 relative group"
+      className="bg-white rounded-card border border-gray-100 shadow-card hover:shadow-card-hover hover:border-gray-300 transition cursor-pointer p-5 relative group"
     >
       <div className="flex justify-between items-start mb-2">
         <h3 className="text-base font-semibold text-gray-900 truncate">

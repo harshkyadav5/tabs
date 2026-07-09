@@ -166,8 +166,8 @@ export default function MusicPlayer({ track }) {
             }}
           >
 
-            <div className="w-140 h-140 bg-gray-50/30 rounded-3xl scale-90 flex justify-center items-center">
-              <img src={musicPlaceholder} alt="Music" className="w-80 h-80 opacity-30 rounded-3xl object-cover transition-all duration-400 z-10 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]"/>
+            <div className="w-140 h-140 bg-gray-50/30 rounded-panel scale-90 flex justify-center items-center">
+              <img src={musicPlaceholder} alt="Music" className="w-80 h-80 opacity-30 rounded-panel object-cover transition-all duration-400 z-10 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]"/>
             </div>
 
             <div className="text-center z-10 w-125">
@@ -299,7 +299,7 @@ export default function MusicPlayer({ track }) {
             }}
           ></div>
 
-          <img src={cover?.[0]?.url} alt={title} className={`w-140 h-140 rounded-3xl object-cover transition-all duration-400 z-10 ${
+          <img src={cover?.[0]?.url} alt={title} className={`w-140 h-140 rounded-panel object-cover transition-all duration-400 z-10 ${
                 isPlaying
                 ? "scale-100 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]"
                 : "scale-90 drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]"

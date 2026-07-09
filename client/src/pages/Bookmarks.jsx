@@ -168,7 +168,7 @@ export default function Bookmarks() {
     <aside className="w-full font-montserrat">
       
       {/* Top bar with buttons */}
-      <div className="w-full rounded-4xl mb-8">
+      <div className="w-full rounded-panel mb-8">
         <div className="px-4 w-full flex justify-end">
           <div className="flex items-center border border-gray-400 bg-white/70 rounded-full p-3">
             <button className="p-2 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200">
@@ -183,7 +183,7 @@ export default function Bookmarks() {
       </div>
 
       {/* Folders Section */}
-      <div className="w-full rounded-4xl mb-8 p-4 bg-white shadow-[0_3px_25px_rgba(0,0,0,0.15)]">
+      <div className="w-full rounded-panel mb-8 p-4 bg-white shadow-card">
         <div className="pb-4 flex justify-end">
           <button className="px-4 py-2 text-sm font-medium rounded-full text-gray-800 hover:bg-black/85 hover:text-white transition duration-200">
             View All

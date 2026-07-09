@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import InfoModal from "../components/InfoModal";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const back = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth={2} d="M15 6s-6 4.419-6 6s6 6 6 6" color="currentColor"/></svg>;
 const ellipsis = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" strokeWidth={2}><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="20" r="2"/></svg>;
@@ -13,21 +14,7 @@ export default function ScreenshotViewer({ image, onBack }) {
   const [showInfo, setShowInfo] = useState(false);
   const menuRef = useRef();
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setShowMenu(false);
-      }
-    };
-
-    if (showMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showMenu]);
+  useOutsideClick(menuRef, () => setShowMenu(false), showMenu);
 
   return (
     <div className="relative w-full h-full font-montserrat tracking-wide">
@@ -78,7 +65,7 @@ export default function ScreenshotViewer({ image, onBack }) {
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute top-9 right-2 w-60 bg-white shadow-[0_8px_32px_#00000029] rounded-xl border border-white overflow-hidden z-30"
+          className="absolute top-9 right-2 w-60 bg-white shadow-dropdown rounded-btn border border-white overflow-hidden z-30"
         >
           <ul className="text-sm p-1">
             {[
@@ -101,11 +88,11 @@ function MenuItem({ icon, label, warning }) {
     <li
       className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${
         warning
-          ? "text-red-500 hover:bg-red-50"
+          ? "text-danger hover:bg-danger-soft"
           : "text-black hover:bg-gray-200"
       }`}
     >
-      <div className={`${warning ? "text-red-500" : "text-blue-500"}`}>{icon}</div>
+      <div className={`${warning ? "text-danger" : "text-blue-500"}`}>{icon}</div>
       <span className="truncate">{label}</span>
     </li>
   );

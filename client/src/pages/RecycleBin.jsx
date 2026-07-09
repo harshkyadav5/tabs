@@ -47,7 +47,7 @@ export default function RecycleBin() {
       {trashedItems.length === 0 ? (
         <div className="text-gray-500">No items in the trash.</div>
       ) : (
-        <div className="w-full bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+        <div className="w-full bg-gray-50 border border-gray-200 rounded-card overflow-hidden">
           
           <div className="bg-gray-100 text-sm text-gray-700 font-medium grid grid-cols-6 gap-4 px-4 py-2">
             <div>Type</div>
@@ -97,13 +97,13 @@ export default function RecycleBin() {
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => handleRestore(item.id)}
-                    className="px-3 py-1 text-xs rounded bg-green-100 text-green-700 hover:bg-green-200"
+                    className="px-3 py-1 text-xs rounded-btn bg-green-100 text-green-700 hover:bg-green-200"
                   >
                     Restore
                   </button>
                   <button
                     onClick={() => handlePermanentDelete(item.id)}
-                    className="px-3 py-1 text-xs rounded bg-red-100 text-red-700 hover:bg-red-200"
+                    className="px-3 py-1 text-xs rounded-btn bg-red-100 text-red-700 hover:bg-red-200"
                   >
                     Delete
                   </button>

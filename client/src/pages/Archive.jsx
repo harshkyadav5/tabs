@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 
 const archivedItems = [
   {
@@ -20,6 +21,7 @@ const archivedItems = [
 
 export default function Archive() {
   const [items, setItems] = useState(archivedItems);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const handleUnarchive = (id) => {
     const updated = items.map((item) =>
@@ -84,7 +86,7 @@ export default function Archive() {
                     Unarchive
                   </button>
                   <button
-                    onClick={() => handlePermanentDelete(item.id)}
+                    onClick={() => setPendingDeleteId(item.id)}
                     className="px-3 py-1 text-xs rounded-btn bg-red-100 text-red-700 hover:bg-red-200"
                   >
                     Delete
@@ -95,6 +97,17 @@ export default function Archive() {
           })}
         </div>
       )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Permanently delete this item?"
+        message="This can't be undone."
+        onCancel={() => setPendingDeleteId(null)}
+        onConfirm={() => {
+          handlePermanentDelete(pendingDeleteId);
+          setPendingDeleteId(null);
+        }}
+      />
     </div>
   );
 }

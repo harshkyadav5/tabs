@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef } from "react";
 import MenuModal from "./MenuModal";
 import useOutsideClick from "../hooks/useOutsideClick";
+import ConfirmDialog from "./ui/ConfirmDialog";
 
 const tagColors = {
   "#idea": "bg-blue-100 text-blue-800",
@@ -14,13 +15,14 @@ const editIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" vie
 const archiveIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M2 16c0-2.339 0-3.508.536-4.362a3.5 3.5 0 0 1 1.102-1.101C4.492 10 5.66 10 8 10h8c2.339 0 3.508 0 4.362.537a3.5 3.5 0 0 1 1.102 1.1C22 12.493 22 13.662 22 16s0 3.508-.537 4.362a3.5 3.5 0 0 1-1.1 1.102C19.507 22 18.338 22 16 22H8c-2.339 0-3.508 0-4.362-.537a3.5 3.5 0 0 1-1.102-1.1C2 19.507 2 18.338 2 16m18-6c0-1.4 0-2.1-.273-2.635a2.5 2.5 0 0 0-1.092-1.093C18.1 6 17.4 6 16 6H8c-1.4 0-2.1 0-2.635.272a2.5 2.5 0 0 0-1.093 1.093C4 7.9 4 8.6 4 10m14-4c0-1.886 0-2.828-.586-3.414S15.886 2 14 2h-4c-1.886 0-2.828 0-3.414.586S6 4.114 6 6"/><path d="M15 14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2"/></g></svg>;
 const trashIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/></svg>;
 
-export default function NotesList({ notes }) {
+export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
   const [search, setSearch] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [folderFilter, setFolderFilter] = useState("");
   const [sortNewest, setSortNewest] = useState(true);
   const [selectedNote, setSelectedNote] = useState(null);
   const [dropdownNoteIndex, setDropdownNoteIndex] = useState(null);
+  const [noteToDelete, setNoteToDelete] = useState(null);
   const dropdownRef = useRef(null);
 
   useOutsideClick(dropdownRef, () => setDropdownNoteIndex(null));
@@ -97,6 +99,13 @@ export default function NotesList({ notes }) {
         </button>
       </div>
 
+      {filteredNotes.length === 0 && (
+        <div className="text-center py-16">
+          <p className="text-gray-500">No notes yet.</p>
+          <p className="text-sm text-gray-400 mt-1">Create your first note to see it here.</p>
+        </div>
+      )}
+
       {pinned.length > 0 && (
         <div>
           <h2 className="text-xl font-semibold text-gray-700 mb-4">📌 Pinned</h2>
@@ -106,6 +115,8 @@ export default function NotesList({ notes }) {
                 key={i}
                 note={note}
                 onClick={() => setSelectedNote(note)}
+                onTogglePin={() => onTogglePin?.(note)}
+                onRequestDelete={() => setNoteToDelete(note)}
                 dropdownOpen={dropdownNoteIndex === i}
                 toggleDropdown={() => setDropdownNoteIndex(dropdownNoteIndex === i ? null : i)}
                 dropdownRef={dropdownRef}
@@ -115,18 +126,22 @@ export default function NotesList({ notes }) {
         </div>
       )}
 
+      {others.length > 0 && (
       <div className="grid md:grid-cols-2 gap-4">
         {others.map((note, i) => (
           <NoteCard
             key={i}
             note={note}
             onClick={() => setSelectedNote(note)}
+            onTogglePin={() => onTogglePin?.(note)}
+            onRequestDelete={() => setNoteToDelete(note)}
             dropdownOpen={dropdownNoteIndex === `other-${i}`}
             toggleDropdown={() => setDropdownNoteIndex(dropdownNoteIndex === `other-${i}` ? null : `other-${i}`)}
             dropdownRef={dropdownRef}
           />
         ))}
       </div>
+      )}
 
       {selectedNote && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
@@ -219,11 +234,22 @@ export default function NotesList({ notes }) {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={noteToDelete !== null}
+        title="Delete this note?"
+        message="This can't be undone."
+        onCancel={() => setNoteToDelete(null)}
+        onConfirm={() => {
+          onDeleteNote?.(noteToDelete);
+          setNoteToDelete(null);
+        }}
+      />
     </div>
   );
 }
 
-function NoteCard({ note, onClick, dropdownOpen, toggleDropdown, dropdownRef }) {
+function NoteCard({ note, onClick, onTogglePin, onRequestDelete, dropdownOpen, toggleDropdown, dropdownRef }) {
   return (
     <div
       onClick={onClick}
@@ -259,12 +285,12 @@ function NoteCard({ note, onClick, dropdownOpen, toggleDropdown, dropdownRef }) 
               {
                 icon: note.is_pinned ? unpinIcon : pinIcon,
                 label: note.is_pinned ? "Unpin" : "Pin",
-                // onClick: () => togglePin(item.id),
+                onClick: onTogglePin,
               },
               {
                 icon: editIcon,
                 label: "Edit",
-                onClick: () => console.log("Edit", note),
+                onClick: onClick,
               },
               {
                 icon: archiveIcon,
@@ -275,7 +301,7 @@ function NoteCard({ note, onClick, dropdownOpen, toggleDropdown, dropdownRef }) 
                 icon: trashIcon,
                 label: "Delete",
                 warning: true,
-                onClick: () => console.log("Delete", note),
+                onClick: onRequestDelete,
               },
             ]}
           />

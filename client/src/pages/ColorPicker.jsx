@@ -39,7 +39,16 @@ export default function ColorPicker() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
         {savedColors.map((color) => (
-          <ColorCard key={color.id} color={color} />
+          <ColorCard
+            key={color.id}
+            color={color}
+            onDelete={(id) => setSavedColors((prev) => prev.filter((c) => c.id !== id))}
+            onSaveLabel={(id, label) =>
+              setSavedColors((prev) =>
+                prev.map((c) => (c.id === id ? { ...c, label } : c))
+              )
+            }
+          />
         ))}
       </div>
     </div>

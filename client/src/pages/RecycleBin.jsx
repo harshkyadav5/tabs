@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 
 const tBin = [
   {
@@ -20,6 +21,7 @@ const tBin = [
 
 export default function RecycleBin() {
   const [trashedItems, setTrashedItems] = useState(tBin);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const handleRestore = (id) => {
     const updated = trashedItems.map((item) =>
@@ -102,7 +104,7 @@ export default function RecycleBin() {
                     Restore
                   </button>
                   <button
-                    onClick={() => handlePermanentDelete(item.id)}
+                    onClick={() => setPendingDeleteId(item.id)}
                     className="px-3 py-1 text-xs rounded-btn bg-red-100 text-red-700 hover:bg-red-200"
                   >
                     Delete
@@ -113,6 +115,17 @@ export default function RecycleBin() {
           })}
         </div>
       )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Permanently delete this item?"
+        message="This can't be undone."
+        onCancel={() => setPendingDeleteId(null)}
+        onConfirm={() => {
+          handlePermanentDelete(pendingDeleteId);
+          setPendingDeleteId(null);
+        }}
+      />
     </div>
   );
 }

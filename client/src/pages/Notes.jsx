@@ -208,7 +208,19 @@ export default function Notes() {
         </div>
       </div>
 
-      <NotesList notes={notes} />
+      <NotesList
+        notes={notes}
+        onDeleteNote={(note) =>
+          setNotes((prev) => prev.filter((n) => n.createdAt !== note.createdAt))
+        }
+        onTogglePin={(note) =>
+          setNotes((prev) =>
+            prev.map((n) =>
+              n.createdAt === note.createdAt ? { ...n, is_pinned: !n.is_pinned } : n
+            )
+          )
+        }
+      />
 
       {/* Add Folder Modal */}
       {showAddFolder && (

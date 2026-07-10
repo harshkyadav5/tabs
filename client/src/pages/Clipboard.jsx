@@ -4,6 +4,7 @@ import { useToast } from "../context/ToastContext";
 import axiosInstance from "../utils/axiosInstance";
 import MenuModal from "../components/MenuModal";
 import useOutsideClick from "../hooks/useOutsideClick";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 
 const pinIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" width={24} height={24} fill={"none"}><path d="M3 21L8 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M13.2585 18.8714C9.51516 18.0215 5.97844 14.4848 5.12853 10.7415C4.99399 10.1489 4.92672 9.85266 5.12161 9.37197C5.3165 8.89129 5.55457 8.74255 6.03071 8.44509C7.10705 7.77265 8.27254 7.55888 9.48209 7.66586C11.1793 7.81598 12.0279 7.89104 12.4512 7.67048C12.8746 7.44991 13.1622 6.93417 13.7376 5.90269L14.4664 4.59604C14.9465 3.73528 15.1866 3.3049 15.7513 3.10202C16.316 2.89913 16.6558 3.02199 17.3355 3.26771C18.9249 3.84236 20.1576 5.07505 20.7323 6.66449C20.978 7.34417 21.1009 7.68401 20.898 8.2487C20.6951 8.8134 20.2647 9.05346 19.4039 9.53358L18.0672 10.2792C17.0376 10.8534 16.5229 11.1406 16.3024 11.568C16.0819 11.9955 16.162 12.8256 16.3221 14.4859C16.4399 15.7068 16.2369 16.88 15.5555 17.9697C15.2577 18.4458 15.1088 18.6839 14.6283 18.8786C14.1477 19.0733 13.8513 19.006 13.2585 18.8714Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>;
 const unpinIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" width={24} height={24} fill={"none"}><path d="M7.5 8C6.95863 8.1281 6.49932 8.14239 5.99268 8.45891C5.07234 9.03388 4.85108 9.71674 5.08821 10.7612C5.94028 14.5139 9.48599 18.0596 13.2388 18.9117C14.2834 19.1489 14.9661 18.928 15.5416 18.0077C15.8411 17.5288 15.8716 17.0081 16 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M12 7.79915C12.1776 7.77794 12.3182 7.74034 12.4295 7.68235C13.3997 7.17686 13.9291 5.53361 14.4498 4.60009C14.9311 3.73715 15.1718 3.30567 15.7379 3.10227C16.3041 2.89888 16.6448 3.02205 17.3262 3.26839C18.9197 3.8445 20.1555 5.08032 20.7316 6.6738C20.9779 7.35521 21.1011 7.69591 20.8977 8.26204C20.6943 8.82817 20.2628 9.06884 19.3999 9.55018C18.4608 10.074 16.7954 10.6108 16.2905 11.5898C16.2345 11.6983 16.1978 11.8327 16.1769 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M3 21L8 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M3 3L21 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>;
@@ -24,6 +25,7 @@ export default function Clipboard() {
   const [columns, setColumns] = useState([]);
   const [showMenuId, setShowMenuId] = useState(null);
   const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const containerRef = useRef(null);
   const menuButtonRef = useRef(null);
@@ -190,6 +192,12 @@ export default function Clipboard() {
         </button>
       </div>
 
+      {clipboardItems.length === 0 ? (
+        <div className="text-center py-16 px-4">
+          <p className="text-gray-500">No clipboard items yet.</p>
+          <p className="text-sm text-gray-400 mt-1">Copy something and add it to see it here.</p>
+        </div>
+      ) : (
       <div ref={containerRef} className="flex gap-4 px-4">
         {columns.map((col, i) => (
           <div key={i} className="space-y-4" style={{ width: `${100 / columns.length}%` }}>
@@ -274,7 +282,7 @@ export default function Clipboard() {
                       icon: trashIcon,
                       label: "Delete",
                       warning: true,
-                      onClick: () => handleDelete(item.id),
+                      onClick: () => setPendingDeleteId(item.id),
                     },
                   ]}
                 />
@@ -305,6 +313,7 @@ export default function Clipboard() {
           </div>
         ))}
       </div>
+      )}
 
       {showNewItemModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -346,6 +355,17 @@ export default function Clipboard() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        title="Delete clipboard item?"
+        message="This can't be undone."
+        onCancel={() => setPendingDeleteId(null)}
+        onConfirm={() => {
+          handleDelete(pendingDeleteId);
+          setPendingDeleteId(null);
+        }}
+      />
     </div>
   );
 }

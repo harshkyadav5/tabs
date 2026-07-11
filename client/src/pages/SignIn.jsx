@@ -109,6 +109,7 @@ export default function SignIn() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                     className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
                   >
                     {showPassword ? showHideToggle[0].icon : showHideToggle[1].icon}

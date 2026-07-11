@@ -145,9 +145,15 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
 
       {selectedNote && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white w-full max-w-2xl rounded-card border border-gray-200 shadow-dropdown p-6 relative">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Note details"
+            className="bg-white w-full max-w-2xl rounded-card border border-gray-200 shadow-dropdown p-6 relative"
+          >
             <button
               onClick={() => setSelectedNote(null)}
+              aria-label="Close"
               className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl"
             >
               &times;
@@ -267,6 +273,7 @@ function NoteCard({ note, onClick, onTogglePin, onRequestDelete, dropdownOpen, t
         >
           <button
             onClick={toggleDropdown}
+            aria-label="Note options"
             className="text-gray-400 hover:text-gray-700 rounded-full p-1 hover:bg-gray-100"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

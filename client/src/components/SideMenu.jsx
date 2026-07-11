@@ -35,8 +35,12 @@ export default function SideMenu() {
     }`;
 
   return (
-    <aside className="h-full w-80 p-10 pr-5 flex flex-col justify-between select-none">
-      
+    <aside
+      role="navigation"
+      aria-label="Sidebar"
+      className="h-full w-80 p-10 pr-5 flex flex-col justify-between select-none"
+    >
+
       <div className="mt-16 overflow-scroll">
         <div className="flex items-center px-1">
             <ul className="space-y-1 w-[100%]">
@@ -44,12 +48,13 @@ export default function SideMenu() {
                 <Link
                   to="/"
                   className={linkClass('/')}
+                  aria-current={location.pathname === '/' ? 'page' : undefined}
                 >
                   <span>For You</span>
                 </Link>
               </li>
             </ul>
-            
+
         </div>
 
         <div className="mb-1">
@@ -66,6 +71,7 @@ export default function SideMenu() {
                 <Link
                   to={item.destination}
                   className={linkClass(item.destination)}
+                  aria-current={location.pathname === item.destination ? 'page' : undefined}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.label}</span>
@@ -89,6 +95,7 @@ export default function SideMenu() {
                 <Link
                   to={item.destination}
                   className={linkClass(item.destination)}
+                  aria-current={location.pathname === item.destination ? 'page' : undefined}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.label}</span>
@@ -109,6 +116,7 @@ export default function SideMenu() {
                 <Link
                   to={item.destination}
                   className={linkClass(item.destination)}
+                  aria-current={location.pathname === item.destination ? 'page' : undefined}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.label}</span>
@@ -121,6 +129,7 @@ export default function SideMenu() {
                 <Link
                   to={item.destination}
                   className={linkClass(item.destination)}
+                  aria-current={location.pathname === item.destination ? 'page' : undefined}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.label}</span>

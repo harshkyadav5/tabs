@@ -225,14 +225,20 @@ export default function Notes() {
       {/* Add Folder Modal */}
       {showAddFolder && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-white w-full max-w-sm rounded-card shadow-dropdown p-6 relative border border-gray-100">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-folder-title"
+            className="bg-white w-full max-w-sm rounded-card shadow-dropdown p-6 relative border border-gray-100"
+          >
             <button
               onClick={() => setShowAddFolder(false)}
+              aria-label="Close"
               className="absolute top-3 right-4 text-gray-400 hover:text-gray-800 text-xl"
             >
               &times;
             </button>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Create Folder</h2>
+            <h2 id="add-folder-title" className="text-lg font-semibold text-gray-800 mb-4">Create Folder</h2>
             <input
               type="text"
               placeholder="Enter folder name"
@@ -267,15 +273,21 @@ export default function Notes() {
       {/* Add Note Modal */}
       {showAddNote && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-white w-full max-w-3xl rounded-card shadow-dropdown p-8 relative border border-gray-100">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-note-title"
+            className="bg-white w-full max-w-3xl rounded-card shadow-dropdown p-8 relative border border-gray-100"
+          >
             <button
               onClick={() => setShowAddNote(false)}
+              aria-label="Close"
               className="absolute top-4 right-6 text-gray-400 hover:text-gray-800 text-2xl"
             >
               &times;
             </button>
 
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">New Note</h2>
+            <h2 id="add-note-title" className="text-xl font-semibold text-gray-800 mb-6">New Note</h2>
 
             <div className="grid gap-4">
               <input

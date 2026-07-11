@@ -30,7 +30,7 @@ export default function MusicNavbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 select-none border-gray-300 flex items-center justify-between px-8 h-16">
+      <nav aria-label="Music" className="fixed top-0 left-0 right-0 z-50 select-none border-gray-300 flex items-center justify-between px-8 h-16">
         <div className="p-2 flex items-center">
           <Link to="/">
             <img
@@ -45,7 +45,10 @@ export default function MusicNavbar() {
         <div className="flex-1 flex justify-center px-4">
           <div className="flex justify-center items-center mr-2">
             <Link to="/music">
-              <button className="p-3 bg-gray-200 border border-gray-200 hover:border-white hover:text-music-accent rounded-full hover:shadow-lg hover:bg-white hover:scale-105 transition-all duration-400">
+              <button
+                aria-label="Go to home"
+                className="p-3 bg-gray-200 border border-gray-200 hover:border-white hover:text-music-accent rounded-full hover:shadow-lg hover:bg-white hover:scale-105 transition-all duration-400"
+              >
                 {icons['home']}
               </button>
             </Link>
@@ -61,6 +64,7 @@ export default function MusicNavbar() {
               </div>
               <input
                 type="text"
+                aria-label="Search songs, artists, playlists"
                 placeholder="Search songs, artists, playlists..."
                 value={localSearchQuery}
                 onChange={(e) => setLocalSearchQuery(e.target.value)}

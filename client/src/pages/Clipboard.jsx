@@ -223,12 +223,14 @@ export default function Clipboard() {
                       onClick={() => handleCopy(item.content)}
                       className="opacity-0 group-hover:opacity-100 transition text-gray-400 hover:text-black p-1.5 rounded-full hover:bg-gray-100"
                       title="Copy"
+                      aria-label="Copy content"
                     >
                       {copyIcon}
                     </button>
                     <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
                       <button
                         ref={menuButtonRef}
+                        aria-label="Item options"
                         onClick={(e) => {
                           e.stopPropagation();
                           const rect = e.currentTarget.getBoundingClientRect();
@@ -317,8 +319,13 @@ export default function Clipboard() {
 
       {showNewItemModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white rounded-card shadow-dropdown p-6 w-[90%] max-w-md">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-clipboard-item-title"
+            className="bg-white rounded-card shadow-dropdown p-6 w-[90%] max-w-md"
+          >
+            <h2 id="add-clipboard-item-title" className="text-lg font-semibold text-gray-800 mb-4">
               Add New Clipboard Item
             </h2>
 

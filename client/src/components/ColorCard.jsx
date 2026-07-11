@@ -109,6 +109,7 @@ export default function ColorCard({ color, onDelete, onSaveLabel }) {
           <button
             onClick={() => setShowMenu((prev) => !prev)}
             title="Options"
+            aria-label="Color options"
             className="p-1.5 backdrop-blur-lg bg-white/30 shadow-sm hover:bg-white/50 text-slate-500 hover:text-black rounded-full transition duration-200"
           >
             {ellipsis}

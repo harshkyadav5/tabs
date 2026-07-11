@@ -186,6 +186,7 @@ export default function SignUp() {
                   <button
                     type="button"
                     onClick={() => setShowPassword1((prev) => !prev)}
+                    aria-label={showPassword1 ? "Hide password" : "Show password"}
                     className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
                   >
                     {showPassword1 ? showHideToggle[0].icon : showHideToggle[1].icon}
@@ -212,6 +213,7 @@ export default function SignUp() {
                   <button
                     type="button"
                     onClick={() => setShowPassword2((prev) => !prev)}
+                    aria-label={showPassword2 ? "Hide password" : "Show password"}
                     className="absolute right-3 top-2 p-1.5 text-sm text-gray-600 hover:bg-gray-300/80 hover:rounded-full transition-all duration-200"
                   >
                     {showPassword2 ? showHideToggle[0].icon : showHideToggle[1].icon}

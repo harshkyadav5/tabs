@@ -4,7 +4,12 @@ export default function InfoModal({ image, onClose }) {
   const close = <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" strokeWidth={2} d="m18 6l-6 6m0 0l-6 6m6-6l6 6m-6-6L6 6" color="currentColor"/></svg>;
 
   return (
-      <div className="absolute top-9 right-2 bg-white/80 backdrop-blur-lg shadow-dropdown rounded-btn border border-white overflow-hidden z-30 w-[360px] max-w-full p-5">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Image info"
+        className="absolute top-9 right-2 bg-white/80 backdrop-blur-lg shadow-dropdown rounded-btn border border-white overflow-hidden z-30 w-[360px] max-w-full p-5"
+      >
         <div className="flex items-center mb-4">
           <button
             onClick={onClose}

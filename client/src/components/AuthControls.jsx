@@ -34,12 +34,20 @@ export default function AuthControls({ className = "flex items-center relative" 
   return (
     <div className={className} ref={dropdownRef}>
       <div className="relative group pr-2">
-        <img
-          src={`/profile-pics/${user.profilePicture}`}
-          alt="Profile"
-          className="h-10 w-10 rounded-full border-2 border-gray-400 cursor-pointer"
+        <button
+          type="button"
+          aria-label="Open profile menu"
+          aria-haspopup="menu"
+          aria-expanded={dropdownOpen}
           onClick={() => setDropdownOpen((prev) => !prev)}
-        />
+          className="block rounded-full"
+        >
+          <img
+            src={`/profile-pics/${user.profilePicture}`}
+            alt=""
+            className="h-10 w-10 rounded-full border-2 border-gray-400 cursor-pointer"
+          />
+        </button>
 
         <div className="absolute left-[-8px] -translate-x-full top-1/2 -translate-y-1/2 z-20 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200">
           <div className="bg-black text-white text-xs rounded px-2 py-1 shadow-lg">

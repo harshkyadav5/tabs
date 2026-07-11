@@ -21,7 +21,7 @@ export default function ScreenshotViewer({ image, onBack }) {
       
       <div className="flex items-center justify-between px-4 mb-6">
         <div className="flex items-center gap-4 hover:bg-gray-300/70 p-1.5 rounded-full transition-all duration-200">
-          <button onClick={onBack} title="Back">
+          <button onClick={onBack} title="Back" aria-label="Back">
             {back}
           </button>
         </div>
@@ -43,10 +43,10 @@ export default function ScreenshotViewer({ image, onBack }) {
         </div>
 
         <div className="flex items-center gap-1 text-gray-800">
-          <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="Info" onClick={() => setShowInfo(true)}>{infoIcon}</button>
-          <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="Favorite">{heartIcon}</button>
-          <a href={image.image_url} download title="Download">{downloadIcon}</a>
-          <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="More" onClick={() => setShowMenu(true)}>{ellipsis}</button>
+          <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="Info" aria-label="Info" onClick={() => setShowInfo(true)}>{infoIcon}</button>
+          <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="Favorite" aria-label="Favorite">{heartIcon}</button>
+          <a href={image.image_url} download title="Download" aria-label="Download">{downloadIcon}</a>
+          <button className="hover:bg-gray-300/70 p-2 rounded-full transition-all duration-200" title="More" aria-label="More options" onClick={() => setShowMenu(true)}>{ellipsis}</button>
         </div>
       </div>
 

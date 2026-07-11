@@ -24,15 +24,22 @@ export default function ProfilePicSelector({ selectedPic, setSelectedPic, onSubm
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
             {profilePics.map((pic) => (
-            <img
+            <button
                 key={pic}
-                src={`/profile-pics/${pic}`}
-                alt={pic}
+                type="button"
                 onClick={() => setSelectedPic(pic)}
-                className={`w-22 h-22 rounded-full cursor-pointer object-cover border-4 shadow-md ${
-                selectedPic === pic ? "border-primary" : "border-transparent"
-                } hover:border-primary/60 transition`}
-            />
+                aria-label={`Choose profile picture ${pic}`}
+                aria-pressed={selectedPic === pic}
+                className="rounded-full"
+            >
+                <img
+                    src={`/profile-pics/${pic}`}
+                    alt=""
+                    className={`w-22 h-22 rounded-full cursor-pointer object-cover border-4 shadow-md ${
+                    selectedPic === pic ? "border-primary" : "border-transparent"
+                    } hover:border-primary/60 transition`}
+                />
+            </button>
             ))}
         </div>
     </div>

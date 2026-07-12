@@ -6,7 +6,7 @@ export default function HomeLayout() {
   return (
     <div className="flex h-screen w-full overflow-hidden">
       <SideMenu />
-      <main className="flex-1 pt-24 pb-16 pr-10 pl-5 overflow-y-auto">
+      <main className="flex-1 pt-20 pb-16 px-4 md:pt-24 md:pr-10 md:pl-5 overflow-y-auto">
         <Outlet />
       </main>
     </div>

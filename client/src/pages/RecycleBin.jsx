@@ -51,7 +51,7 @@ export default function RecycleBin() {
       ) : (
         <div className="w-full bg-gray-50 border border-gray-200 rounded-card overflow-hidden">
           
-          <div className="bg-gray-100 text-sm text-gray-700 font-medium grid grid-cols-6 gap-4 px-4 py-2">
+          <div className="hidden md:grid bg-gray-100 text-sm text-gray-700 font-medium grid-cols-6 gap-4 px-4 py-2">
             <div>Type</div>
             <div>Title</div>
             <div>Content</div>
@@ -68,7 +68,7 @@ export default function RecycleBin() {
             return (
               <div
                 key={item.id}
-                className={`grid grid-cols-6 gap-4 items-start px-4 py-3 text-sm border-t border-gray-200 ${bgColor} hover:bg-gray-100/90 transition-all duration-200`}
+                className={`flex flex-col gap-2 md:grid md:grid-cols-6 md:gap-4 md:items-start px-4 py-3 text-sm border-t border-gray-200 ${bgColor} hover:bg-gray-100/90 transition-all duration-200`}
               >
                 <div className="capitalize font-medium text-gray-800">
                   {item.type}

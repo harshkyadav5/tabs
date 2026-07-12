@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { useSidebar } from "../context/SidebarContext";
 
 
 const featureItems = [
@@ -26,6 +27,11 @@ const deletedItems = [
 
 export default function SideMenu() {
   const location = useLocation();
+  const { mobileOpen, setMobileOpen } = useSidebar();
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname, setMobileOpen]);
 
   const linkClass = (path) =>
     `flex items-center space-x-3 px-3 py-2 rounded-lg tracking-wider text-sm font-medium transition ${
@@ -35,11 +41,29 @@ export default function SideMenu() {
     }`;
 
   return (
-    <aside
-      role="navigation"
-      aria-label="Sidebar"
-      className="h-full w-80 p-10 pr-5 flex flex-col justify-between select-none"
-    >
+    <>
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        role="navigation"
+        aria-label="Sidebar"
+        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] bg-white md:bg-transparent h-full p-10 pr-5 flex flex-col justify-between select-none transform transition-transform duration-300 md:static md:z-auto md:translate-x-0 md:transition-none ${
+          mobileOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
+        }`}
+      >
+      <button
+        type="button"
+        onClick={() => setMobileOpen(false)}
+        aria-label="Close menu"
+        className="md:hidden absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-full transition"
+      >
+        &times;
+      </button>
 
       <div className="mt-16 overflow-scroll">
         <div className="flex items-center px-1">
@@ -143,6 +167,7 @@ export default function SideMenu() {
       <footer className="text-xs text-center text-gray-500 pt-6">
         © 2025 Tabs
       </footer>
-    </aside>
+      </aside>
+    </>
   );
 }

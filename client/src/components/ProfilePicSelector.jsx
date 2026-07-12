@@ -16,7 +16,7 @@ const profilePics = [
 export default function ProfilePicSelector({ selectedPic, setSelectedPic, onSubmit, onBack, submitting = false }) {
   return (
     <>
-    <div className="grid grid-cols-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
             <h2 className="text-3xl tracking-wide text-black text-left mt-4">
                 Choose a Profile Picture
@@ -44,7 +44,7 @@ export default function ProfilePicSelector({ selectedPic, setSelectedPic, onSubm
         </div>
     </div>
 
-    <div className="flex gap-5 mt-15 items-baseline-last justify-end">
+    <div className="flex flex-wrap gap-5 mt-15 items-baseline-last justify-end">
         <Button variant="ghost" onClick={onBack}>
             Back
         </Button>

@@ -57,7 +57,7 @@ export default function MusicNavbar() {
           <div className="relative group flex">
             <div className="absolute  inset-0 rounded-full bg-gradient-to-r from-music-accent-soft to-music-accent blur-md opacity-0 group-hover:opacity-30 group-focus-within:opacity-30 transition-opacity duration-1000 z-0 pointer-events-none" />
 
-            <div className="z-20 flex bg-gray-200 p-1 max-w-100 w-100 min-w-80 rounded-panel group-hover:bg-white group-focus-within:bg-white focus-within:ring-2 focus-within:ring-music-accent/40 transition-all duration-500">
+            <div className="z-20 flex bg-gray-200 p-1 w-full min-w-0 sm:min-w-80 sm:w-100 max-w-100 rounded-panel group-hover:bg-white group-focus-within:bg-white focus-within:ring-2 focus-within:ring-music-accent/40 transition-all duration-500">
 
               <div className="h-full flex items-center justify-center pl-3 group-hover:text-music-accent group-focus-within:text-music-accent transition-all duration-500">
                   {icons['search']}

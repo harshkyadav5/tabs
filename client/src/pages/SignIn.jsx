@@ -68,7 +68,7 @@ export default function SignIn() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-slate-100 transition-colors duration-300 px-4">
-      <div className="grid grid-rows-[1fr_4fr] w-full max-w-5xl h-fit p-10 rounded-panel bg-white">
+      <div className="grid grid-rows-[1fr_4fr] w-full max-w-5xl h-fit p-6 sm:p-10 rounded-panel bg-white">
         <div className="pr-5">
           <div className="h-full">
             <img src="./src/assets/tabs-logo.svg" alt="logo" className="max-h-full max-w-[80px]" />
@@ -76,7 +76,7 @@ export default function SignIn() {
         </div>
 
         <form onSubmit={handleSubmit} className="self-center grid grid-rows-[2fr_1fr]">
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <h2 className="text-4xl tracking-wide text-black text-left">Sign in</h2>
             </div>
@@ -121,7 +121,7 @@ export default function SignIn() {
             </div>
           </div>
 
-          <div className="flex gap-5 items-baseline justify-end">
+          <div className="flex flex-wrap gap-5 items-baseline justify-end">
             <Link to="/signup" className="px-4 py-2 tracking-wide text-primary hover:bg-primary-soft rounded-btn transition-colors duration-300 font-medium">
               Sign Up
             </Link>

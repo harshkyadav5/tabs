@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import suggestionsRoutes from "./routes/suggestionsRoutes.js";
 import clipboardRoutes from "./routes/clipboardRoutes.js";
 import musicRoutes from "./routes/musicRoutes.js";
+import bookmarkRoutes from "./routes/bookmarkRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/suggestions", suggestionsRoutes);
 app.use("/api/music", musicRoutes);
 app.use("/api/clipboard", clipboardRoutes);
+app.use("/api/bookmarks", bookmarkRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

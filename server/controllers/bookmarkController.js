@@ -82,7 +82,7 @@ export const updateBookmark = async (req, res) => {
        SET url = COALESCE($1, url), 
            title = COALESCE($2, title), 
            description = COALESCE($3, description),
-           folder_id = $4,
+           folder_id = COALESCE($4, folder_id),
            is_pinned = COALESCE($5, is_pinned),
            is_archived = COALESCE($6, is_archived),
            modified_at = CURRENT_TIMESTAMP

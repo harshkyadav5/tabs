@@ -46,13 +46,8 @@ export const incrementViewCount = async (id) => {
   }
 };
 
-export const togglePin = async (id) => {
-  try {
-    const response = await axiosInstance.patch(`/bookmarks/${id}/pin`);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.error || 'Failed to toggle pin status');
-  }
+export const togglePin = async (id, isPinned) => {
+  return updateBookmark(id, { is_pinned: isPinned });
 };
 
 // Folder operations

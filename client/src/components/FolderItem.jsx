@@ -1,10 +1,21 @@
 import React from "react";
 
-export default function FolderItem({ icon, overlay, label, tooltip, onClick }) {
+export default function FolderItem({ icon, overlay, label, tooltip, onClick, active = false }) {
   return (
     <div
-      className="shrink-0 w-28 h-28 flex flex-col items-center justify-center rounded-3xl text-sm font-semibold text-gray-800 duration-300 relative group cursor-pointer"
+      role="button"
+      tabIndex={0}
+      aria-pressed={active}
+      className={`shrink-0 w-28 h-28 flex flex-col items-center justify-center rounded-3xl text-sm font-semibold text-gray-800 duration-300 relative group cursor-pointer ${
+        active ? "ring-2 ring-primary bg-primary-soft" : ""
+      }`}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
     >
       <div className="relative w-24 h-24 mb-1">
         <div className="w-full h-full relative backdrop-blur-sm flex items-center justify-center text-2xl font-bold drop-shadow-sm">

@@ -4,13 +4,16 @@ export default function Modal({ open, onClose, title, children, footer, classNam
   const panelRef = useRef(null);
 
   useEffect(() => {
+    if (open) panelRef.current?.focus();
+  }, [open]);
+
+  useEffect(() => {
     if (!open) return;
 
     const handleKeyDown = (e) => {
       if (e.key === "Escape") onClose?.();
     };
     document.addEventListener("keydown", handleKeyDown);
-    panelRef.current?.focus();
 
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, onClose]);

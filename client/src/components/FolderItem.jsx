@@ -6,7 +6,7 @@ export default function FolderItem({ icon, overlay, label, tooltip, onClick, act
       role="button"
       tabIndex={0}
       aria-pressed={active}
-      className={`shrink-0 w-28 h-28 flex flex-col items-center justify-center rounded-3xl text-sm font-semibold text-gray-800 duration-300 relative group cursor-pointer ${
+      className={`shrink-0 w-28 h-32 flex flex-col items-center justify-center rounded-3xl text-sm font-semibold text-gray-800 duration-300 relative group cursor-pointer ${
         active ? "ring-2 ring-primary bg-primary-soft" : ""
       }`}
       onClick={onClick}
@@ -25,10 +25,12 @@ export default function FolderItem({ icon, overlay, label, tooltip, onClick, act
           {overlay}
         </span>
       </div>
-      <span className="text-[13px] tracking-wide truncate">{label}</span>
-      <div className="absolute bottom-0 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-400">
-        {tooltip}
-      </div>
+      <span className="text-[13px] tracking-wide truncate w-24 text-center">{label}</span>
+      {tooltip && tooltip !== label && (
+        <div className="absolute top-full mt-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+          {tooltip}
+        </div>
+      )}
     </div>
   );
 }

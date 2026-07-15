@@ -82,7 +82,7 @@ const readLocal = (key) => {
   }
 };
 
-const EMPTY_FORM = { url: "", title: "", description: "", folder_id: "" };
+const EMPTY_FORM = { url: "", title: "", description: "", folder_id: "", is_pinned: false };
 
 export default function Bookmarks() {
   const { user } = useAuth();
@@ -92,6 +92,8 @@ export default function Bookmarks() {
   const [bookmarks, setBookmarks] = useState([]);
   const [folders, setFolders] = useState([]);
   const [activeFilter, setActiveFilter] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
 
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
@@ -165,6 +167,7 @@ export default function Bookmarks() {
       title: bookmark.title || "",
       description: bookmark.description || "",
       folder_id: bookmark.folder_id != null ? String(bookmark.folder_id) : "",
+      is_pinned: !!bookmark.is_pinned,
     });
     setBookmarkFormErrors({});
     setShowBookmarkModal(true);
@@ -181,6 +184,7 @@ export default function Bookmarks() {
       title: bookmarkForm.title.trim() || null,
       description: bookmarkForm.description.trim() || null,
       folder_id: bookmarkForm.folder_id ? Number(bookmarkForm.folder_id) : null,
+      is_pinned: bookmarkForm.is_pinned,
     };
 
     setSubmitting(true);
@@ -209,7 +213,6 @@ export default function Bookmarks() {
             id: Date.now(),
             ...payload,
             view_count: 0,
-            is_pinned: false,
             is_archived: false,
             is_deleted: false,
             created_at: now,
@@ -318,6 +321,30 @@ export default function Bookmarks() {
     return true;
   });
 
+  const searchedBookmarks = filteredBookmarks.filter((b) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.trim().toLowerCase();
+    return (
+      (b.title || "").toLowerCase().includes(q) ||
+      (b.url || "").toLowerCase().includes(q) ||
+      (b.description || "").toLowerCase().includes(q)
+    );
+  });
+
+  const visibleBookmarks = [...searchedBookmarks].sort((a, b) => {
+    switch (sortBy) {
+      case "oldest":
+        return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+      case "most_viewed":
+        return (b.view_count || 0) - (a.view_count || 0);
+      case "title":
+        return (a.title || a.url).localeCompare(b.title || b.url);
+      case "newest":
+      default:
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    }
+  });
+
   return (
     <aside className="w-full font-montserrat">
 
@@ -360,7 +387,7 @@ export default function Bookmarks() {
 
         <div
           ref={folderScrollRef}
-          className={`flex overflow-x-auto whitespace-nowrap space-x-4 p-4 pt-0 transition-all duration-200 ${
+          className={`flex overflow-x-auto whitespace-nowrap space-x-4 px-4 pt-0 pb-10 transition-all duration-200 ${
             !atStart && !atEnd
               ? "mask-to-l-r"
               : !atStart
@@ -399,20 +426,49 @@ export default function Bookmarks() {
 
       <div className="p-4">
         <h1 className="text-lg font-bold mb-4">Bookmarks</h1>
-        {filteredBookmarks.length === 0 ? (
+
+        {bookmarks.length > 0 && (
+          <div className="flex flex-wrap gap-4 items-center bg-white p-4 rounded-card border border-gray-200 mb-6">
+            <input
+              type="text"
+              placeholder="Search bookmarks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="border px-3 py-2 rounded-btn w-full max-w-sm text-sm"
+            />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="border px-2 py-2 text-sm rounded-btn"
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="most_viewed">Most Viewed</option>
+              <option value="title">Title (A-Z)</option>
+            </select>
+          </div>
+        )}
+
+        {visibleBookmarks.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-500">
-              {bookmarks.length === 0 ? "No bookmarks yet." : "No bookmarks in this filter."}
+              {bookmarks.length === 0
+                ? "No bookmarks yet."
+                : searchQuery.trim()
+                ? "No bookmarks match your search."
+                : "No bookmarks in this filter."}
             </p>
             <p className="text-sm text-gray-400 mt-1">
               {bookmarks.length === 0
                 ? "Save a link to see it here."
+                : searchQuery.trim()
+                ? "Try a different search term."
                 : "Try a different folder or clear the filter."}
             </p>
           </div>
         ) : (
           <BookmarkList
-            bookmarks={filteredBookmarks}
+            bookmarks={visibleBookmarks}
             folders={folders}
             onTogglePin={handleTogglePin}
             onEdit={openEditModal}
@@ -484,6 +540,14 @@ export default function Bookmarks() {
             ))}
           </select>
         </div>
+        <label className="flex items-center gap-2 mt-4 pl-3 text-sm text-gray-700 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={bookmarkForm.is_pinned}
+            onChange={(e) => setBookmarkForm({ ...bookmarkForm, is_pinned: e.target.checked })}
+          />
+          Add to Favorites
+        </label>
       </Modal>
 
       {/* Add Folder Modal */}

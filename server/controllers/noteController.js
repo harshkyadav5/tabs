@@ -87,7 +87,7 @@ export const updateNote = async (req, res) => {
       `UPDATE notes 
        SET title = COALESCE($1, title), 
            content = COALESCE($2, content), 
-           folder_id = $3,
+           folder_id = COALESCE($3, folder_id),
            tags = COALESCE($4, tags),
            is_pinned = COALESCE($5, is_pinned),
            is_archived = COALESCE($6, is_archived),
@@ -176,8 +176,8 @@ export const updateNoteFolder = async (req, res) => {
     const { name } = req.body;
 
     const result = await pool.query(
-      `UPDATE note_folders 
-       SET name = $1 
+      `UPDATE note_folders
+       SET name = COALESCE($1, name)
        WHERE id = $2 AND user_id = $3
        RETURNING *`,
       [name, folderId, userId]

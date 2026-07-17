@@ -15,10 +15,18 @@ const editIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" vie
 const archiveIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M2 16c0-2.339 0-3.508.536-4.362a3.5 3.5 0 0 1 1.102-1.101C4.492 10 5.66 10 8 10h8c2.339 0 3.508 0 4.362.537a3.5 3.5 0 0 1 1.102 1.1C22 12.493 22 13.662 22 16s0 3.508-.537 4.362a3.5 3.5 0 0 1-1.1 1.102C19.507 22 18.338 22 16 22H8c-2.339 0-3.508 0-4.362-.537a3.5 3.5 0 0 1-1.102-1.1C2 19.507 2 18.338 2 16m18-6c0-1.4 0-2.1-.273-2.635a2.5 2.5 0 0 0-1.092-1.093C18.1 6 17.4 6 16 6H8c-1.4 0-2.1 0-2.635.272a2.5 2.5 0 0 0-1.093 1.093C4 7.9 4 8.6 4 10m14-4c0-1.886 0-2.828-.586-3.414S15.886 2 14 2h-4c-1.886 0-2.828 0-3.414.586S6 4.114 6 6"/><path d="M15 14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2"/></g></svg>;
 const trashIcon = <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m19.5 5.5l-.62 10.025c-.158 2.561-.237 3.842-.88 4.763a4 4 0 0 1-1.2 1.128c-.957.584-2.24.584-4.806.584c-2.57 0-3.855 0-4.814-.585a4 4 0 0 1-1.2-1.13c-.642-.922-.72-2.205-.874-4.77L4.5 5.5M3 5.5h18m-4.944 0l-.683-1.408c-.453-.936-.68-1.403-1.071-1.695a2 2 0 0 0-.275-.172C13.594 2 13.074 2 12.035 2c-1.066 0-1.599 0-2.04.234a2 2 0 0 0-.278.18c-.395.303-.616.788-1.058 1.757L8.053 5.5m1.447 11v-6m5 6v-6" color="currentColor"/></svg>;
 
-export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
+const normalizeTags = (tagsInput) =>
+  tagsInput
+    ? tagsInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+        .map((t) => (t.startsWith("#") ? t : `#${t}`))
+    : [];
+
+export default function NotesList({ notes, folders = [], onDeleteNote, onTogglePin, onUpdateNote, emptyAtAll = false }) {
   const [search, setSearch] = useState("");
   const [tagFilter, setTagFilter] = useState("");
-  const [folderFilter, setFolderFilter] = useState("");
   const [sortNewest, setSortNewest] = useState(true);
   const [selectedNote, setSelectedNote] = useState(null);
   const [dropdownNoteIndex, setDropdownNoteIndex] = useState(null);
@@ -31,10 +39,11 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
     let result = [...notes];
 
     if (search) {
+      const q = search.toLowerCase();
       result = result.filter(
         (n) =>
-          n.title.toLowerCase().includes(search.toLowerCase()) ||
-          n.content.toLowerCase().includes(search.toLowerCase())
+          n.title.toLowerCase().includes(q) ||
+          (n.content || "").toLowerCase().includes(q)
       );
     }
 
@@ -42,67 +51,71 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
       result = result.filter((n) => n.tags?.includes(tagFilter));
     }
 
-    if (folderFilter) {
-      result = result.filter((n) => n.folder === folderFilter);
-    }
-
     result.sort((a, b) => {
-      const dateA = new Date(a.modifiedAt);
-      const dateB = new Date(b.modifiedAt);
+      const dateA = new Date(a.modified_at || 0);
+      const dateB = new Date(b.modified_at || 0);
       return sortNewest ? dateB - dateA : dateA - dateB;
     });
 
     return result;
-  }, [notes, search, tagFilter, folderFilter, sortNewest]);
+  }, [notes, search, tagFilter, sortNewest]);
 
   const pinned = filteredNotes.filter((n) => n.is_pinned);
   const others = filteredNotes.filter((n) => !n.is_pinned);
 
   const allTags = Array.from(new Set(notes.flatMap((n) => n.tags || [])));
-  const allFolders = Array.from(new Set(notes.map((n) => n.folder)));
+  const folderName = (folderId) => folders.find((f) => f.id === folderId)?.name;
+
+  const openNoteDetail = (note) => {
+    setSelectedNote({ ...note, tagsInput: (note.tags || []).join(", ") });
+  };
 
   return (
     <div className="w-full space-y-8">
-      <div className="flex flex-wrap gap-4 items-center bg-white p-4 rounded-card border border-gray-200">
-        <input
-          type="text"
-          placeholder="Search notes..."
-          className="border px-3 py-2 rounded-btn w-full max-w-sm text-sm"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
-          className="border px-2 py-2 text-sm rounded-btn"
-          value={tagFilter}
-          onChange={(e) => setTagFilter(e.target.value)}
-        >
-          <option value="">All Tags</option>
-          {allTags.map((tag, i) => (
-            <option key={i} value={tag}>{tag}</option>
-          ))}
-        </select>
-        <select
-          className="border px-2 py-2 text-sm rounded-btn"
-          value={folderFilter}
-          onChange={(e) => setFolderFilter(e.target.value)}
-        >
-          <option value="">All Folders</option>
-          {allFolders.map((folder, i) => (
-            <option key={i} value={folder}>{folder}</option>
-          ))}
-        </select>
-        <button
-          onClick={() => setSortNewest((prev) => !prev)}
-          className="text-sm px-3 py-2 border rounded-btn"
-        >
-          {sortNewest ? "Newest First" : "Oldest First"}
-        </button>
-      </div>
+      {notes.length > 0 && (
+        <div className="flex flex-wrap gap-4 items-center bg-white p-4 rounded-card border border-gray-200">
+          <input
+            type="text"
+            placeholder="Search notes..."
+            className="border px-3 py-2 rounded-btn w-full max-w-sm text-sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            className="border px-2 py-2 text-sm rounded-btn"
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+          >
+            <option value="">All Tags</option>
+            {allTags.map((tag, i) => (
+              <option key={i} value={tag}>{tag}</option>
+            ))}
+          </select>
+          <button
+            onClick={() => setSortNewest((prev) => !prev)}
+            className="text-sm px-3 py-2 border rounded-btn"
+          >
+            {sortNewest ? "Newest First" : "Oldest First"}
+          </button>
+        </div>
+      )}
 
       {filteredNotes.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-gray-500">No notes yet.</p>
-          <p className="text-sm text-gray-400 mt-1">Create your first note to see it here.</p>
+          <p className="text-gray-500">
+            {emptyAtAll
+              ? "No notes yet."
+              : notes.length === 0
+              ? "No notes in this filter."
+              : "No notes match your search."}
+          </p>
+          <p className="text-sm text-gray-400 mt-1">
+            {emptyAtAll
+              ? "Create your first note to see it here."
+              : notes.length === 0
+              ? "Try a different folder or clear the filter."
+              : "Try a different search term."}
+          </p>
         </div>
       )}
 
@@ -112,9 +125,10 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
           <div className="grid md:grid-cols-2 gap-4">
             {pinned.map((note, i) => (
               <NoteCard
-                key={i}
+                key={note.id}
                 note={note}
-                onClick={() => setSelectedNote(note)}
+                folderName={folderName(note.folder_id)}
+                onClick={() => openNoteDetail(note)}
                 onTogglePin={() => onTogglePin?.(note)}
                 onRequestDelete={() => setNoteToDelete(note)}
                 dropdownOpen={dropdownNoteIndex === i}
@@ -130,9 +144,10 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
       <div className="grid md:grid-cols-2 gap-4">
         {others.map((note, i) => (
           <NoteCard
-            key={i}
+            key={note.id}
             note={note}
-            onClick={() => setSelectedNote(note)}
+            folderName={folderName(note.folder_id)}
+            onClick={() => openNoteDetail(note)}
             onTogglePin={() => onTogglePin?.(note)}
             onRequestDelete={() => setNoteToDelete(note)}
             dropdownOpen={dropdownNoteIndex === `other-${i}`}
@@ -171,7 +186,7 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
 
               <textarea
                 className="w-full min-h-[200px] p-3 border rounded-btn text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800"
-                value={selectedNote.content}
+                value={selectedNote.content || ""}
                 onChange={(e) =>
                   setSelectedNote({ ...selectedNote, content: e.target.value })
                 }
@@ -182,29 +197,31 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
                   type="text"
                   placeholder="Tags (comma-separated)"
                   className="flex-1 border px-3 py-2 rounded-btn text-sm"
-                  value={(selectedNote.tags || []).join(", ")}
+                  value={selectedNote.tagsInput}
                   onChange={(e) =>
-                    setSelectedNote({
-                      ...selectedNote,
-                      tags: e.target.value.split(",").map((t) => t.trim()),
-                    })
+                    setSelectedNote({ ...selectedNote, tagsInput: e.target.value })
                   }
                 />
 
-                <input
-                  type="text"
-                  placeholder="Folder"
+                <select
                   className="flex-1 border px-3 py-2 rounded-btn text-sm"
-                  value={selectedNote.folder || ""}
+                  value={selectedNote.folder_id != null ? String(selectedNote.folder_id) : ""}
                   onChange={(e) =>
-                    setSelectedNote({ ...selectedNote, folder: e.target.value })
+                    setSelectedNote({ ...selectedNote, folder_id: e.target.value })
                   }
-                />
+                >
+                  <option value="">No folder</option>
+                  {folders.map((folder) => (
+                    <option key={folder.id} value={folder.id}>
+                      {folder.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="flex items-center justify-between text-sm text-gray-600 mt-2">
-                <span>Created: {selectedNote.createdAt}</span>
-                <span>Last Modified: {selectedNote.modifiedAt}</span>
+                <span>Created: {selectedNote.created_at ? new Date(selectedNote.created_at).toLocaleString() : "—"}</span>
+                <span>Last Modified: {selectedNote.modified_at ? new Date(selectedNote.modified_at).toLocaleString() : "—"}</span>
               </div>
 
               <div className="flex justify-between items-center mt-4">
@@ -221,15 +238,14 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
 
                 <button
                   onClick={() => {
-                    const updatedNote = {
-                      ...selectedNote,
-                      modifiedAt: new Date().toISOString().slice(0, 16),
-                    };
-                    const updatedNotes = notes.map((n) =>
-                      n.createdAt === selectedNote.createdAt ? updatedNote : n
-                    );
-                    localStorage.setItem("notes", JSON.stringify(updatedNotes));
-                    window.location.reload();
+                    onUpdateNote?.(selectedNote.id, {
+                      title: selectedNote.title.trim(),
+                      content: (selectedNote.content || "").trim() || null,
+                      tags: normalizeTags(selectedNote.tagsInput),
+                      folder_id: selectedNote.folder_id ? Number(selectedNote.folder_id) : null,
+                      is_pinned: selectedNote.is_pinned,
+                    });
+                    setSelectedNote(null);
                   }}
                   className="px-5 py-2 text-sm font-medium rounded-btn bg-black text-white hover:bg-gray-900 transition"
                 >
@@ -247,7 +263,7 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
         message="This can't be undone."
         onCancel={() => setNoteToDelete(null)}
         onConfirm={() => {
-          onDeleteNote?.(noteToDelete);
+          onDeleteNote?.(noteToDelete.id);
           setNoteToDelete(null);
         }}
       />
@@ -255,7 +271,7 @@ export default function NotesList({ notes, onDeleteNote, onTogglePin }) {
   );
 }
 
-function NoteCard({ note, onClick, onTogglePin, onRequestDelete, dropdownOpen, toggleDropdown, dropdownRef }) {
+function NoteCard({ note, folderName, onClick, onTogglePin, onRequestDelete, dropdownOpen, toggleDropdown, dropdownRef }) {
   return (
     <div
       onClick={onClick}
@@ -329,9 +345,14 @@ function NoteCard({ note, onClick, onTogglePin, onRequestDelete, dropdownOpen, t
             {tag}
           </span>
         ))}
+        {folderName && (
+          <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-gray-100 text-gray-600">
+            {folderName}
+          </span>
+        )}
       </div>
       <div className="text-[11px] text-gray-400">
-        Modified: {note.modifiedAt}
+        Modified: {note.modified_at ? new Date(note.modified_at).toLocaleDateString() : "—"}
       </div>
     </div>
   );

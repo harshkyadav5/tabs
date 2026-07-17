@@ -23,7 +23,7 @@ export const buildLocalSuggestions = () => {
 
   const recentNote = sortByDate(notes)[0] || null;
   const todoNote = notes
-    .filter(n => Array.isArray(n.tags) && n.tags.some(t => ["todo","to-do","task"].includes((t||"").toLowerCase())))
+    .filter(n => Array.isArray(n.tags) && n.tags.some(t => ["todo","to-do","task"].includes((t||"").replace(/^#/, "").toLowerCase())))
     .sort((a,b) => new Date(b.modified_at||0) - new Date(a.modified_at||0))[0] || null;
 
   const pinnedClipboard = clipboard.filter(c => c.is_pinned).sort((a,b) =>

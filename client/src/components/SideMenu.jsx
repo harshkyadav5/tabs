@@ -165,7 +165,7 @@ export default function SideMenu() {
       </div>
 
       <footer className="text-xs text-center text-gray-500 pt-6">
-        © 2025 Tabs
+        © {new Date().getFullYear()} Tabs
       </footer>
       </aside>
     </>

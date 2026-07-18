@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { SearchIcon, SearchSubmitArrowIcon, BookmarkThinIcon, NoteThinIcon, TagIcon } from "./icons";
 
 const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
   const [query, setQuery] = useState("");
@@ -137,9 +138,7 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
     <div className={`relative ${className}`} ref={searchRef}>
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          <SearchIcon className="h-5 w-5 text-gray-400" />
         </div>
         
         <input
@@ -159,9 +158,7 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
               disabled={!query.trim()}
               className="text-gray-400 hover:text-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+              <SearchSubmitArrowIcon className="h-5 w-5" />
             </button>
           )}
         </div>
@@ -216,19 +213,13 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
             >
               <div className="flex-shrink-0">
                 {suggestion.type === 'bookmark' && (
-                  <svg className="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-                  </svg>
+                  <BookmarkThinIcon className="h-4 w-4 text-indigo-500" />
                 )}
                 {suggestion.type === 'note' && (
-                  <svg className="h-4 w-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5l2 2h5a2 2 0 012 2v12a2 2 0 01-2 2z" />
-                  </svg>
+                  <NoteThinIcon className="h-4 w-4 text-yellow-500" />
                 )}
                 {suggestion.type === 'tag' && (
-                  <svg className="h-4 w-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
+                  <TagIcon className="h-4 w-4 text-purple-500" />
                 )}
               </div>
               

@@ -2,12 +2,9 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import AuthControls from "./AuthControls";
 import { useSidebar } from "../context/SidebarContext";
+import { HamburgerMenuIcon } from "./icons";
 
-const menuIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 6h16M4 12h16M4 18h16" />
-  </svg>
-);
+const menuIcon = <HamburgerMenuIcon />;
 
 export default function Navbar() {
   const location = useLocation();

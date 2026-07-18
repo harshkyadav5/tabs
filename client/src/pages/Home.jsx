@@ -4,43 +4,24 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { buildLocalSuggestions } from "../utils/suggestionsLocal";
 import Card from "../components/ui/Card";
+import {
+  BookmarkThinIcon,
+  NoteThinIcon,
+  ClipboardHomeIcon,
+  ScreenshotsHomeIcon,
+  ColorsHomeIcon,
+  MusicHomeIcon,
+  SmartHomeIcon,
+} from "../components/icons";
 
 const Icons = {
-  Bookmarks: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"/>
-    </svg>
-  ),
-  Notes: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5l2 2h5a2 2 0 012 2v12a2 2 0 01-2 2z"/>
-    </svg>
-  ),
-  Clipboard: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5h6M9 3h6a2 2 0 012 2v14a2 2 0 01-2 2H9a2 2 0 01-2-2V5a2 2 0 012-2z"/>
-    </svg>
-  ),
-  Screenshots: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16M8 4v16m8-16v16"/>
-    </svg>
-  ),
-  Colors: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <circle cx="12" cy="12" r="9" strokeWidth="2"/>
-    </svg>
-  ),
-  Music: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-2v13"/>
-    </svg>
-  ),
-  Smart: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8a2 2 0 00-1 3.73V15h2v-3.27A2 2 0 0012 8z"/>
-    </svg>
-  ),
+  Bookmarks: <BookmarkThinIcon className="w-5 h-5 text-indigo-500" />,
+  Notes: <NoteThinIcon className="w-5 h-5 text-yellow-500" />,
+  Clipboard: <ClipboardHomeIcon />,
+  Screenshots: <ScreenshotsHomeIcon />,
+  Colors: <ColorsHomeIcon />,
+  Music: <MusicHomeIcon />,
+  Smart: <SmartHomeIcon />,
 };
 
 const CARD_GRADIENTS = {

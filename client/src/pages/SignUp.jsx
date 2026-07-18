@@ -4,10 +4,11 @@ import { useToast } from "../context/ToastContext";
 import ProfilePicSelector from "../components/ProfilePicSelector";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import { EyeIcon, EyeOffIcon } from "../components/icons";
 
 const showHideToggle = [
-  { label: "Show", icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M21.544 11.045c.304.426.456.64.456.955c0 .316-.152.529-.456.955C20.178 14.871 16.689 19 12 19c-4.69 0-8.178-4.13-9.544-6.045C2.152 12.529 2 12.315 2 12c0-.316.152-.529.456-.955C3.822 9.129 7.311 5 12 5c4.69 0 8.178 4.13 9.544 6.045"/><path d="M15 12a3 3 0 1 0-6 0a3 3 0 0 0 6 0"/></g></svg> },
-  { label: "Hide", icon: <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M19.439 15.439a19.5 19.5 0 0 0 2.105-2.484c.304-.426.456-.64.456-.955c0-.316-.152-.529-.456-.955C20.178 9.129 16.689 5 12 5c-.908 0-1.77.155-2.582.418m-2.67 1.33c-2.017 1.36-3.506 3.195-4.292 4.297c-.304.426-.456.64-.456.955c0 .316.152.529.456.955C3.822 14.871 7.311 19 12 19c1.99 0 3.765-.744 5.253-1.747"/><path d="M9.858 10A2.929 2.929 0 1 0 14 14.142M3 3l18 18"/></g></svg> },
+  { label: "Show", icon: <EyeIcon className="w-6 h-6" /> },
+  { label: "Hide", icon: <EyeOffIcon className="w-6 h-6" /> },
 ];
 
 export default function SignUp() {

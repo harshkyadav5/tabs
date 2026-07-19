@@ -56,11 +56,20 @@ export const deleteClipboardItem = async (req, res) => {
   const itemId = req.params.id;
 
   try {
-    await pool.query(
+    const result = await pool.query(
       `UPDATE clipboard_items SET is_deleted = TRUE, modified_at = NOW()
-       WHERE id = $1 AND user_id = $2`,
+       WHERE id = $1 AND user_id = $2 AND is_deleted = FALSE
+       RETURNING *`,
       [itemId, userId]
     );
+
+    if (result.rows.length > 0) {
+      await pool.query(
+        `INSERT INTO trash_bin (user_id, entity_type, entity_id) VALUES ($1, 'clipboard', $2)`,
+        [userId, itemId]
+      );
+    }
+
     res.json({ success: true });
   } catch (err) {
     console.error("Error deleting item:", err);

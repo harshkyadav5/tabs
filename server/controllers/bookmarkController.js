@@ -108,9 +108,9 @@ export const deleteBookmark = async (req, res) => {
     const bookmarkId = req.params.id;
 
     const result = await pool.query(
-      `UPDATE bookmarks 
+      `UPDATE bookmarks
        SET is_deleted = true, modified_at = CURRENT_TIMESTAMP
-       WHERE id = $1 AND user_id = $2
+       WHERE id = $1 AND user_id = $2 AND is_deleted = false
        RETURNING *`,
       [bookmarkId, userId]
     );
@@ -118,6 +118,11 @@ export const deleteBookmark = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Bookmark not found" });
     }
+
+    await pool.query(
+      `INSERT INTO trash_bin (user_id, entity_type, entity_id) VALUES ($1, 'bookmark', $2)`,
+      [userId, bookmarkId]
+    );
 
     res.json({ message: "Bookmark deleted successfully" });
   } catch (error) {

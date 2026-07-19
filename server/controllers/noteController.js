@@ -114,9 +114,9 @@ export const deleteNote = async (req, res) => {
     const noteId = req.params.id;
 
     const result = await pool.query(
-      `UPDATE notes 
+      `UPDATE notes
        SET is_deleted = true, modified_at = CURRENT_TIMESTAMP
-       WHERE id = $1 AND user_id = $2
+       WHERE id = $1 AND user_id = $2 AND is_deleted = false
        RETURNING *`,
       [noteId, userId]
     );
@@ -124,6 +124,11 @@ export const deleteNote = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Note not found" });
     }
+
+    await pool.query(
+      `INSERT INTO trash_bin (user_id, entity_type, entity_id) VALUES ($1, 'note', $2)`,
+      [userId, noteId]
+    );
 
     res.json({ message: "Note deleted successfully" });
   } catch (error) {

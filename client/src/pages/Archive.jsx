@@ -1,38 +1,30 @@
 import React, { useState } from "react";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
-
-const archivedItems = [
-  {
-    id: 1,
-    type: "note",
-    title: "Old Project Notes",
-    content: "This is an archived note about the old project.",
-    is_archived: true,
-    archived_at: "2025-07-15T09:20:00Z",
-  },
-  {
-    id: 2,
-    type: "clipboard",
-    content: "Some useful copied text saved for later.",
-    is_archived: true,
-    archived_at: "2025-07-20T14:10:00Z",
-  },
-];
+import { useArchiveTrash } from "../context/ArchiveTrashContext";
+import { useToast } from "../context/ToastContext";
+import { unarchiveItem, deleteArchivedItem } from "../services/archiveService";
 
 export default function Archive() {
-  const [items, setItems] = useState(archivedItems);
-  const [pendingDeleteId, setPendingDeleteId] = useState(null);
+  const { archivedItems: items, refreshArchive } = useArchiveTrash();
+  const { showToast } = useToast();
+  const [pendingDelete, setPendingDelete] = useState(null);
 
-  const handleUnarchive = (id) => {
-    const updated = items.map((item) =>
-      item.id === id ? { ...item, is_archived: false } : item
-    );
-    setItems(updated.filter((item) => item.is_archived));
+  const handleUnarchive = async (item) => {
+    try {
+      await unarchiveItem(item.entity_type, item.id);
+      await refreshArchive();
+    } catch (err) {
+      showToast(err.message || "Failed to unarchive item", "error");
+    }
   };
 
-  const handlePermanentDelete = (id) => {
-    const updated = items.filter((item) => item.id !== id);
-    setItems(updated);
+  const handlePermanentDelete = async (item) => {
+    try {
+      await deleteArchivedItem(item.entity_type, item.id);
+      await refreshArchive();
+    } catch (err) {
+      showToast(err.message || "Failed to delete item", "error");
+    }
   };
 
   return (
@@ -43,7 +35,7 @@ export default function Archive() {
         <div className="text-gray-500">No items in archive.</div>
       ) : (
         <div className="w-full bg-gray-50 border border-gray-200 rounded-card overflow-hidden">
-          
+
           <div className="hidden md:grid bg-gray-100 text-sm text-gray-700 font-medium grid-cols-5 gap-4 px-4 py-2">
             <div>Type</div>
             <div>Title</div>
@@ -59,11 +51,11 @@ export default function Archive() {
                 : "bg-gray-50";
             return (
               <div
-                key={item.id}
+                key={`${item.entity_type}-${item.id}`}
                 className={`flex flex-col gap-2 md:grid md:grid-cols-5 md:gap-4 md:items-start px-4 py-3 text-sm border-t border-gray-200 ${bgColor} hover:bg-gray-100/90 transition-all duration-200`}
               >
                 <div className="capitalize font-medium text-gray-800">
-                  {item.type}
+                  {item.entity_type}
                 </div>
 
                 <div className="text-gray-900 font-semibold">
@@ -80,13 +72,13 @@ export default function Archive() {
 
                 <div className="flex justify-end gap-2">
                   <button
-                    onClick={() => handleUnarchive(item.id)}
+                    onClick={() => handleUnarchive(item)}
                     className="px-3 py-1 text-xs rounded-btn bg-blue-100 text-blue-700 hover:bg-blue-200"
                   >
                     Unarchive
                   </button>
                   <button
-                    onClick={() => setPendingDeleteId(item.id)}
+                    onClick={() => setPendingDelete(item)}
                     className="px-3 py-1 text-xs rounded-btn bg-red-100 text-red-700 hover:bg-red-200"
                   >
                     Delete
@@ -99,13 +91,13 @@ export default function Archive() {
       )}
 
       <ConfirmDialog
-        open={pendingDeleteId !== null}
+        open={pendingDelete !== null}
         title="Permanently delete this item?"
         message="This can't be undone."
-        onCancel={() => setPendingDeleteId(null)}
+        onCancel={() => setPendingDelete(null)}
         onConfirm={() => {
-          handlePermanentDelete(pendingDeleteId);
-          setPendingDeleteId(null);
+          handlePermanentDelete(pendingDelete);
+          setPendingDelete(null);
         }}
       />
     </div>

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
+import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import {
   BookmarksNavIcon,
   NotesNavIcon,
@@ -38,6 +39,7 @@ const deletedItems = [
 export default function SideMenu() {
   const location = useLocation();
   const { mobileOpen, setMobileOpen } = useSidebar();
+  const { archivedCount, trashedCount } = useArchiveTrash();
 
   useEffect(() => {
     setMobileOpen(false);
@@ -153,7 +155,12 @@ export default function SideMenu() {
                   aria-current={location.pathname === item.destination ? 'page' : undefined}
                 >
                   <span className="text-lg">{item.icon}</span>
-                  <span>{item.label}</span>
+                  <span className="flex-1">{item.label}</span>
+                  {archivedCount > 0 && (
+                    <span className="text-xs font-semibold text-gray-500 bg-gray-200 rounded-full px-2 py-0.5">
+                      {archivedCount}
+                    </span>
+                  )}
                 </Link>
               </li>
             ))}
@@ -166,7 +173,12 @@ export default function SideMenu() {
                   aria-current={location.pathname === item.destination ? 'page' : undefined}
                 >
                   <span className="text-lg">{item.icon}</span>
-                  <span>{item.label}</span>
+                  <span className="flex-1">{item.label}</span>
+                  {trashedCount > 0 && (
+                    <span className="text-xs font-semibold text-gray-500 bg-gray-200 rounded-full px-2 py-0.5">
+                      {trashedCount}
+                    </span>
+                  )}
                 </Link>
               </li>
             ))}

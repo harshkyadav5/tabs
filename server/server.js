@@ -7,6 +7,8 @@ import clipboardRoutes from "./routes/clipboardRoutes.js";
 import musicRoutes from "./routes/musicRoutes.js";
 import bookmarkRoutes from "./routes/bookmarkRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
+import archiveRoutes from "./routes/archiveRoutes.js";
+import trashRoutes from "./routes/trashRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ app.use("/api/music", musicRoutes);
 app.use("/api/clipboard", clipboardRoutes);
 app.use("/api/bookmarks", bookmarkRoutes);
 app.use("/api/notes", noteRoutes);
+app.use("/api/archive", archiveRoutes);
+app.use("/api/trash", trashRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

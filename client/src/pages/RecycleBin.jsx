@@ -1,38 +1,30 @@
 import React, { useState } from "react";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
-
-const tBin = [
-  {
-    id: 1,
-    type: "note",
-    title: "Deleted Note",
-    content: "This note was moved to trash.",
-    is_trashed: true,
-    deleted_at: "2025-08-01T10:30:00Z",
-  },
-  {
-    id: 2,
-    type: "clipboard",
-    content: "Copied text that was deleted.",
-    is_trashed: true,
-    deleted_at: "2025-08-01T12:15:00Z",
-  },
-];
+import { useArchiveTrash } from "../context/ArchiveTrashContext";
+import { useToast } from "../context/ToastContext";
+import { restoreItem, deleteTrashItem } from "../services/trashService";
 
 export default function RecycleBin() {
-  const [trashedItems, setTrashedItems] = useState(tBin);
-  const [pendingDeleteId, setPendingDeleteId] = useState(null);
+  const { trashedItems, refreshTrash } = useArchiveTrash();
+  const { showToast } = useToast();
+  const [pendingDelete, setPendingDelete] = useState(null);
 
-  const handleRestore = (id) => {
-    const updated = trashedItems.map((item) =>
-      item.id === id ? { ...item, is_trashed: false } : item
-    );
-    setTrashedItems(updated.filter((item) => item.is_trashed));
+  const handleRestore = async (item) => {
+    try {
+      await restoreItem(item.entity_type, item.id);
+      await refreshTrash();
+    } catch (err) {
+      showToast(err.message || "Failed to restore item", "error");
+    }
   };
 
-  const handlePermanentDelete = (id) => {
-    const updated = trashedItems.filter((item) => item.id !== id);
-    setTrashedItems(updated);
+  const handlePermanentDelete = async (item) => {
+    try {
+      await deleteTrashItem(item.entity_type, item.id);
+      await refreshTrash();
+    } catch (err) {
+      showToast(err.message || "Failed to delete item", "error");
+    }
   };
 
   const getDaysLeft = (deletedAt) => {
@@ -67,11 +59,11 @@ export default function RecycleBin() {
                 : "bg-gray-50";
             return (
               <div
-                key={item.id}
+                key={`${item.entity_type}-${item.id}`}
                 className={`flex flex-col gap-2 md:grid md:grid-cols-6 md:gap-4 md:items-start px-4 py-3 text-sm border-t border-gray-200 ${bgColor} hover:bg-gray-100/90 transition-all duration-200`}
               >
                 <div className="capitalize font-medium text-gray-800">
-                  {item.type}
+                  {item.entity_type}
                 </div>
 
                 <div className="text-gray-900 font-semibold">
@@ -98,13 +90,13 @@ export default function RecycleBin() {
 
                 <div className="flex justify-end gap-2">
                   <button
-                    onClick={() => handleRestore(item.id)}
+                    onClick={() => handleRestore(item)}
                     className="px-3 py-1 text-xs rounded-btn bg-green-100 text-green-700 hover:bg-green-200"
                   >
                     Restore
                   </button>
                   <button
-                    onClick={() => setPendingDeleteId(item.id)}
+                    onClick={() => setPendingDelete(item)}
                     className="px-3 py-1 text-xs rounded-btn bg-red-100 text-red-700 hover:bg-red-200"
                   >
                     Delete
@@ -117,13 +109,13 @@ export default function RecycleBin() {
       )}
 
       <ConfirmDialog
-        open={pendingDeleteId !== null}
+        open={pendingDelete !== null}
         title="Permanently delete this item?"
         message="This can't be undone."
-        onCancel={() => setPendingDeleteId(null)}
+        onCancel={() => setPendingDelete(null)}
         onConfirm={() => {
-          handlePermanentDelete(pendingDeleteId);
-          setPendingDeleteId(null);
+          handlePermanentDelete(pendingDelete);
+          setPendingDelete(null);
         }}
       />
     </div>

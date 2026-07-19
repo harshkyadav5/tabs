@@ -17,6 +17,7 @@ import RecycleBin from "./pages/RecycleBin";
 import HomeLayout from "./layouts/HomeLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
 import { SidebarProvider } from "./context/SidebarContext";
+import { ArchiveTrashProvider } from "./context/ArchiveTrashContext";
 
 const MusicPageWrapper = () => {
   const { query } = useParams();
@@ -32,34 +33,36 @@ export default function App() {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen transition-colors duration-300">
-        {!isAuthPage && !isProfilePage && !isMusicPage && <Navbar />}
-        {isProfilePage && <Navbar />}
-        {isMusicPage && <MusicNavbar />}
+      <ArchiveTrashProvider>
+        <div className="min-h-screen transition-colors duration-300">
+          {!isAuthPage && !isProfilePage && !isMusicPage && <Navbar />}
+          {isProfilePage && <Navbar />}
+          {isMusicPage && <MusicNavbar />}
 
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
 
-          <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile />} />
 
-          <Route element={<HomeLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/notes" element={<Notes />} />
-            <Route path="/bookmarks" element={<Bookmarks />} />
-            <Route path="/clipboard" element={<Clipboard />} />
-            <Route path="/screenshot" element={<ScreenshotGallery />} />
-            <Route path="/color-picker" element={<ColorPicker />} />
-            <Route path="/recycle-bin" element={<RecycleBin />} />
-            <Route path="/archive" element={<Archive />} />
-          </Route>
+            <Route element={<HomeLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/notes" element={<Notes />} />
+              <Route path="/bookmarks" element={<Bookmarks />} />
+              <Route path="/clipboard" element={<Clipboard />} />
+              <Route path="/screenshot" element={<ScreenshotGallery />} />
+              <Route path="/color-picker" element={<ColorPicker />} />
+              <Route path="/recycle-bin" element={<RecycleBin />} />
+              <Route path="/archive" element={<Archive />} />
+            </Route>
 
-          <Route element={<SimpleLayout />}>
-            <Route path="/music" element={<Music />} />
-            <Route path="/music/search/:query" element={<MusicPageWrapper />} />
-          </Route>
-        </Routes>
-      </div>
+            <Route element={<SimpleLayout />}>
+              <Route path="/music" element={<Music />} />
+              <Route path="/music/search/:query" element={<MusicPageWrapper />} />
+            </Route>
+          </Routes>
+        </div>
+      </ArchiveTrashProvider>
     </SidebarProvider>
   );
 }

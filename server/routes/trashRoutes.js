@@ -10,8 +10,8 @@ import {
 const router = express.Router();
 
 router.get("/", authenticate, getTrashItems);
-router.post("/:entityType/:entityId/restore", authenticate, restoreItem);
+router.post("/:entity_type/:entity_id/restore", authenticate, restoreItem);
 router.delete("/empty", authenticate, emptyTrash);
-router.delete("/:entityType/:entityId", authenticate, deleteTrashItem);
+router.delete("/:entity_type/:entity_id", authenticate, deleteTrashItem);
 
 export default router;

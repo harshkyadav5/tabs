@@ -9,6 +9,15 @@ export const getArchivedItems = async () => {
   }
 };
 
+export const archiveItem = async (entityType, entityId) => {
+  try {
+    const response = await axiosInstance.post('/archive', { entity_type: entityType, entity_id: entityId });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Failed to archive item');
+  }
+};
+
 export const unarchiveItem = async (entityType, entityId) => {
   try {
     const response = await axiosInstance.delete(`/archive/${entityType}/${entityId}`);

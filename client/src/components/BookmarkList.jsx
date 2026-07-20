@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import MenuModal from "./MenuModal";
 import ConfirmDialog from "./ui/ConfirmDialog";
-import { PinIcon, UnpinIcon, EditIcon, TrashIcon, OpenInNewTabIcon, EllipsisHorizontalIcon, EyeIcon, LinkIcon } from "./icons";
+import { PinIcon, UnpinIcon, EditIcon, ArchiveIcon, TrashIcon, OpenInNewTabIcon, EllipsisHorizontalIcon, EyeIcon, LinkIcon } from "./icons";
 
 const pinIcon = <PinIcon />;
 const unpinIcon = <UnpinIcon />;
 const editIcon = <EditIcon />;
+const archiveIcon = <ArchiveIcon />;
 const trashIcon = <TrashIcon />;
 
-export default function BookmarkList({ bookmarks, folders = [], onTogglePin, onEdit, onDelete, onOpen }) {
+export default function BookmarkList({ bookmarks, folders = [], onTogglePin, onEdit, onArchive, onDelete, onOpen }) {
   const [showAll, setShowAll] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
@@ -75,6 +76,11 @@ export default function BookmarkList({ bookmarks, folders = [], onTogglePin, onE
                         icon: editIcon,
                         label: "Edit",
                         onClick: () => onEdit?.(bookmark),
+                      },
+                      {
+                        icon: archiveIcon,
+                        label: "Archive",
+                        onClick: () => onArchive?.(bookmark),
                       },
                       {
                         icon: trashIcon,

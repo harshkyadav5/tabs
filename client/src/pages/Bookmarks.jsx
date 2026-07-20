@@ -6,6 +6,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import {
   getBookmarks,
   createBookmark,
@@ -16,6 +17,7 @@ import {
   getBookmarkFolders,
   createBookmarkFolder,
 } from "../services/bookmarkService";
+import { archiveItem } from "../services/archiveService";
 import { AddBookmarkIcon, AddFolderIcon, FolderIcon, StarIcon } from "../components/icons";
 
 const addBookmarkIcon = <AddBookmarkIcon />;
@@ -40,6 +42,7 @@ const EMPTY_FORM = { url: "", title: "", description: "", folder_id: "", is_pinn
 export default function Bookmarks() {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { refreshArchive } = useArchiveTrash();
   const isLoggedIn = !!user;
 
   const [bookmarks, setBookmarks] = useState([]);
@@ -245,6 +248,25 @@ export default function Bookmarks() {
     }
   };
 
+  const handleArchive = async (bookmark) => {
+    try {
+      if (isLoggedIn) {
+        await archiveItem("bookmark", bookmark.id);
+        await refreshArchive();
+      } else {
+        const all = readLocal(LOCAL_BOOKMARKS_KEY);
+        const updatedAll = all.map((b) =>
+          b.id === bookmark.id ? { ...b, is_archived: true } : b
+        );
+        localStorage.setItem(LOCAL_BOOKMARKS_KEY, JSON.stringify(updatedAll));
+      }
+      setBookmarks((prev) => prev.filter((b) => b.id !== bookmark.id));
+      showToast("Bookmark archived", "success");
+    } catch (err) {
+      showToast(err.message || "Failed to archive bookmark", "error");
+    }
+  };
+
   const handleOpenBookmark = (bookmark) => {
     if (isLoggedIn) {
       incrementViewCount(bookmark.id)
@@ -425,6 +447,7 @@ export default function Bookmarks() {
             folders={folders}
             onTogglePin={handleTogglePin}
             onEdit={openEditModal}
+            onArchive={handleArchive}
             onDelete={handleDelete}
             onOpen={handleOpenBookmark}
           />

@@ -9,7 +9,7 @@ const editIcon = <EditIcon />;
 const archiveIcon = <ArchiveIcon />;
 const trashIcon = <TrashIcon />;
 
-export default function ColorCard({ color, onDelete, onSaveLabel }) {
+export default function ColorCard({ color, onDelete, onSaveLabel, onArchive }) {
   const [showMenu, setShowMenu] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -133,7 +133,7 @@ export default function ColorCard({ color, onDelete, onSaveLabel }) {
             {
               icon: archiveIcon,
               label: "Archive",
-              onClick: () => console.log("Archive", color.id),
+              onClick: () => onArchive?.(color.id),
             },
             {
               icon: trashIcon,

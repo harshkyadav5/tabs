@@ -3,11 +3,19 @@ import pool from "../db/db.js";
 export const getSavedColors = async (req, res) => {
   try {
     const userId = req.user.id;
+    const { is_archived } = req.query;
 
-    const result = await pool.query(
-      `SELECT * FROM saved_colors WHERE user_id = $1 ORDER BY created_at DESC`,
-      [userId]
-    );
+    let query = `SELECT * FROM saved_colors WHERE user_id = $1`;
+    const params = [userId];
+
+    if (is_archived !== undefined) {
+      params.push(is_archived === 'true');
+      query += ` AND is_archived = $${params.length}`;
+    }
+
+    query += ` ORDER BY created_at DESC`;
+
+    const result = await pool.query(query, params);
 
     res.json(result.rows);
   } catch (error) {

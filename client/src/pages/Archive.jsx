@@ -4,6 +4,9 @@ import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import { useToast } from "../context/ToastContext";
 import { unarchiveItem, deleteArchivedItem } from "../services/archiveService";
 
+const itemTitle = (item) =>
+  item.entity_type === "color" ? item.label || item.hex_code : item.title;
+
 export default function Archive() {
   const { archivedItems: items, refreshArchive } = useArchiveTrash();
   const { showToast } = useToast();
@@ -58,12 +61,18 @@ export default function Archive() {
                   {item.entity_type}
                 </div>
 
-                <div className="text-gray-900 font-semibold">
-                  {item.title || "(No title)"}
+                <div className="text-gray-900 font-semibold flex items-center gap-2">
+                  {item.entity_type === "color" && (
+                    <span
+                      className="w-4 h-4 rounded-full border border-gray-300 shrink-0"
+                      style={{ backgroundColor: item.hex_code }}
+                    />
+                  )}
+                  {itemTitle(item) || "(No title)"}
                 </div>
 
                 <div className="text-gray-600 line-clamp-2">
-                  {item.content}
+                  {item.entity_type === "color" ? item.rgb_code : item.content}
                 </div>
 
                 <div className="text-gray-500">

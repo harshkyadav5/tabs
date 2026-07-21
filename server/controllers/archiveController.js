@@ -30,6 +30,9 @@ export const getArchivedItems = async (req, res) => {
         case 'music':
           tableName = 'music';
           break;
+        case 'color':
+          tableName = 'saved_colors';
+          break;
         default:
           continue;
       }
@@ -62,7 +65,7 @@ export const archiveItem = async (req, res) => {
       return res.status(400).json({ error: "Entity type and entity ID are required" });
     }
 
-    const validTypes = ['bookmark', 'note', 'clipboard', 'screenshot', 'music'];
+    const validTypes = ['bookmark', 'note', 'clipboard', 'screenshot', 'music', 'color'];
     if (!validTypes.includes(entity_type)) {
       return res.status(400).json({ error: "Invalid entity type" });
     }
@@ -83,6 +86,9 @@ export const archiveItem = async (req, res) => {
         break;
       case 'music':
         tableName = 'music';
+        break;
+      case 'color':
+        tableName = 'saved_colors';
         break;
     }
 
@@ -152,6 +158,9 @@ export const unarchiveItem = async (req, res) => {
       case 'music':
         tableName = 'music';
         break;
+      case 'color':
+        tableName = 'saved_colors';
+        break;
       default:
         return res.status(400).json({ error: "Invalid entity type" });
     }
@@ -198,6 +207,9 @@ export const deleteArchivedItem = async (req, res) => {
         break;
       case 'music':
         tableName = 'music';
+        break;
+      case 'color':
+        tableName = 'saved_colors';
         break;
       default:
         return res.status(400).json({ error: "Invalid entity type" });

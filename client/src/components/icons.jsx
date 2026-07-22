@@ -290,6 +290,19 @@ export const FolderIcon = ({ className = "w-6 h-6", ...props }) => {
   );
 };
 
+export const PlusIcon = ({ className = "w-6 h-6", ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" {...props}>
+    <path
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      d="M12 4v16m8-8H4"
+    />
+  </svg>
+);
+
 export const StarIcon = ({ className = "w-7 h-7", ...props }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" {...props}>
     <path
@@ -697,16 +710,3 @@ export const AddNoteIcon = ({ className = "w-6 h-6", ...props }) => (
   </svg>
 );
 
-// pages/ColorPicker.jsx
-export const PlusIcon = ({ className = "w-6 h-6", ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" {...props}>
-    <path
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.5"
-      d="M12 4v16m8-8H4"
-    />
-  </svg>
-);

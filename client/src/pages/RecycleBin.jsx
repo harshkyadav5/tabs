@@ -4,6 +4,18 @@ import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import { useToast } from "../context/ToastContext";
 import { restoreItem, deleteTrashItem } from "../services/trashService";
 
+const itemTitle = (item) => {
+  if (item.entity_type === "color") return item.label || item.hex_code;
+  if (item.entity_type === "screenshot") return item.web_url;
+  return item.title;
+};
+
+const itemContent = (item) => {
+  if (item.entity_type === "color") return item.rgb_code;
+  if (item.entity_type === "screenshot") return item.image_url;
+  return item.content;
+};
+
 export default function RecycleBin() {
   const { trashedItems, refreshTrash } = useArchiveTrash();
   const { showToast } = useToast();
@@ -66,12 +78,18 @@ export default function RecycleBin() {
                   {item.entity_type}
                 </div>
 
-                <div className="text-gray-900 font-semibold">
-                  {item.title || "(No title)"}
+                <div className="text-gray-900 font-semibold flex items-center gap-2">
+                  {item.entity_type === "color" && (
+                    <span
+                      className="w-4 h-4 rounded-full border border-gray-300 shrink-0"
+                      style={{ backgroundColor: item.hex_code }}
+                    />
+                  )}
+                  {itemTitle(item) || "(No title)"}
                 </div>
 
-                <div className="text-gray-60 line-clamp-2">
-                  {item.content}
+                <div className="text-gray-600 line-clamp-2">
+                  {itemContent(item)}
                 </div>
 
                 <div className="text-gray-500">

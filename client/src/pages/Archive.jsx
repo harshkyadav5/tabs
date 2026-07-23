@@ -4,8 +4,18 @@ import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import { useToast } from "../context/ToastContext";
 import { unarchiveItem, deleteArchivedItem } from "../services/archiveService";
 
-const itemTitle = (item) =>
-  item.entity_type === "color" ? item.label || item.hex_code : item.title;
+const itemTitle = (item) => {
+  if (item.entity_type === "color") return item.label || item.hex_code;
+  if (item.entity_type === "clipboard") return item.description;
+  if (item.entity_type === "screenshot") return item.web_url;
+  return item.title;
+};
+
+const itemContent = (item) => {
+  if (item.entity_type === "color") return item.rgb_code;
+  if (item.entity_type === "screenshot") return item.image_url;
+  return item.content;
+};
 
 export default function Archive() {
   const { archivedItems: items, refreshArchive } = useArchiveTrash();
@@ -72,7 +82,7 @@ export default function Archive() {
                 </div>
 
                 <div className="text-gray-600 line-clamp-2">
-                  {item.entity_type === "color" ? item.rgb_code : item.content}
+                  {itemContent(item)}
                 </div>
 
                 <div className="text-gray-500">

@@ -6,6 +6,7 @@ import { restoreItem, deleteTrashItem } from "../services/trashService";
 
 const itemTitle = (item) => {
   if (item.entity_type === "color") return item.label || item.hex_code;
+  if (item.entity_type === "clipboard") return item.description;
   if (item.entity_type === "screenshot") return item.web_url;
   return item.title;
 };

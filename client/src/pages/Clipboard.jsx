@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import axiosInstance from "../utils/axiosInstance";
+import { archiveItem } from "../services/archiveService";
 import MenuModal from "../components/MenuModal";
-import useOutsideClick from "../hooks/useOutsideClick";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { PinIcon, UnpinIcon, CopyIcon, EditIcon, ArchiveIcon, TrashIcon, EllipsisHorizontalIcon } from "../components/icons";
 
@@ -15,8 +16,9 @@ const archiveIcon = <ArchiveIcon />;
 const trashIcon = <TrashIcon />;
 
 export default function Clipboard() {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const { showToast } = useToast();
+  const { refreshArchive } = useArchiveTrash();
   const isLoggedIn = !!user;
 
   const [clipboardItems, setClipboardItems] = useState([]);
@@ -25,25 +27,32 @@ export default function Clipboard() {
   const [editedContent, setEditedContent] = useState("");
   const [columns, setColumns] = useState([]);
   const [showMenuId, setShowMenuId] = useState(null);
-  const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const containerRef = useRef(null);
-  const menuButtonRef = useRef(null);
 
   const LOCAL_KEY = "tabs_clipboard";
+
+  const readLocal = () => {
+    try {
+      return JSON.parse(localStorage.getItem(LOCAL_KEY)) || [];
+    } catch {
+      return [];
+    }
+  };
 
   const fetchClipboardItems = async () => {
     if (isLoggedIn) {
       try {
-        const res = await axiosInstance.get("/clipboard");
+        const res = await axiosInstance.get("/clipboard", {
+          params: { is_deleted: false, is_archived: false },
+        });
         setClipboardItems(res.data || []);
-      } catch (err) {
+      } catch {
         showToast("Failed to fetch clipboard", "error");
       }
     } else {
-      const localData = JSON.parse(localStorage.getItem(LOCAL_KEY)) || [];
-      setClipboardItems(localData);
+      setClipboardItems(readLocal().filter((i) => !i.is_deleted && !i.is_archived));
     }
   };
 
@@ -55,13 +64,12 @@ export default function Clipboard() {
           content: item.content,
           is_pinned: item.is_pinned,
         });
-      } catch (err) {
+      } catch {
         showToast("Failed to save", "error");
       }
     } else {
-      const updated = clipboardItems.map((i) => (i.id === item.id ? item : i));
-      setClipboardItems(updated);
-      localStorage.setItem(LOCAL_KEY, JSON.stringify(updated));
+      const all = readLocal().map((i) => (i.id === item.id ? item : i));
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(all));
     }
   };
 
@@ -84,8 +92,6 @@ export default function Clipboard() {
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, [clipboardItems]);
-
-  useOutsideClick(menuButtonRef, () => setShowMenuId(null));
 
   const [showNewItemModal, setShowNewItemModal] = useState(false);
   const [newDescription, setNewDescription] = useState("");
@@ -110,11 +116,30 @@ export default function Clipboard() {
       } catch {
         showToast("Failed to delete", "error");
       }
+    } else {
+      const all = readLocal().map((i) => (i.id === id ? { ...i, is_deleted: true } : i));
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(all));
     }
-    const updated = clipboardItems.filter((item) => item.id !== id);
-    setClipboardItems(updated);
-    if (!isLoggedIn) localStorage.setItem(LOCAL_KEY, JSON.stringify(updated));
+    setClipboardItems((prev) => prev.filter((item) => item.id !== id));
     setShowMenuId(null);
+  };
+
+  const handleArchive = async (id) => {
+    try {
+      if (isLoggedIn) {
+        await archiveItem("clipboard", id);
+        await refreshArchive();
+      } else {
+        const all = readLocal().map((i) => (i.id === id ? { ...i, is_archived: true } : i));
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(all));
+      }
+      setClipboardItems((prev) => prev.filter((item) => item.id !== id));
+      showToast("Item archived", "success");
+    } catch (err) {
+      showToast(err.message || "Failed to archive item", "error");
+    } finally {
+      setShowMenuId(null);
+    }
   };
 
   const handleStartEdit = (item) => {
@@ -157,19 +182,21 @@ export default function Clipboard() {
         const res = await axiosInstance.post("/clipboard", newItem);
         const saved = res.data; // contains id, created_at, etc.
         setClipboardItems([saved, ...clipboardItems]);
-      } catch (err) {
+      } catch {
         showToast("Failed to save new item", "error");
       }
     } else {
       const localItem = {
         ...newItem,
         id: Date.now(),
+        is_deleted: false,
+        is_archived: false,
         created_at: new Date().toISOString(),
         modified_at: new Date().toISOString(),
       };
-      const updated = [localItem, ...clipboardItems];
-      setClipboardItems(updated);
-      localStorage.setItem(LOCAL_KEY, JSON.stringify(updated));
+      const all = readLocal();
+      localStorage.setItem(LOCAL_KEY, JSON.stringify([localItem, ...all]));
+      setClipboardItems((prev) => [localItem, ...prev]);
     }
 
     setNewDescription("");
@@ -230,12 +257,9 @@ export default function Clipboard() {
                     </button>
                     <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
                       <button
-                        ref={menuButtonRef}
                         aria-label="Item options"
                         onClick={(e) => {
                           e.stopPropagation();
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          setDropdownPosition({ x: rect.right, y: rect.bottom });
                           setShowMenuId(showMenuId === item.id ? null : item.id);
                         }}
                         className="text-gray-400 hover:text-gray-700 rounded-full p-1 hover:bg-gray-100"
@@ -275,7 +299,7 @@ export default function Clipboard() {
                     {
                       icon: archiveIcon,
                       label: "Archive",
-                      onClick: () => console.log("Archive"),
+                      onClick: () => handleArchive(item.id),
                     },
                     {
                       icon: trashIcon,

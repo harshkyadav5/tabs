@@ -2,11 +2,27 @@ import pool from "../db/db.js";
 
 export const getClipboardItems = async (req, res) => {
   const userId = req.user.id;
+  const { is_archived, is_deleted } = req.query;
+
   try {
-    const result = await pool.query(
-      "SELECT * FROM clipboard_items WHERE user_id = $1 AND is_deleted = FALSE ORDER BY is_pinned DESC, modified_at DESC",
-      [userId]
-    );
+    let query = `SELECT * FROM clipboard_items WHERE user_id = $1`;
+    const params = [userId];
+
+    if (is_archived !== undefined) {
+      params.push(is_archived === 'true');
+      query += ` AND is_archived = $${params.length}`;
+    }
+
+    if (is_deleted !== undefined) {
+      params.push(is_deleted === 'true');
+      query += ` AND is_deleted = $${params.length}`;
+    } else {
+      query += ` AND is_deleted = FALSE`;
+    }
+
+    query += ` ORDER BY is_pinned DESC, modified_at DESC`;
+
+    const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching clipboard items:", err);

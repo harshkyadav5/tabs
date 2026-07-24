@@ -19,7 +19,7 @@ import { AddNoteIcon, AddFolderIcon, FolderIcon, StarIcon } from "../components/
 
 const addNoteIcon = <AddNoteIcon />;
 const addFolderIcon = <AddFolderIcon />;
-const folderIcon = <FolderIcon />;
+const folderIcon = <FolderIcon className="w-20 h-20" />;
 const starIcon = <StarIcon />;
 
 const FAVORITES_FILTER = "favorites";

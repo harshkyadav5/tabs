@@ -22,7 +22,7 @@ import { AddBookmarkIcon, AddFolderIcon, FolderIcon, StarIcon } from "../compone
 
 const addBookmarkIcon = <AddBookmarkIcon />;
 const addFolderIcon = <AddFolderIcon />;
-const folderIcon = <FolderIcon />;
+const folderIcon = <FolderIcon className="w-20 h-20" />;
 const starIcon = <StarIcon />;
 
 const FAVORITES_FILTER = "favorites";

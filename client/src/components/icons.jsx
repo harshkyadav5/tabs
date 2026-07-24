@@ -270,7 +270,7 @@ export const AddFolderIcon = ({ className = "w-6 h-6", ...props }) => (
 );
 
 export const FolderIcon = ({ className = "w-6 h-6", ...props }) => {
-  const gradId = React.useId();
+  const gradId = `folder-grad-${React.useId().replace(/:/g, "")}`;
   return (
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
       <defs>

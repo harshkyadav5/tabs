@@ -9,11 +9,20 @@ const editIcon = <EditIcon />;
 const archiveIcon = <ArchiveIcon />;
 const trashIcon = <TrashIcon />;
 
-export default function ColorCard({ color, onDelete, onSaveLabel, onArchive }) {
+const normalizeTags = (tagsInput) =>
+  tagsInput
+    ? tagsInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+        .map((t) => (t.startsWith("#") ? t : `#${t}`))
+    : [];
+
+export default function ColorCard({ color, onDelete, onSaveTags, onArchive }) {
   const [showMenu, setShowMenu] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [editedLabel, setEditedLabel] = useState(color.label || "");
+  const [editedTagsInput, setEditedTagsInput] = useState((color.tags || []).join(", "));
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -65,14 +74,14 @@ export default function ColorCard({ color, onDelete, onSaveLabel, onArchive }) {
           <div className="mt-2 flex items-center gap-2">
             <input
               autoFocus
-              value={editedLabel}
-              onChange={(e) => setEditedLabel(e.target.value)}
-              placeholder="Label"
+              value={editedTagsInput}
+              onChange={(e) => setEditedTagsInput(e.target.value)}
+              placeholder="Tags, comma separated"
               className="min-w-0 flex-1 text-xs px-2 py-1 rounded-btn border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <button
               onClick={() => {
-                onSaveLabel?.(color.id, editedLabel.trim());
+                onSaveTags?.(color.id, normalizeTags(editedTagsInput));
                 setEditing(false);
               }}
               className="text-xs font-medium text-primary hover:underline"
@@ -87,10 +96,17 @@ export default function ColorCard({ color, onDelete, onSaveLabel, onArchive }) {
             </button>
           </div>
         ) : (
-          color.label && (
-            <span className="mt-2 inline-block text-xs px-2 py-0.5 rounded-full bg-white/90 shadow-sm text-gray-800 w-fit">
-              #{color.label}
-            </span>
+          color.tags?.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {color.tags.map((tag, i) => (
+                <span
+                  key={i}
+                  className="inline-block text-xs px-2 py-0.5 rounded-full bg-white/90 shadow-sm text-gray-800 w-fit"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           )
         )}
 
@@ -126,7 +142,7 @@ export default function ColorCard({ color, onDelete, onSaveLabel, onArchive }) {
               icon: editIcon,
               label: "Edit",
               onClick: () => {
-                setEditedLabel(color.label || "");
+                setEditedTagsInput((color.tags || []).join(", "));
                 setEditing(true);
               },
             },

@@ -27,7 +27,7 @@ export const getSavedColors = async (req, res) => {
 export const createSavedColor = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { hex_code, rgb_code, label } = req.body;
+    const { hex_code, rgb_code, label, tags } = req.body;
 
     if (!hex_code || !rgb_code) {
       return res.status(400).json({ error: "Hex code and RGB code are required" });
@@ -38,10 +38,10 @@ export const createSavedColor = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO saved_colors (user_id, hex_code, rgb_code, label)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO saved_colors (user_id, hex_code, rgb_code, label, tags)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [userId, hex_code, rgb_code, label]
+      [userId, hex_code, rgb_code, label, tags || []]
     );
 
     res.status(201).json(result.rows[0]);
@@ -55,21 +55,22 @@ export const updateSavedColor = async (req, res) => {
   try {
     const userId = req.user.id;
     const colorId = req.params.id;
-    const { hex_code, rgb_code, label } = req.body;
+    const { hex_code, rgb_code, label, tags } = req.body;
 
     if (hex_code && !/^#[0-9A-F]{6}$/i.test(hex_code)) {
       return res.status(400).json({ error: "Invalid hex code format" });
     }
 
     const result = await pool.query(
-      `UPDATE saved_colors 
-       SET hex_code = COALESCE($1, hex_code), 
+      `UPDATE saved_colors
+       SET hex_code = COALESCE($1, hex_code),
            rgb_code = COALESCE($2, rgb_code),
            label = COALESCE($3, label),
+           tags = COALESCE($4, tags),
            modified_at = CURRENT_TIMESTAMP
-       WHERE id = $4 AND user_id = $5
+       WHERE id = $5 AND user_id = $6
        RETURNING *`,
-      [hex_code, rgb_code, label, colorId, userId]
+      [hex_code, rgb_code, label, tags, colorId, userId]
     );
 
     if (result.rows.length === 0) {

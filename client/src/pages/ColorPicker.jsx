@@ -35,9 +35,18 @@ const hexToRgb = (hex) => {
   return `rgb(${r},${g},${b})`;
 };
 
-const EMPTY_FORM = { hex: "#4ECDC4", label: "" };
+const EMPTY_FORM = { hex: "#4ECDC4", tagsInput: "" };
 
 const HEX_REGEX = /^#[0-9A-Fa-f]{6}$/;
+
+const normalizeTags = (tagsInput) =>
+  tagsInput
+    ? tagsInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+        .map((t) => (t.startsWith("#") ? t : `#${t}`))
+    : [];
 
 const PRESET_COLORS = [
   "#FF6B6B",
@@ -89,11 +98,12 @@ export default function ColorPicker() {
     setSubmitting(true);
     try {
       const rgb_code = hexToRgb(form.hex);
+      const tags = normalizeTags(form.tagsInput);
       if (isLoggedIn) {
         const created = await createSavedColor({
           hex_code: form.hex,
           rgb_code,
-          label: form.label.trim() || null,
+          tags,
         });
         setSavedColors((prev) => [created, ...prev]);
       } else {
@@ -102,7 +112,7 @@ export default function ColorPicker() {
           id: Date.now(),
           hex_code: form.hex,
           rgb_code,
-          label: form.label.trim() || null,
+          tags,
           is_archived: false,
           created_at: new Date().toISOString(),
           modified_at: new Date().toISOString(),
@@ -134,18 +144,18 @@ export default function ColorPicker() {
     }
   };
 
-  const handleSaveLabel = async (id, label) => {
+  const handleSaveTags = async (id, tags) => {
     try {
       if (isLoggedIn) {
-        const updated = await updateSavedColor(id, { label });
+        const updated = await updateSavedColor(id, { tags });
         setSavedColors((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
       } else {
-        const all = readLocal().map((c) => (c.id === id ? { ...c, label } : c));
+        const all = readLocal().map((c) => (c.id === id ? { ...c, tags } : c));
         localStorage.setItem(LOCAL_COLORS_KEY, JSON.stringify(all));
-        setSavedColors((prev) => prev.map((c) => (c.id === id ? { ...c, label } : c)));
+        setSavedColors((prev) => prev.map((c) => (c.id === id ? { ...c, tags } : c)));
       }
     } catch (err) {
-      showToast(err.message || "Failed to update label", "error");
+      showToast(err.message || "Failed to update tags", "error");
     }
   };
 
@@ -187,7 +197,7 @@ export default function ColorPicker() {
               key={color.id}
               color={color}
               onDelete={handleDelete}
-              onSaveLabel={handleSaveLabel}
+              onSaveTags={handleSaveTags}
               onArchive={handleArchive}
             />
           ))}
@@ -262,11 +272,11 @@ export default function ColorPicker() {
         </div>
 
         <Input
-          label="Label"
+          label="Tags"
           type="text"
-          placeholder="Optional label"
-          value={form.label}
-          onChange={(e) => setForm({ ...form, label: e.target.value })}
+          placeholder="Comma separated, e.g. primary, brand"
+          value={form.tagsInput}
+          onChange={(e) => setForm({ ...form, tagsInput: e.target.value })}
         />
       </Modal>
     </div>

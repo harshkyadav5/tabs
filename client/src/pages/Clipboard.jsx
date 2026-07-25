@@ -18,7 +18,7 @@ const trashIcon = <TrashIcon />;
 export default function Clipboard() {
   const { user } = useAuth();
   const { showToast } = useToast();
-  const { refreshArchive } = useArchiveTrash();
+  const { refreshArchive, refreshTrash } = useArchiveTrash();
   const isLoggedIn = !!user;
 
   const [clipboardItems, setClipboardItems] = useState([]);
@@ -113,6 +113,7 @@ export default function Clipboard() {
     if (isLoggedIn) {
       try {
         await axiosInstance.delete(`/clipboard/${id}`);
+        await refreshTrash();
       } catch {
         showToast("Failed to delete", "error");
       }

@@ -6,6 +6,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import {
   getScreenshots,
   createScreenshot,
@@ -31,6 +32,7 @@ const EMPTY_FORM = { web_url: "", image_url: "" };
 export default function ScreenshotGallery() {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { refreshTrash } = useArchiveTrash();
   const isLoggedIn = !!user;
 
   const [objectFit, setObjectFit] = useState("contain");
@@ -129,6 +131,7 @@ export default function ScreenshotGallery() {
     try {
       if (isLoggedIn) {
         await deleteScreenshot(id);
+        await refreshTrash();
       } else {
         const all = readLocal().map((s) => (s.id === id ? { ...s, is_deleted: true } : s));
         localStorage.setItem(LOCAL_SCREENSHOTS_KEY, JSON.stringify(all));

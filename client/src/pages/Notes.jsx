@@ -6,6 +6,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import {
   getNotes,
   createNote,
@@ -48,6 +49,7 @@ const EMPTY_FORM = { title: "", content: "", tagsInput: "", folder_id: "", is_pi
 export default function Notes() {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { refreshTrash } = useArchiveTrash();
   const isLoggedIn = !!user;
 
   const [notes, setNotes] = useState([]);
@@ -210,6 +212,7 @@ export default function Notes() {
     try {
       if (isLoggedIn) {
         await deleteNote(id);
+        await refreshTrash();
       } else {
         const all = readLocal(LOCAL_NOTES_KEY);
         const updatedAll = all.map((n) => (n.id === id ? { ...n, is_deleted: true } : n));

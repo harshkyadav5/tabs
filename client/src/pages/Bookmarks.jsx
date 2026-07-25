@@ -42,7 +42,7 @@ const EMPTY_FORM = { url: "", title: "", description: "", folder_id: "", is_pinn
 export default function Bookmarks() {
   const { user } = useAuth();
   const { showToast } = useToast();
-  const { refreshArchive } = useArchiveTrash();
+  const { refreshArchive, refreshTrash } = useArchiveTrash();
   const isLoggedIn = !!user;
 
   const [bookmarks, setBookmarks] = useState([]);
@@ -236,6 +236,7 @@ export default function Bookmarks() {
     try {
       if (isLoggedIn) {
         await deleteBookmark(id);
+        await refreshTrash();
       } else {
         const all = readLocal(LOCAL_BOOKMARKS_KEY);
         const updatedAll = all.map((b) => (b.id === id ? { ...b, is_deleted: true } : b));

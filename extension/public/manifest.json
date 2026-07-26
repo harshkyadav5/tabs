@@ -16,8 +16,11 @@
     "48": "icons/tabs-logo.png",
     "128": "icons/tabs-logo.png"
   },
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "storage"],
   "background": {
     "service_worker": "background.js"
+  },
+  "externally_connectable": {
+    "matches": ["http://localhost/*"]
   }
 }

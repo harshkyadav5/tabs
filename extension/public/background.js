@@ -13,4 +13,13 @@ chrome.runtime.onMessageExternal.addListener((message, sender, sendResponse) => 
 
     return true;
   }
+
+  if (message.type === "LOGOUT") {
+    chrome.storage.local.remove(["user", "token"], () => {
+      console.log("Auth data cleared from extension.");
+      sendResponse({ status: "success" });
+    });
+
+    return true;
+  }
 });

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { notifyExtensionLogin, notifyExtensionLogout } from "../utils/extensionBridge";
 
 const AuthContext = createContext();
 
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", token);
     setUser(userData);
     setToken(token);
+    notifyExtensionLogin(userData, token);
   };
 
   const logout = () => {
@@ -24,6 +26,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setUser(null);
     setToken(null);
+    notifyExtensionLogout();
   };
 
   return (

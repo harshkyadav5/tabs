@@ -79,7 +79,6 @@ export default function ScreenshotViewer({ image, index, total, onBack, onToggle
           className="absolute top-9 right-2 w-60 bg-white shadow-dropdown rounded-btn border border-white overflow-hidden z-30"
         >
           <ul className="text-sm p-1">
-            <MenuItem icon={infoIcon} label="Info" onClick={() => { setShowInfo(true); setShowMenu(false); }} />
             <MenuItem
               icon={heartIcon}
               label={image.is_favorite ? "Unfavorite" : "Favorite"}

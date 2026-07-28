@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { buildLocalSuggestions } from "../utils/suggestionsLocal";
 import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
 import {
   BookmarkThinIcon,
   NoteThinIcon,
@@ -22,12 +23,6 @@ const Icons = {
   Colors: <ColorsHomeIcon />,
   Music: <MusicHomeIcon />,
   Smart: <SmartHomeIcon />,
-};
-
-const CARD_GRADIENTS = {
-  indigo: "from-indigo-500 to-purple-500",
-  purple: "from-purple-500 to-purple-500",
-  pink: "from-pink-500 to-purple-500",
 };
 
 export default function Home() {
@@ -70,38 +65,38 @@ export default function Home() {
   const goToColors = () => navigate(`/colors`);
   const goToMusic = (id) => navigate(`/music?open=${id}`);
 
-  const SuggestionCard = ({ title, desc, onClick, hoverColor = "indigo" }) => (
+  const SuggestionCard = ({ title, desc, onClick }) => (
     <Card>
       <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
       <p className="text-sm text-gray-500 mb-4">{desc}</p>
-      <button
-        onClick={onClick}
-        className={`px-4 py-1.5 text-sm rounded-btn bg-gradient-to-r ${CARD_GRADIENTS[hoverColor] || CARD_GRADIENTS.indigo} text-white font-medium hover:opacity-90 transition`}
-      >
+      <Button variant="secondary" onClick={onClick}>
         View
-      </button>
+      </Button>
     </Card>
   );
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <p className="text-gray-600 text-center">Loading your suggestions…</p>
+      <div className="p-6 max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">For You</h1>
+        <p className="text-gray-500">Loading your suggestions…</p>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <p className="text-gray-600 text-center">No suggestions yet.</p>
+      <div className="p-6 max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">For You</h1>
+        <p className="text-gray-500">No suggestions yet.</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
-      <p className="text-gray-600 mb-10 text-lg text-center">
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold mb-2">For You</h1>
+      <p className="text-gray-500 mb-8">
         Personalized suggestions powered by AI
       </p>
 
@@ -116,7 +111,6 @@ export default function Home() {
               title="Most visited bookmark"
               desc={`${data.bookmarks.mostVisited.title || "Untitled"} — ${data.bookmarks.mostVisited.view_count ?? 0} views`}
               onClick={() => goToBookmark(data.bookmarks.mostVisited.id)}
-              hoverColor="indigo"
             />
           )}
           {data.bookmarks?.savedButUnopened && (
@@ -124,11 +118,10 @@ export default function Home() {
               title="Saved but unopened"
               desc={data.bookmarks.savedButUnopened.title || data.bookmarks.savedButUnopened.url}
               onClick={() => goToBookmark(data.bookmarks.savedButUnopened.id)}
-              hoverColor="indigo"
             />
           )}
           {!data.bookmarks?.mostVisited && !data.bookmarks?.savedButUnopened && (
-            <SuggestionCard title="No bookmarks yet" desc="Start saving links to see suggestions here." onClick={() => navigate("/bookmarks")} hoverColor="indigo"/>
+            <SuggestionCard title="No bookmarks yet" desc="Start saving links to see suggestions here." onClick={() => navigate("/bookmarks")}/>
           )}
         </div>
       </section>
@@ -144,7 +137,6 @@ export default function Home() {
               title="Continue recent note"
               desc={data.notes.recent.title}
               onClick={() => goToNote(data.notes.recent.id)}
-              hoverColor="indigo"
             />
           )}
           {data.notes?.todo && (
@@ -152,11 +144,10 @@ export default function Home() {
               title="Notes tagged #todo"
               desc={data.notes.todo.title}
               onClick={() => goToNote(data.notes.todo.id)}
-              hoverColor="indigo"
             />
           )}
           {!data.notes?.recent && !data.notes?.todo && (
-            <SuggestionCard title="No notes yet" desc="Create your first note to get suggestions." onClick={() => navigate("/notes")} hoverColor="indigo"/>
+            <SuggestionCard title="No notes yet" desc="Create your first note to get suggestions." onClick={() => navigate("/notes")}/>
           )}
         </div>
       </section>
@@ -172,7 +163,6 @@ export default function Home() {
               title="Pinned clipboard"
               desc={data.clipboard.pinned.description || data.clipboard.pinned.preview}
               onClick={() => goToClipboard(data.clipboard.pinned.id)}
-              hoverColor="indigo"
             />
           )}
           {data.clipboard?.recent && (
@@ -180,11 +170,10 @@ export default function Home() {
               title="Most recent snippet"
               desc={data.clipboard.recent.description || data.clipboard.recent.preview}
               onClick={() => goToClipboard(data.clipboard.recent.id)}
-              hoverColor="indigo"
             />
           )}
           {!data.clipboard?.pinned && !data.clipboard?.recent && (
-            <SuggestionCard title="No snippets yet" desc="Copy something to your Clipboard to see it here." onClick={() => navigate("/clipboard")} hoverColor="indigo"/>
+            <SuggestionCard title="No snippets yet" desc="Copy something to your Clipboard to see it here." onClick={() => navigate("/clipboard")}/>
           )}
         </div>
       </section>
@@ -200,7 +189,6 @@ export default function Home() {
               title="Favorite screenshot"
               desc={data.screenshots.favorite.web_url}
               onClick={() => goToScreenshot(data.screenshots.favorite.id)}
-              hoverColor="purple"
             />
           )}
           {data.screenshots?.recent && (
@@ -208,11 +196,10 @@ export default function Home() {
               title="Latest screenshot"
               desc={data.screenshots.recent.web_url}
               onClick={() => goToScreenshot(data.screenshots.recent.id)}
-              hoverColor="purple"
             />
           )}
           {!data.screenshots?.favorite && !data.screenshots?.recent && (
-            <SuggestionCard title="No screenshots yet" desc="Capture a webpage to see it here." onClick={() => navigate("/screenshots")} hoverColor="purple"/>
+            <SuggestionCard title="No screenshots yet" desc="Capture a webpage to see it here." onClick={() => navigate("/screenshots")}/>
           )}
         </div>
       </section>
@@ -237,12 +224,12 @@ export default function Home() {
                   <div>{data.colors.latest.hex_code} • {data.colors.latest.rgb_code}</div>
                 </div>
               </div>
-              <button onClick={() => goToColors()} className="px-4 py-1.5 text-sm rounded-btn bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium hover:opacity-90 transition">
+              <Button variant="secondary" onClick={() => goToColors()}>
                 View
-              </button>
+              </Button>
             </Card>
           ) : (
-            <SuggestionCard title="No colors yet" desc="Save a color to see it here." onClick={goToColors} hoverColor="indigo"/>
+            <SuggestionCard title="No colors yet" desc="Save a color to see it here." onClick={goToColors}/>
           )}
         </div>
       </section>
@@ -258,7 +245,6 @@ export default function Home() {
               title="Favorite track"
               desc={`${data.music.favorite.track_name} — ${data.music.favorite.artist || "Unknown"}`}
               onClick={() => goToMusic(data.music.favorite.id)}
-              hoverColor="pink"
             />
           )}
           {data.music?.recent && (
@@ -266,11 +252,10 @@ export default function Home() {
               title="Recently added"
               desc={`${data.music.recent.track_name} — ${data.music.recent.artist || "Unknown"}`}
               onClick={() => goToMusic(data.music.recent.id)}
-              hoverColor="pink"
             />
           )}
           {!data.music?.favorite && !data.music?.recent && (
-            <SuggestionCard title="No tracks yet" desc="Add a track to see suggestions here." onClick={() => navigate("/music")} hoverColor="pink"/>
+            <SuggestionCard title="No tracks yet" desc="Add a track to see suggestions here." onClick={() => navigate("/music")}/>
           )}
         </div>
       </section>
@@ -286,14 +271,12 @@ export default function Home() {
               title="Note + Bookmark connection"
               desc={`Your note "${data.notes.recent.title}" pairs with "${data.bookmarks.mostVisited.title}"`}
               onClick={() => { goToNote(data.notes.recent.id); }}
-              hoverColor="purple"
             />
           ) : (
             <SuggestionCard
               title="No smart picks yet"
               desc="As you create more content, we’ll surface cross-feature links here."
               onClick={() => navigate("/notes")}
-              hoverColor="purple"
             />
           )}
         </div>

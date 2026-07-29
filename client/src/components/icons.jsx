@@ -652,33 +652,10 @@ export const ExportIcon = ({ className = "w-5 h-5", ...props }) => (
 );
 
 // Home.jsx
-export const ClipboardHomeIcon = ({ className = "w-5 h-5 text-green-500", ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5h6M9 3h6a2 2 0 012 2v14a2 2 0 01-2 2H9a2 2 0 01-2-2V5a2 2 0 012-2z" />
-  </svg>
-);
-
-export const ScreenshotsHomeIcon = ({ className = "w-5 h-5 text-pink-500", ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16M8 4v16m8-16v16" />
-  </svg>
-);
-
-export const ColorsHomeIcon = ({ className = "w-5 h-5 text-purple-500", ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}>
-    <circle cx="12" cy="12" r="9" strokeWidth="2" />
-  </svg>
-);
-
-export const MusicHomeIcon = ({ className = "w-5 h-5 text-red-500", ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-2v13" />
-  </svg>
-);
-
-export const SmartHomeIcon = ({ className = "w-5 h-5 text-pink-500", ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8a2 2 0 00-1 3.73V15h2v-3.27A2 2 0 0012 8z" />
+export const SmartHomeIcon = ({ className = "w-5 h-5 text-sky-500", ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 2.5l1.9 5.6l5.6 1.9l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.9L12 2.5z" />
+    <path d="M19 14.5l.7 2l2 .7l-2 .7l-.7 2l-.7-2l-2-.7l2-.7l.7-2z" />
   </svg>
 );
 

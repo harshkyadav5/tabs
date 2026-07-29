@@ -6,22 +6,22 @@ import { buildLocalSuggestions } from "../utils/suggestionsLocal";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import {
-  BookmarkThinIcon,
-  NoteThinIcon,
-  ClipboardHomeIcon,
-  ScreenshotsHomeIcon,
-  ColorsHomeIcon,
-  MusicHomeIcon,
+  BookmarksNavIcon,
+  NotesNavIcon,
+  ClipboardNavIcon,
+  ScreenshotNavIcon,
+  ColorPickerNavIcon,
+  MusicNavIcon,
   SmartHomeIcon,
 } from "../components/icons";
 
 const Icons = {
-  Bookmarks: <BookmarkThinIcon className="w-5 h-5 text-indigo-500" />,
-  Notes: <NoteThinIcon className="w-5 h-5 text-yellow-500" />,
-  Clipboard: <ClipboardHomeIcon />,
-  Screenshots: <ScreenshotsHomeIcon />,
-  Colors: <ColorsHomeIcon />,
-  Music: <MusicHomeIcon />,
+  Bookmarks: <BookmarksNavIcon className="w-5 h-5 text-indigo-500" />,
+  Notes: <NotesNavIcon className="w-5 h-5 text-yellow-500" />,
+  Clipboard: <ClipboardNavIcon className="w-5 h-5 text-green-500" />,
+  Screenshots: <ScreenshotNavIcon className="w-5 h-5 text-pink-500" />,
+  Colors: <ColorPickerNavIcon className="w-5 h-5 text-purple-500" />,
+  Music: <MusicNavIcon className="w-5 h-5 text-red-500" />,
   Smart: <SmartHomeIcon />,
 };
 

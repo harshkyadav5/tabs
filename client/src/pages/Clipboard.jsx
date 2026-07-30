@@ -6,7 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { archiveItem } from "../services/archiveService";
 import MenuModal from "../components/MenuModal";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
-import { PinIcon, UnpinIcon, CopyIcon, EditIcon, ArchiveIcon, TrashIcon, EllipsisHorizontalIcon } from "../components/icons";
+import { PinIcon, UnpinIcon, CopyIcon, EditIcon, ArchiveIcon, TrashIcon, EllipsisHorizontalIcon, PlusIcon } from "../components/icons";
 
 const pinIcon = <PinIcon />;
 const unpinIcon = <UnpinIcon />;
@@ -14,6 +14,7 @@ const copyIcon = <CopyIcon />;
 const editIcon = <EditIcon />;
 const archiveIcon = <ArchiveIcon />;
 const trashIcon = <TrashIcon />;
+const addItemIcon = <PlusIcon />;
 
 export default function Clipboard() {
   const { user } = useAuth();
@@ -215,9 +216,10 @@ export default function Clipboard() {
         <h1 className="text-xl font-semibold text-gray-800">Clipboard</h1>
         <button
           onClick={() => setShowNewItemModal(true)}
-          className="px-4 py-2 text-sm bg-black text-white rounded-btn hover:bg-gray-900 transition"
+          aria-label="Add clipboard item"
+          className="p-2 border border-gray-300 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200"
         >
-          + Add Item
+          {addItemIcon}
         </button>
       </div>
 

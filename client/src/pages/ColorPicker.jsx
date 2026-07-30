@@ -176,9 +176,9 @@ export default function ColorPicker() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Saved Colors</h1>
+        <h1 className="text-3xl font-bold">Saved Colors</h1>
         <button
           onClick={openAddModal}
           aria-label="Add color"

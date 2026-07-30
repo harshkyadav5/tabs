@@ -212,8 +212,8 @@ export default function Clipboard() {
 
   return (
     <div className="w-full space-y-8">
-      <div className="flex justify-between items-center py-6 px-4">
-        <h1 className="text-xl font-semibold text-gray-800">Clipboard</h1>
+      <div className="flex justify-between items-center p-6">
+        <h1 className="text-3xl font-bold">Clipboard</h1>
         <button
           onClick={() => setShowNewItemModal(true)}
           aria-label="Add clipboard item"

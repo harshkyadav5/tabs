@@ -145,7 +145,7 @@ export default function ScreenshotGallery() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto">
       {activeImage ? (
         <ScreenshotViewer
           image={activeImage}

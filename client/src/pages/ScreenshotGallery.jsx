@@ -133,8 +133,11 @@ export default function ScreenshotGallery() {
         await deleteScreenshot(id);
         await refreshTrash();
       } else {
-        const all = readLocal().map((s) => (s.id === id ? { ...s, is_deleted: true } : s));
+        const all = readLocal().map((s) =>
+          s.id === id ? { ...s, is_deleted: true, deleted_at: new Date().toISOString() } : s
+        );
         localStorage.setItem(LOCAL_SCREENSHOTS_KEY, JSON.stringify(all));
+        await refreshTrash();
       }
       setScreenshots((prev) => prev.filter((s) => s.id !== id));
       setActiveImageId(null);

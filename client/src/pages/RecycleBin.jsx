@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import { useToast } from "../context/ToastContext";
+import { useAuth } from "../context/AuthContext";
 import { restoreItem, deleteTrashItem } from "../services/trashService";
+import { localRestoreItem, localDeleteForever } from "../utils/guestArchiveTrash";
 
 const itemTitle = (item) => {
   if (item.entity_type === "color") return item.tags?.[0] || item.hex_code;
@@ -20,11 +22,17 @@ const itemContent = (item) => {
 export default function RecycleBin() {
   const { trashedItems, refreshTrash } = useArchiveTrash();
   const { showToast } = useToast();
+  const { user } = useAuth();
+  const isLoggedIn = !!user;
   const [pendingDelete, setPendingDelete] = useState(null);
 
   const handleRestore = async (item) => {
     try {
-      await restoreItem(item.entity_type, item.id);
+      if (isLoggedIn) {
+        await restoreItem(item.entity_type, item.id);
+      } else {
+        localRestoreItem(item.entity_type, item.id);
+      }
       await refreshTrash();
     } catch (err) {
       showToast(err.message || "Failed to restore item", "error");
@@ -33,7 +41,11 @@ export default function RecycleBin() {
 
   const handlePermanentDelete = async (item) => {
     try {
-      await deleteTrashItem(item.entity_type, item.id);
+      if (isLoggedIn) {
+        await deleteTrashItem(item.entity_type, item.id);
+      } else {
+        localDeleteForever(item.entity_type, item.id);
+      }
       await refreshTrash();
     } catch (err) {
       showToast(err.message || "Failed to delete item", "error");

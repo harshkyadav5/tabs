@@ -239,8 +239,11 @@ export default function Bookmarks() {
         await refreshTrash();
       } else {
         const all = readLocal(LOCAL_BOOKMARKS_KEY);
-        const updatedAll = all.map((b) => (b.id === id ? { ...b, is_deleted: true } : b));
+        const updatedAll = all.map((b) =>
+          b.id === id ? { ...b, is_deleted: true, deleted_at: new Date().toISOString() } : b
+        );
         localStorage.setItem(LOCAL_BOOKMARKS_KEY, JSON.stringify(updatedAll));
+        await refreshTrash();
       }
       setBookmarks((prev) => prev.filter((b) => b.id !== id));
       showToast("Bookmark deleted", "success");
@@ -257,9 +260,12 @@ export default function Bookmarks() {
       } else {
         const all = readLocal(LOCAL_BOOKMARKS_KEY);
         const updatedAll = all.map((b) =>
-          b.id === bookmark.id ? { ...b, is_archived: true } : b
+          b.id === bookmark.id
+            ? { ...b, is_archived: true, archived_at: new Date().toISOString() }
+            : b
         );
         localStorage.setItem(LOCAL_BOOKMARKS_KEY, JSON.stringify(updatedAll));
+        await refreshArchive();
       }
       setBookmarks((prev) => prev.filter((b) => b.id !== bookmark.id));
       showToast("Bookmark archived", "success");

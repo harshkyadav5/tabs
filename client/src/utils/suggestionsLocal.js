@@ -6,9 +6,9 @@ const fromLS = (key) => {
 export const buildLocalSuggestions = () => {
   const bookmarks = fromLS("bookmarks").filter(b => !b.is_deleted && !b.is_archived);
   const notes = fromLS("notes").filter(n => !n.is_deleted && !n.is_archived);
-  const clipboard = fromLS("clipboard_items").filter(c => !c.is_deleted);
+  const clipboard = fromLS("tabs_clipboard").filter(c => !c.is_deleted && !c.is_archived);
   const screenshots = fromLS("screenshots").filter(s => !s.is_deleted);
-  const colors = fromLS("saved_colors");
+  const colors = fromLS("saved_colors").filter(c => !c.is_archived);
   const music = fromLS("music").filter(m => !m.is_deleted);
 
   const sortByDate = (arr, k="modified_at") =>

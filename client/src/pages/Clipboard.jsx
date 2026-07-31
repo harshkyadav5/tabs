@@ -119,8 +119,11 @@ export default function Clipboard() {
         showToast("Failed to delete", "error");
       }
     } else {
-      const all = readLocal().map((i) => (i.id === id ? { ...i, is_deleted: true } : i));
+      const all = readLocal().map((i) =>
+        i.id === id ? { ...i, is_deleted: true, deleted_at: new Date().toISOString() } : i
+      );
       localStorage.setItem(LOCAL_KEY, JSON.stringify(all));
+      await refreshTrash();
     }
     setClipboardItems((prev) => prev.filter((item) => item.id !== id));
     setShowMenuId(null);
@@ -132,8 +135,11 @@ export default function Clipboard() {
         await archiveItem("clipboard", id);
         await refreshArchive();
       } else {
-        const all = readLocal().map((i) => (i.id === id ? { ...i, is_archived: true } : i));
+        const all = readLocal().map((i) =>
+          i.id === id ? { ...i, is_archived: true, archived_at: new Date().toISOString() } : i
+        );
         localStorage.setItem(LOCAL_KEY, JSON.stringify(all));
+        await refreshArchive();
       }
       setClipboardItems((prev) => prev.filter((item) => item.id !== id));
       showToast("Item archived", "success");

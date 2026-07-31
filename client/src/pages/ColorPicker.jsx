@@ -165,8 +165,11 @@ export default function ColorPicker() {
         await archiveItem("color", id);
         await refreshArchive();
       } else {
-        const all = readLocal().map((c) => (c.id === id ? { ...c, is_archived: true } : c));
+        const all = readLocal().map((c) =>
+          c.id === id ? { ...c, is_archived: true, archived_at: new Date().toISOString() } : c
+        );
         localStorage.setItem(LOCAL_COLORS_KEY, JSON.stringify(all));
+        await refreshArchive();
       }
       setSavedColors((prev) => prev.filter((c) => c.id !== id));
       showToast("Color archived", "success");

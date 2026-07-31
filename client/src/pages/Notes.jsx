@@ -215,8 +215,11 @@ export default function Notes() {
         await refreshTrash();
       } else {
         const all = readLocal(LOCAL_NOTES_KEY);
-        const updatedAll = all.map((n) => (n.id === id ? { ...n, is_deleted: true } : n));
+        const updatedAll = all.map((n) =>
+          n.id === id ? { ...n, is_deleted: true, deleted_at: new Date().toISOString() } : n
+        );
         localStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(updatedAll));
+        await refreshTrash();
       }
       setNotes((prev) => prev.filter((n) => n.id !== id));
       showToast("Note deleted", "success");

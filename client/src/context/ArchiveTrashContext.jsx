@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { useAuth } from "./AuthContext";
 import { getArchivedItems } from "../services/archiveService";
 import { getTrashItems } from "../services/trashService";
+import { getLocalArchivedItems, getLocalTrashedItems } from "../utils/guestArchiveTrash";
 
 const ArchiveTrashContext = createContext();
 
@@ -16,7 +17,7 @@ export function ArchiveTrashProvider({ children }) {
 
   const refreshArchive = useCallback(async () => {
     if (!isLoggedIn) {
-      setArchivedItems([]);
+      setArchivedItems(getLocalArchivedItems());
       return;
     }
     try {
@@ -29,7 +30,7 @@ export function ArchiveTrashProvider({ children }) {
 
   const refreshTrash = useCallback(async () => {
     if (!isLoggedIn) {
-      setTrashedItems([]);
+      setTrashedItems(getLocalTrashedItems());
       return;
     }
     try {

@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { useArchiveTrash } from "../context/ArchiveTrashContext";
 import { useToast } from "../context/ToastContext";
+import { useAuth } from "../context/AuthContext";
 import { unarchiveItem, deleteArchivedItem } from "../services/archiveService";
+import { localUnarchiveItem, localDeleteForever } from "../utils/guestArchiveTrash";
 
 const itemTitle = (item) => {
   if (item.entity_type === "color") return item.tags?.[0] || item.hex_code;
@@ -20,11 +22,17 @@ const itemContent = (item) => {
 export default function Archive() {
   const { archivedItems: items, refreshArchive } = useArchiveTrash();
   const { showToast } = useToast();
+  const { user } = useAuth();
+  const isLoggedIn = !!user;
   const [pendingDelete, setPendingDelete] = useState(null);
 
   const handleUnarchive = async (item) => {
     try {
-      await unarchiveItem(item.entity_type, item.id);
+      if (isLoggedIn) {
+        await unarchiveItem(item.entity_type, item.id);
+      } else {
+        localUnarchiveItem(item.entity_type, item.id);
+      }
       await refreshArchive();
     } catch (err) {
       showToast(err.message || "Failed to unarchive item", "error");
@@ -33,7 +41,11 @@ export default function Archive() {
 
   const handlePermanentDelete = async (item) => {
     try {
-      await deleteArchivedItem(item.entity_type, item.id);
+      if (isLoggedIn) {
+        await deleteArchivedItem(item.entity_type, item.id);
+      } else {
+        localDeleteForever(item.entity_type, item.id);
+      }
       await refreshArchive();
     } catch (err) {
       showToast(err.message || "Failed to delete item", "error");

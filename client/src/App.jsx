@@ -12,6 +12,7 @@ import Bookmarks from "./pages/Bookmarks";
 import Clipboard from "./pages/Clipboard";
 import ScreenshotGallery from "./pages/ScreenshotGallery";
 import ColorPicker from "./pages/ColorPicker";
+import Search from "./pages/Search";
 import Archive from "./pages/Archive";
 import RecycleBin from "./pages/RecycleBin";
 import HomeLayout from "./layouts/HomeLayout";
@@ -52,6 +53,7 @@ export default function App() {
               <Route path="/clipboard" element={<Clipboard />} />
               <Route path="/screenshot" element={<ScreenshotGallery />} />
               <Route path="/color-picker" element={<ColorPicker />} />
+              <Route path="/search" element={<Search />} />
               <Route path="/recycle-bin" element={<RecycleBin />} />
               <Route path="/archive" element={<Archive />} />
             </Route>

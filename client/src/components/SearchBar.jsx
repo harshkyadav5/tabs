@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { useAuth } from "../context/AuthContext";
+import { getLocalSearchStats, getLocalSearchSuggestions, searchLocal } from "../utils/localSearch";
 import { SearchIcon, SearchSubmitArrowIcon, BookmarkThinIcon, NoteThinIcon, TagIcon } from "./icons";
 
 const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
@@ -18,8 +19,9 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
   });
   const [isSearching, setIsSearching] = useState(false);
   const [searchStats, setSearchStats] = useState(null);
-  
-  const { token } = useAuth();
+
+  const { user } = useAuth();
+  const isLoggedIn = !!user;
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const suggestionsRef = useRef(null);
@@ -27,12 +29,14 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
 
   // Fetch search statistics
   useEffect(() => {
-    if (token) {
-      axios.get("/api/search/stats")
+    if (isLoggedIn) {
+      axiosInstance.get("/search/stats")
         .then(response => setSearchStats(response.data))
         .catch(error => console.error("Failed to fetch search stats:", error));
+    } else {
+      setSearchStats(getLocalSearchStats());
     }
-  }, [token]);
+  }, [isLoggedIn]);
 
   // Handle input changes with debouncing
   const handleInputChange = (e) => {
@@ -57,10 +61,16 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
 
   // Fetch search suggestions
   const fetchSuggestions = async (searchQuery) => {
-    if (!token) return;
-    
+    if (!isLoggedIn) {
+      setSuggestions(getLocalSearchSuggestions(searchQuery, 8));
+      setShowSuggestions(true);
+      return;
+    }
+
     try {
-      const response = await axios.get(`/api/search/suggestions?query=${encodeURIComponent(searchQuery)}&limit=8`);
+      const response = await axiosInstance.get("/search/suggestions", {
+        params: { query: searchQuery, limit: 8 },
+      });
       setSuggestions(response.data.suggestions);
       setShowSuggestions(true);
     } catch (error) {
@@ -70,19 +80,30 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
 
   // Handle search submission
   const handleSearch = async (searchQuery = query) => {
-    if (!searchQuery.trim() || !token) return;
-    
+    if (!searchQuery.trim()) return;
+
     setIsSearching(true);
     setShowSuggestions(false);
-    
+
     try {
       const activeFilters = Object.keys(filters).filter(key => filters[key]);
-      const response = await axios.post("/api/search", {
+
+      if (!isLoggedIn) {
+        const data = searchLocal(searchQuery.trim(), activeFilters);
+        if (onSearch) {
+          onSearch(data);
+        } else {
+          navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}&filters=${activeFilters.join(',')}`);
+        }
+        return;
+      }
+
+      const response = await axiosInstance.post("/search", {
         query: searchQuery.trim(),
         filters: activeFilters,
         limit: 50
       });
-      
+
       if (onSearch) {
         onSearch(response.data);
       } else {

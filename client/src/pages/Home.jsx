@@ -61,8 +61,8 @@ export default function Home() {
   const goToBookmark = (id) => navigate(`/bookmarks?open=${id}`);
   const goToNote = (id) => navigate(`/notes?open=${id}`);
   const goToClipboard = (id) => navigate(`/clipboard?open=${id}`);
-  const goToScreenshot = (id) => navigate(`/screenshots?open=${id}`);
-  const goToColors = () => navigate(`/colors`);
+  const goToScreenshot = (id) => navigate(`/screenshot?open=${id}`);
+  const goToColors = () => navigate(`/color-picker`);
   const goToMusic = (id) => navigate(`/music?open=${id}`);
 
   const SuggestionCard = ({ title, desc, onClick }) => (

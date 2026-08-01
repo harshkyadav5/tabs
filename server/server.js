@@ -11,6 +11,7 @@ import archiveRoutes from "./routes/archiveRoutes.js";
 import trashRoutes from "./routes/trashRoutes.js";
 import colorRoutes from "./routes/colorRoutes.js";
 import screenshotRoutes from "./routes/screenshotRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/archive", archiveRoutes);
 app.use("/api/trash", trashRoutes);
 app.use("/api/colors", colorRoutes);
 app.use("/api/screenshots", screenshotRoutes);
+app.use("/api/search", searchRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

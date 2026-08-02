@@ -183,6 +183,52 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
             </button>
           )}
         </div>
+
+        {/* Search Suggestions */}
+        {showSuggestions && suggestions.length > 0 && (
+          <div
+            ref={suggestionsRef}
+            className="absolute z-50 top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-80 overflow-y-auto"
+          >
+            {suggestions.map((suggestion, index) => (
+              <button
+                key={index}
+                onClick={() => handleSuggestionClick(suggestion)}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 flex items-center gap-3"
+              >
+                <div className="flex-shrink-0">
+                  {suggestion.type === 'bookmark' && (
+                    <BookmarkThinIcon className="h-4 w-4 text-indigo-500" />
+                  )}
+                  {suggestion.type === 'note' && (
+                    <NoteThinIcon className="h-4 w-4 text-yellow-500" />
+                  )}
+                  {suggestion.type === 'tag' && (
+                    <TagIcon className="h-4 w-4 text-purple-500" />
+                  )}
+                </div>
+
+                {/* Suggestion text */}
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-gray-900 truncate">
+                    {suggestion.text}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {suggestion.category}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {showSuggestions && suggestions.length === 0 && query.length >= 1 && (
+          <div className="absolute z-50 top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-4">
+            <div className="text-sm text-gray-500 text-center">
+              No suggestions found for "{query}"
+            </div>
+          </div>
+        )}
       </div>
 
       {searchStats && (
@@ -217,52 +263,6 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
             label="Music" 
             count={searchStats.total_music} 
           />
-        </div>
-      )}
-
-      {/* Search Suggestions */}
-      {showSuggestions && suggestions.length > 0 && (
-        <div 
-          ref={suggestionsRef}
-          className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-80 overflow-y-auto"
-        >
-          {suggestions.map((suggestion, index) => (
-            <button
-              key={index}
-              onClick={() => handleSuggestionClick(suggestion)}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 flex items-center gap-3"
-            >
-              <div className="flex-shrink-0">
-                {suggestion.type === 'bookmark' && (
-                  <BookmarkThinIcon className="h-4 w-4 text-indigo-500" />
-                )}
-                {suggestion.type === 'note' && (
-                  <NoteThinIcon className="h-4 w-4 text-yellow-500" />
-                )}
-                {suggestion.type === 'tag' && (
-                  <TagIcon className="h-4 w-4 text-purple-500" />
-                )}
-              </div>
-              
-              {/* Suggestion text */}
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-900 truncate">
-                  {suggestion.text}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {suggestion.category}
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {showSuggestions && suggestions.length === 0 && query.length >= 1 && (
-        <div className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-4">
-          <div className="text-sm text-gray-500 text-center">
-            No suggestions found for "{query}"
-          </div>
         </div>
       )}
     </div>

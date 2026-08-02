@@ -110,7 +110,7 @@ export default function Search() {
       <SearchBar className="mb-8 max-w-xl" placeholder="Search everything..." />
 
       {!query.trim() ? (
-        <div className="text-gray-500">
+        <div className="text-gray-500 max-w-xl">
           Type something to search across your bookmarks, notes, clipboard, screenshots, colors, and music.
         </div>
       ) : loading ? (

@@ -23,6 +23,7 @@ export default function Clipboard() {
   const isLoggedIn = !!user;
 
   const [clipboardItems, setClipboardItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [editingItemId, setEditingItemId] = useState(null);
   const [editedDescription, setEditedDescription] = useState("");
   const [editedContent, setEditedContent] = useState("");
@@ -74,10 +75,19 @@ export default function Clipboard() {
     }
   };
 
+  const visibleItems = clipboardItems.filter((item) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.trim().toLowerCase();
+    return (
+      (item.description || "").toLowerCase().includes(q) ||
+      (item.content || "").toLowerCase().includes(q)
+    );
+  });
+
   const distributeItems = () => {
     const width = window.innerWidth;
     const numCols = width < 640 ? 1 : width < 1024 ? 2 : width < 1280 ? 3 : 4;
-    const sorted = [...clipboardItems].sort((a, b) => b.is_pinned - a.is_pinned);
+    const sorted = [...visibleItems].sort((a, b) => b.is_pinned - a.is_pinned);
     const newCols = Array.from({ length: numCols }, () => []);
     sorted.forEach((item, i) => newCols[i % numCols].push(item));
     setColumns(newCols);
@@ -92,7 +102,7 @@ export default function Clipboard() {
     const resize = () => distributeItems();
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
-  }, [clipboardItems]);
+  }, [clipboardItems, searchQuery]);
 
   const [showNewItemModal, setShowNewItemModal] = useState(false);
   const [newDescription, setNewDescription] = useState("");
@@ -229,10 +239,26 @@ export default function Clipboard() {
         </button>
       </div>
 
+      {clipboardItems.length > 0 && (
+        <div className="px-4 mb-2">
+          <input
+            type="text"
+            placeholder="Search clipboard..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border px-3 py-2 rounded-btn w-full max-w-sm text-sm"
+          />
+        </div>
+      )}
+
       {clipboardItems.length === 0 ? (
         <div className="text-center py-16 px-4">
           <p className="text-gray-500">No clipboard items yet.</p>
           <p className="text-sm text-gray-400 mt-1">Copy something and add it to see it here.</p>
+        </div>
+      ) : visibleItems.length === 0 ? (
+        <div className="text-center py-16 px-4">
+          <p className="text-gray-500">No items match "{searchQuery}".</p>
         </div>
       ) : (
       <div ref={containerRef} className="flex gap-4 px-4">

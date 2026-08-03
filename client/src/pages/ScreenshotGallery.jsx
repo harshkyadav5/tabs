@@ -42,9 +42,15 @@ export default function ScreenshotGallery() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const activeIndex = screenshots.findIndex((s) => s.id === activeImageId);
   const activeImage = activeIndex >= 0 ? screenshots[activeIndex] : null;
+
+  const visibleScreenshots = screenshots.filter((s) => {
+    if (!searchQuery.trim()) return true;
+    return (s.web_url || "").toLowerCase().includes(searchQuery.trim().toLowerCase());
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -180,11 +186,23 @@ export default function ScreenshotGallery() {
             </div>
           </div>
 
+          {screenshots.length > 0 && (
+            <input
+              type="text"
+              placeholder="Search screenshots by URL..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="border px-3 py-2 rounded-btn w-full max-w-sm text-sm mb-4"
+            />
+          )}
+
           {screenshots.length === 0 ? (
             <div className="text-gray-500">No screenshots yet.</div>
+          ) : visibleScreenshots.length === 0 ? (
+            <div className="text-gray-500">No screenshots match "{searchQuery}".</div>
           ) : (
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {screenshots.map((screenshot) => (
+              {visibleScreenshots.map((screenshot) => (
                 <ScreenshotGridItem
                   key={screenshot.id}
                   screenshot={screenshot}

@@ -68,10 +68,21 @@ export default function ColorPicker() {
   const isLoggedIn = !!user;
 
   const [savedColors, setSavedColors] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const isValidHex = HEX_REGEX.test(form.hex);
+
+  const visibleColors = savedColors.filter((c) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.trim().toLowerCase();
+    return (
+      (c.hex_code || "").toLowerCase().includes(q) ||
+      (c.rgb_code || "").toLowerCase().includes(q) ||
+      (c.tags || []).some((t) => (t || "").toLowerCase().includes(q))
+    );
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -191,11 +202,23 @@ export default function ColorPicker() {
         </button>
       </div>
 
+      {savedColors.length > 0 && (
+        <input
+          type="text"
+          placeholder="Search colors by hex, rgb, or tag..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="border px-3 py-2 rounded-btn w-full max-w-sm text-sm mb-6"
+        />
+      )}
+
       {savedColors.length === 0 ? (
         <div className="text-gray-500">No saved colors yet.</div>
+      ) : visibleColors.length === 0 ? (
+        <div className="text-gray-500">No colors match "{searchQuery}".</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-          {savedColors.map((color) => (
+          {visibleColors.map((color) => (
             <ColorCard
               key={color.id}
               color={color}

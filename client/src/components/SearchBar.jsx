@@ -137,21 +137,16 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
   }, []);
 
   // Filter toggle component
-  const FilterToggle = ({ type, label, count }) => (
+  const FilterToggle = ({ type, label }) => (
     <button
       onClick={() => setFilters(prev => ({ ...prev, [type]: !prev[type] }))}
-      className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
         filters[type]
           ? "bg-indigo-100 text-indigo-700 border border-indigo-200"
           : "bg-gray-100 text-gray-500 border border-gray-200 hover:bg-gray-200"
       }`}
     >
-      <span>{label}</span>
-      {count && (
-        <span className="text-xs bg-white px-1.5 py-0.5 rounded-full">
-          {count}
-        </span>
-      )}
+      {label}
     </button>
   );
 
@@ -233,36 +228,12 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
 
       {searchStats && (
         <div className="mt-3 flex flex-wrap gap-2">
-          <FilterToggle 
-            type="bookmarks" 
-            label="Bookmarks" 
-            count={searchStats.total_bookmarks} 
-          />
-          <FilterToggle 
-            type="notes" 
-            label="Notes" 
-            count={searchStats.total_notes} 
-          />
-          <FilterToggle 
-            type="clipboard" 
-            label="Clipboard" 
-            count={searchStats.total_clipboard} 
-          />
-          <FilterToggle 
-            type="screenshots" 
-            label="Screenshots" 
-            count={searchStats.total_screenshots} 
-          />
-          <FilterToggle 
-            type="colors" 
-            label="Colors" 
-            count={searchStats.total_colors} 
-          />
-          <FilterToggle 
-            type="music" 
-            label="Music" 
-            count={searchStats.total_music} 
-          />
+          <FilterToggle type="bookmarks" label="Bookmarks" />
+          <FilterToggle type="notes" label="Notes" />
+          <FilterToggle type="clipboard" label="Clipboard" />
+          <FilterToggle type="screenshots" label="Screenshots" />
+          <FilterToggle type="colors" label="Colors" />
+          <FilterToggle type="music" label="Music" />
         </div>
       )}
     </div>

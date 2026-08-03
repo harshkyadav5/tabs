@@ -161,18 +161,25 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
           type="text"
           value={query}
           onChange={handleInputChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSearch();
+            }
+          }}
           placeholder={placeholder}
-          className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          className="block w-full pl-10 pr-14 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
         />
-        
-        <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+
+        <div className="absolute inset-y-0 right-2 flex items-center">
           {isSearching ? (
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-500"></div>
           ) : (
             <button
               onClick={() => handleSearch()}
               disabled={!query.trim()}
-              className="text-gray-400 hover:text-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Search"
+              className="p-2 rounded-full text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-colors"
             >
               <SearchSubmitArrowIcon className="h-5 w-5" />
             </button>

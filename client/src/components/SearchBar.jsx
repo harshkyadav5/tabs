@@ -3,7 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import { useAuth } from "../context/AuthContext";
 import { getLocalSearchStats, getLocalSearchSuggestions, searchLocal } from "../utils/localSearch";
-import { SearchIcon, SearchSubmitArrowIcon, BookmarkThinIcon, NoteThinIcon, TagIcon } from "./icons";
+import {
+  SearchIcon,
+  SearchSubmitArrowIcon,
+  BookmarkThinIcon,
+  NoteThinIcon,
+  TagIcon,
+  ClipboardNavIcon,
+  ScreenshotNavIcon,
+  ColorPickerNavIcon,
+  MusicNavIcon,
+} from "./icons";
 
 const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
   const [query, setQuery] = useState("");
@@ -204,6 +214,18 @@ const SearchBar = ({ onSearch, className = "", placeholder = "Search" }) => {
                   )}
                   {suggestion.type === 'note' && (
                     <NoteThinIcon className="h-4 w-4 text-yellow-500" />
+                  )}
+                  {suggestion.type === 'clipboard' && (
+                    <ClipboardNavIcon className="h-4 w-4 text-green-500" />
+                  )}
+                  {suggestion.type === 'screenshot' && (
+                    <ScreenshotNavIcon className="h-4 w-4 text-pink-500" />
+                  )}
+                  {suggestion.type === 'color' && (
+                    <ColorPickerNavIcon className="h-4 w-4 text-purple-500" />
+                  )}
+                  {suggestion.type === 'music' && (
+                    <MusicNavIcon className="h-4 w-4 text-red-500" />
                   )}
                   {suggestion.type === 'tag' && (
                     <TagIcon className="h-4 w-4 text-purple-500" />

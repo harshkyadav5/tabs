@@ -57,7 +57,7 @@ export const getSearchSuggestions = async (req, res) => {
 
     const term = `%${query.trim()}%`;
 
-    const [bookmarks, notes, tags] = await Promise.all([
+    const [bookmarks, notes, tags, clipboard, screenshots, colors, music] = await Promise.all([
       pool.query(
         `SELECT title, url FROM bookmarks
          WHERE user_id=$1 AND is_deleted=false AND is_archived=false AND title ILIKE $2
@@ -76,13 +76,65 @@ export const getSearchSuggestions = async (req, res) => {
          LIMIT $3`,
         [userId, term, limit]
       ),
+      pool.query(
+        `SELECT description, content FROM clipboard_items
+         WHERE user_id=$1 AND is_deleted=false AND is_archived=false
+           AND (description ILIKE $2 OR content ILIKE $2)
+         ORDER BY modified_at DESC LIMIT $3`,
+        [userId, term, limit]
+      ),
+      pool.query(
+        `SELECT web_url FROM screenshots
+         WHERE user_id=$1 AND is_deleted=false AND web_url ILIKE $2
+         ORDER BY modified_at DESC LIMIT $3`,
+        [userId, term, limit]
+      ),
+      pool.query(
+        `SELECT hex_code, label FROM saved_colors
+         WHERE user_id=$1 AND is_archived=false
+           AND (label ILIKE $2 OR hex_code ILIKE $2 OR EXISTS (
+             SELECT 1 FROM unnest(tags) AS t WHERE t ILIKE $2
+           ))
+         ORDER BY created_at DESC LIMIT $3`,
+        [userId, term, limit]
+      ),
+      pool.query(
+        `SELECT track_name, artist FROM music
+         WHERE user_id=$1 AND is_deleted=false AND (track_name ILIKE $2 OR artist ILIKE $2)
+         ORDER BY created_at DESC LIMIT $3`,
+        [userId, term, limit]
+      ),
     ]);
 
-    const suggestions = [
-      ...bookmarks.rows.map((b) => ({ type: "bookmark", text: b.title || b.url, category: "Bookmark" })),
-      ...notes.rows.map((n) => ({ type: "note", text: n.title, category: "Note" })),
-      ...tags.rows.map((t) => ({ type: "tag", text: t.tag, category: "Tag" })),
-    ].slice(0, limit);
+    const categoryLists = [
+      bookmarks.rows.map((b) => ({ type: "bookmark", text: b.title || b.url, category: "Bookmark" })),
+      notes.rows.map((n) => ({ type: "note", text: n.title, category: "Note" })),
+      clipboard.rows.map((c) => ({
+        type: "clipboard",
+        text: c.description || (c.content || "").slice(0, 60),
+        category: "Clipboard",
+      })),
+      screenshots.rows.map((s) => ({ type: "screenshot", text: s.web_url, category: "Screenshot" })),
+      colors.rows.map((c) => ({ type: "color", text: c.label || c.hex_code, category: "Color" })),
+      music.rows.map((m) => ({
+        type: "music",
+        text: m.artist ? `${m.track_name} — ${m.artist}` : m.track_name,
+        category: "Music",
+      })),
+      tags.rows.map((t) => ({ type: "tag", text: t.tag, category: "Tag" })),
+    ];
+
+    const suggestions = [];
+    let addedInPass = true;
+    while (addedInPass && suggestions.length < limit) {
+      addedInPass = false;
+      for (const list of categoryLists) {
+        if (list.length > 0 && suggestions.length < limit) {
+          suggestions.push(list.shift());
+          addedInPass = true;
+        }
+      }
+    }
 
     res.json({ suggestions });
   } catch (err) {

@@ -38,13 +38,42 @@ export const getLocalSearchSuggestions = (query, limit = 8) => {
   const tagSet = new Set();
   notes.forEach((n) => (n.tags || []).forEach((t) => matches(t, term) && tagSet.add(t)));
 
-  const suggestions = [
-    ...bookmarks.map((b) => ({ type: "bookmark", text: b.title || b.url, category: "Bookmark" })),
-    ...matchingNotes.map((n) => ({ type: "note", text: n.title, category: "Note" })),
-    ...[...tagSet].map((t) => ({ type: "tag", text: t, category: "Tag" })),
+  const clipboard = readLocal("tabs_clipboard").filter(
+    (c) => !c.is_deleted && !c.is_archived && (matches(c.description, term) || matches(c.content, term))
+  );
+  const screenshots = readLocal("screenshots").filter((s) => !s.is_deleted && matches(s.web_url, term));
+  const colors = readLocal("saved_colors").filter(
+    (c) =>
+      !c.is_archived &&
+      (matches(c.label, term) || matches(c.hex_code, term) || (c.tags || []).some((t) => matches(t, term)))
+  );
+
+  const categoryLists = [
+    bookmarks.map((b) => ({ type: "bookmark", text: b.title || b.url, category: "Bookmark" })),
+    matchingNotes.map((n) => ({ type: "note", text: n.title, category: "Note" })),
+    clipboard.map((c) => ({
+      type: "clipboard",
+      text: c.description || (c.content || "").slice(0, 60),
+      category: "Clipboard",
+    })),
+    screenshots.map((s) => ({ type: "screenshot", text: s.web_url, category: "Screenshot" })),
+    colors.map((c) => ({ type: "color", text: c.label || c.hex_code, category: "Color" })),
+    [...tagSet].map((t) => ({ type: "tag", text: t, category: "Tag" })),
   ];
 
-  return suggestions.slice(0, limit);
+  const suggestions = [];
+  let addedInPass = true;
+  while (addedInPass && suggestions.length < limit) {
+    addedInPass = false;
+    for (const list of categoryLists) {
+      if (list.length > 0 && suggestions.length < limit) {
+        suggestions.push(list.shift());
+        addedInPass = true;
+      }
+    }
+  }
+
+  return suggestions;
 };
 
 export const searchLocal = (query, filters = []) => {

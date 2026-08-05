@@ -16,20 +16,10 @@ const editIcon = <EditIcon />;
 const archiveIcon = <ArchiveIcon />;
 const trashIcon = <TrashIcon />;
 
-const normalizeTags = (tagsInput) =>
-  tagsInput
-    ? tagsInput
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean)
-        .map((t) => (t.startsWith("#") ? t : `#${t}`))
-    : [];
-
-export default function NotesList({ notes, folders = [], onDeleteNote, onTogglePin, onUpdateNote, emptyAtAll = false }) {
+export default function NotesList({ notes, folders = [], onDeleteNote, onTogglePin, onOpenNote, onEditNote, emptyAtAll = false }) {
   const [search, setSearch] = useState("");
   const [tagFilter, setTagFilter] = useState("");
   const [sortNewest, setSortNewest] = useState(true);
-  const [selectedNote, setSelectedNote] = useState(null);
   const [dropdownNoteIndex, setDropdownNoteIndex] = useState(null);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const dropdownRef = useRef(null);
@@ -66,10 +56,6 @@ export default function NotesList({ notes, folders = [], onDeleteNote, onToggleP
 
   const allTags = Array.from(new Set(notes.flatMap((n) => n.tags || [])));
   const folderName = (folderId) => folders.find((f) => f.id === folderId)?.name;
-
-  const openNoteDetail = (note) => {
-    setSelectedNote({ ...note, tagsInput: (note.tags || []).join(", ") });
-  };
 
   return (
     <div className="w-full space-y-8">
@@ -129,7 +115,8 @@ export default function NotesList({ notes, folders = [], onDeleteNote, onToggleP
                 key={note.id}
                 note={note}
                 folderName={folderName(note.folder_id)}
-                onClick={() => openNoteDetail(note)}
+                onClick={() => onOpenNote?.(note)}
+                onEdit={() => onEditNote?.(note)}
                 onTogglePin={() => onTogglePin?.(note)}
                 onRequestDelete={() => setNoteToDelete(note)}
                 dropdownOpen={dropdownNoteIndex === i}
@@ -148,7 +135,8 @@ export default function NotesList({ notes, folders = [], onDeleteNote, onToggleP
             key={note.id}
             note={note}
             folderName={folderName(note.folder_id)}
-            onClick={() => openNoteDetail(note)}
+            onClick={() => onOpenNote?.(note)}
+            onEdit={() => onEditNote?.(note)}
             onTogglePin={() => onTogglePin?.(note)}
             onRequestDelete={() => setNoteToDelete(note)}
             dropdownOpen={dropdownNoteIndex === `other-${i}`}
@@ -157,105 +145,6 @@ export default function NotesList({ notes, folders = [], onDeleteNote, onToggleP
           />
         ))}
       </div>
-      )}
-
-      {selectedNote && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Note details"
-            className="bg-white w-full max-w-2xl rounded-card border border-gray-200 shadow-dropdown p-6 relative"
-          >
-            <button
-              onClick={() => setSelectedNote(null)}
-              aria-label="Close"
-              className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl"
-            >
-              &times;
-            </button>
-
-            <div className="space-y-4">
-              <input
-                type="text"
-                className="w-full text-xl font-semibold text-gray-900 border-b focus:outline-none pb-1"
-                value={selectedNote.title}
-                onChange={(e) =>
-                  setSelectedNote({ ...selectedNote, title: e.target.value })
-                }
-              />
-
-              <textarea
-                className="w-full min-h-[200px] p-3 border rounded-btn text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800"
-                value={selectedNote.content || ""}
-                onChange={(e) =>
-                  setSelectedNote({ ...selectedNote, content: e.target.value })
-                }
-              />
-
-              <div className="flex flex-wrap gap-2">
-                <input
-                  type="text"
-                  placeholder="Tags (comma-separated)"
-                  className="flex-1 border px-3 py-2 rounded-btn text-sm"
-                  value={selectedNote.tagsInput}
-                  onChange={(e) =>
-                    setSelectedNote({ ...selectedNote, tagsInput: e.target.value })
-                  }
-                />
-
-                <select
-                  className="flex-1 border px-3 py-2 rounded-btn text-sm"
-                  value={selectedNote.folder_id != null ? String(selectedNote.folder_id) : ""}
-                  onChange={(e) =>
-                    setSelectedNote({ ...selectedNote, folder_id: e.target.value })
-                  }
-                >
-                  <option value="">No folder</option>
-                  {folders.map((folder) => (
-                    <option key={folder.id} value={folder.id}>
-                      {folder.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center justify-between text-sm text-gray-600 mt-2">
-                <span>Created: {selectedNote.created_at ? new Date(selectedNote.created_at).toLocaleString() : "—"}</span>
-                <span>Last Modified: {selectedNote.modified_at ? new Date(selectedNote.modified_at).toLocaleString() : "—"}</span>
-              </div>
-
-              <div className="flex justify-between items-center mt-4">
-                <label className="flex items-center gap-2 text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={selectedNote.is_pinned || false}
-                    onChange={(e) =>
-                      setSelectedNote({ ...selectedNote, is_pinned: e.target.checked })
-                    }
-                  />
-                  Pin this note
-                </label>
-
-                <button
-                  onClick={() => {
-                    onUpdateNote?.(selectedNote.id, {
-                      title: selectedNote.title.trim(),
-                      content: (selectedNote.content || "").trim() || null,
-                      tags: normalizeTags(selectedNote.tagsInput),
-                      folder_id: selectedNote.folder_id ? Number(selectedNote.folder_id) : null,
-                      is_pinned: selectedNote.is_pinned,
-                    });
-                    setSelectedNote(null);
-                  }}
-                  className="px-5 py-2 text-sm font-medium rounded-btn bg-black text-white hover:bg-gray-900 transition"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
 
       <ConfirmDialog
@@ -272,7 +161,7 @@ export default function NotesList({ notes, folders = [], onDeleteNote, onToggleP
   );
 }
 
-function NoteCard({ note, folderName, onClick, onTogglePin, onRequestDelete, dropdownOpen, toggleDropdown, dropdownRef }) {
+function NoteCard({ note, folderName, onClick, onEdit, onTogglePin, onRequestDelete, dropdownOpen, toggleDropdown, dropdownRef }) {
   return (
     <div
       onClick={onClick}
@@ -310,7 +199,7 @@ function NoteCard({ note, folderName, onClick, onTogglePin, onRequestDelete, dro
               {
                 icon: editIcon,
                 label: "Edit",
-                onClick: onClick,
+                onClick: onEdit,
               },
               {
                 icon: archiveIcon,

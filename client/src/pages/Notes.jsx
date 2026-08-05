@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FolderItem from "../components/FolderItem";
 import NotesList from "../components/NotesList";
+import NoteDetail from "../components/NoteDetail";
 import Modal from "../components/ui/Modal";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
@@ -59,6 +60,9 @@ export default function Notes() {
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
   const folderScrollRef = React.useRef(null);
+
+  const [activeNoteId, setActiveNoteId] = useState(null);
+  const [activeNoteEditMode, setActiveNoteEditMode] = useState(false);
 
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [noteForm, setNoteForm] = useState(EMPTY_FORM);
@@ -260,85 +264,113 @@ export default function Notes() {
     return true;
   });
 
+  const activeNote = notes.find((n) => n.id === activeNoteId) || null;
+
+  const openNote = (note, { edit = false } = {}) => {
+    setActiveNoteId(note.id);
+    setActiveNoteEditMode(edit);
+  };
+
+  const closeNote = () => {
+    setActiveNoteId(null);
+    setActiveNoteEditMode(false);
+  };
+
   return (
     <aside className="w-full font-montserrat">
-      <div className="w-full rounded-panel mb-8">
-        <div className="px-4 w-full flex justify-end">
-          <div className="flex items-center border border-gray-400 bg-white/70 rounded-full p-3">
-            <button
-              className="p-2 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200"
-              onClick={openAddNoteModal}
-              aria-label="Add note"
-            >
-              {addNoteIcon}
-            </button>
-            <div className="h-6 w-px bg-gray-300 mx-2" />
-            <button
-              className="p-2 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200"
-              onClick={() => {
-                setNewFolderName("");
-                setShowFolderModal(true);
-              }}
-              aria-label="Add folder"
-            >
-              {addFolderIcon}
-            </button>
+      {activeNote ? (
+        <NoteDetail
+          key={activeNote.id}
+          note={activeNote}
+          folders={folders}
+          startInEdit={activeNoteEditMode}
+          onBack={closeNote}
+          onUpdateNote={handleUpdateNote}
+          onDeleteNote={handleDeleteNote}
+          onTogglePin={handleTogglePin}
+        />
+      ) : (
+        <>
+          <div className="w-full rounded-panel mb-8">
+            <div className="px-4 w-full flex justify-end">
+              <div className="flex items-center border border-gray-400 bg-white/70 rounded-full p-3">
+                <button
+                  className="p-2 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200"
+                  onClick={openAddNoteModal}
+                  aria-label="Add note"
+                >
+                  {addNoteIcon}
+                </button>
+                <div className="h-6 w-px bg-gray-300 mx-2" />
+                <button
+                  className="p-2 hover:bg-black/85 text-gray-800 hover:text-white rounded-full transition duration-200"
+                  onClick={() => {
+                    setNewFolderName("");
+                    setShowFolderModal(true);
+                  }}
+                  aria-label="Add folder"
+                >
+                  {addFolderIcon}
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="w-full rounded-panel mb-8 p-4 bg-white shadow-card">
-        <div className="pb-4 flex justify-end">
-          <button
-            onClick={() => setActiveFilter(null)}
-            className="px-4 py-2 text-sm font-medium rounded-full text-gray-800 hover:bg-black/85 hover:text-white transition duration-200"
-          >
-            View All
-          </button>
-        </div>
+          <div className="w-full rounded-panel mb-8 p-4 bg-white shadow-card">
+            <div className="pb-4 flex justify-end">
+              <button
+                onClick={() => setActiveFilter(null)}
+                className="px-4 py-2 text-sm font-medium rounded-full text-gray-800 hover:bg-black/85 hover:text-white transition duration-200"
+              >
+                View All
+              </button>
+            </div>
 
-        <div
-          ref={folderScrollRef}
-          className={`flex overflow-x-auto whitespace-nowrap space-x-4 px-4 pt-0 pb-10 transition-all duration-200 ${
-            !atStart && !atEnd
-              ? "mask-to-l-r"
-              : !atStart
-              ? "mask-to-r"
-              : !atEnd
-              ? "mask-to-l"
-              : ""
-          }`}
-        >
-          <FolderItem
-            icon={folderIcon}
-            overlay={starIcon}
-            label="Favorite"
-            tooltip="Pinned notes"
-            active={activeFilter === FAVORITES_FILTER}
-            onClick={() => toggleFilter(FAVORITES_FILTER)}
+            <div
+              ref={folderScrollRef}
+              className={`flex overflow-x-auto whitespace-nowrap space-x-4 px-4 pt-0 pb-10 transition-all duration-200 ${
+                !atStart && !atEnd
+                  ? "mask-to-l-r"
+                  : !atStart
+                  ? "mask-to-r"
+                  : !atEnd
+                  ? "mask-to-l"
+                  : ""
+              }`}
+            >
+              <FolderItem
+                icon={folderIcon}
+                overlay={starIcon}
+                label="Favorite"
+                tooltip="Pinned notes"
+                active={activeFilter === FAVORITES_FILTER}
+                onClick={() => toggleFilter(FAVORITES_FILTER)}
+              />
+              {folders.map((folder) => (
+                <FolderItem
+                  key={folder.id}
+                  icon={folderIcon}
+                  overlay={folder.name.charAt(0).toUpperCase()}
+                  label={folder.name}
+                  tooltip={folder.name}
+                  active={activeFilter === folder.id}
+                  onClick={() => toggleFilter(folder.id)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <NotesList
+            notes={filteredNotes}
+            folders={folders}
+            onDeleteNote={handleDeleteNote}
+            onTogglePin={handleTogglePin}
+            onOpenNote={(note) => openNote(note)}
+            onEditNote={(note) => openNote(note, { edit: true })}
+            emptyAtAll={notes.length === 0}
           />
-          {folders.map((folder) => (
-            <FolderItem
-              key={folder.id}
-              icon={folderIcon}
-              overlay={folder.name.charAt(0).toUpperCase()}
-              label={folder.name}
-              tooltip={folder.name}
-              active={activeFilter === folder.id}
-              onClick={() => toggleFilter(folder.id)}
-            />
-          ))}
-        </div>
-      </div>
-
-      <NotesList
-        notes={filteredNotes}
-        folders={folders}
-        onDeleteNote={handleDeleteNote}
-        onTogglePin={handleTogglePin}
-        onUpdateNote={handleUpdateNote}
-        emptyAtAll={notes.length === 0}
-      />
+        </>
+      )}
 
       {/* Add Folder Modal */}
       <Modal

@@ -81,7 +81,12 @@ export default function ColorCard({ color, onDelete, onSaveTags, onArchive }) {
             />
             <button
               onClick={() => {
-                onSaveTags?.(color.id, normalizeTags(editedTagsInput));
+                const nextTags = normalizeTags(editedTagsInput);
+                const hasChanges =
+                  JSON.stringify(nextTags) !== JSON.stringify(color.tags || []);
+                if (hasChanges) {
+                  onSaveTags?.(color.id, nextTags);
+                }
                 setEditing(false);
               }}
               className="text-xs font-medium text-primary hover:underline"

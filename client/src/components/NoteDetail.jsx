@@ -45,13 +45,24 @@ export default function NoteDetail({
   };
 
   const saveEditing = () => {
-    onUpdateNote?.(note.id, {
+    const updates = {
       title: draft.title.trim(),
       content: (draft.content || "").trim() || null,
       tags: normalizeTags(draft.tagsInput),
       folder_id: draft.folder_id ? Number(draft.folder_id) : null,
       is_pinned: draft.is_pinned,
-    });
+    };
+
+    const hasChanges =
+      updates.title !== note.title ||
+      updates.content !== (note.content || null) ||
+      updates.folder_id !== (note.folder_id ?? null) ||
+      updates.is_pinned !== !!note.is_pinned ||
+      JSON.stringify(updates.tags) !== JSON.stringify(note.tags || []);
+
+    if (hasChanges) {
+      onUpdateNote?.(note.id, updates);
+    }
     setDraft(null);
     setIsEditing(false);
   };

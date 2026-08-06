@@ -168,6 +168,17 @@ export default function Clipboard() {
   };
 
   const handleSaveEdit = () => {
+    const original = clipboardItems.find((item) => item.id === editingItemId);
+    if (!original) return;
+
+    const hasChanges =
+      editedDescription !== original.description || editedContent !== original.content;
+
+    if (!hasChanges) {
+      setEditingItemId(null);
+      return;
+    }
+
     const updated = clipboardItems.map((item) =>
       item.id === editingItemId
         ? { ...item, description: editedDescription, content: editedContent, modified_at: new Date().toISOString() }

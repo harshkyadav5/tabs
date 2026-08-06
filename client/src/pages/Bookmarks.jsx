@@ -143,6 +143,20 @@ export default function Bookmarks() {
       is_pinned: bookmarkForm.is_pinned,
     };
 
+    if (editingBookmark) {
+      const hasChanges =
+        payload.url !== editingBookmark.url ||
+        payload.title !== (editingBookmark.title || null) ||
+        payload.description !== (editingBookmark.description || null) ||
+        payload.folder_id !== (editingBookmark.folder_id ?? null) ||
+        payload.is_pinned !== !!editingBookmark.is_pinned;
+
+      if (!hasChanges) {
+        setShowBookmarkModal(false);
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
       if (isLoggedIn) {

@@ -1,4 +1,5 @@
 import { createUser, findUserByEmail, findUserByUsername } from "../models/userModel.js";
+import { validatePasswordStrength } from "../utils/validation.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
@@ -22,6 +23,11 @@ const signup = async (req, res) => {
 
     if(!isValidUsername)
         return res.status(400).json({ error: "Username format is not valid" });
+
+    const passwordCheck = validatePasswordStrength(password, { username: lowerCaseUsername, email: lowerCaseEmail });
+
+    if(!passwordCheck.valid)
+        return res.status(400).json({ error: passwordCheck.message });
 
     try {
         const usernameCheck = await findUserByUsername(lowerCaseUsername);

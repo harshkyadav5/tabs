@@ -11,6 +11,50 @@ const showHideToggle = [
   { label: "Hide", icon: <EyeOffIcon className="w-6 h-6" /> },
 ];
 
+const MIN_PASSWORD_LENGTH = 8;
+
+const COMMON_PASSWORDS = new Set([
+  "password", "password1", "12345678", "123456789", "1234567890",
+  "qwerty123", "qwertyuiop", "letmein123", "welcome123", "admin123",
+  "iloveyou", "monkey123", "football", "abc123456", "password123",
+  "changeme", "trustno1", "dragon123",
+]);
+
+function getPasswordStrengthError(password, { username, email } = {}) {
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    return `Password must be at least ${MIN_PASSWORD_LENGTH} characters`;
+  }
+
+  const categories = [
+    /[a-z]/.test(password),
+    /[A-Z]/.test(password),
+    /[0-9]/.test(password),
+    /[^A-Za-z0-9]/.test(password),
+  ].filter(Boolean).length;
+
+  if (categories < 3) {
+    return "Include at least 3 of: lowercase, uppercase, numbers, and symbols";
+  }
+
+  if (COMMON_PASSWORDS.has(password.toLowerCase())) {
+    return "This password is too common. Please choose a stronger one";
+  }
+
+  const lowerPassword = password.toLowerCase();
+  const usernamePart = username?.trim().toLowerCase();
+  const emailLocalPart = email?.split("@")[0]?.trim().toLowerCase();
+
+  if (usernamePart && usernamePart.length >= 3 && lowerPassword.includes(usernamePart)) {
+    return "Password must not contain your username";
+  }
+
+  if (emailLocalPart && emailLocalPart.length >= 3 && lowerPassword.includes(emailLocalPart)) {
+    return "Password must not contain your email address";
+  }
+
+  return null;
+}
+
 export default function SignUp() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
@@ -42,8 +86,12 @@ export default function SignUp() {
     }
     if (!form.password) {
       newErrors.password = "Password is required";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else {
+      const strengthError = getPasswordStrengthError(form.password, {
+        username: form.username,
+        email: form.email,
+      });
+      if (strengthError) newErrors.password = strengthError;
     }
     if (!form.confirmPassword) {
       newErrors.confirmPassword = "Please re-enter your password";
@@ -193,8 +241,12 @@ export default function SignUp() {
                     {showPassword1 ? showHideToggle[0].icon : showHideToggle[1].icon}
                   </button>
                 </div>
-                {errors.password && (
+                {errors.password ? (
                   <p className="text-sm text-danger mt-1">{errors.password}</p>
+                ) : (
+                  <p className="text-sm text-gray-500 mt-1">
+                    At least 8 characters, with 3 of: lowercase, uppercase, numbers, symbols.
+                  </p>
                 )}
               </div>
 

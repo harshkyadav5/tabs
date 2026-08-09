@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import ColorInput from "../components/ColorInput";
 import { icons } from "../components/icons";
+import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { getSavedColors, createSavedColor } from "../services/colorService";
 
 export default function ColorPickerPage() {
+  const { user } = useAuth();
   const [color, setColor] = useState("#6d28d9");
   const [history, setHistory] = useState([color]);
   const [isColorInputOpen, setIsColorInputOpen] = useState(false);
@@ -17,11 +20,32 @@ export default function ColorPickerPage() {
     return `rgb(${r}, ${g}, ${b})`;
   };
 
+  useEffect(() => {
+    if (!user) return;
+    getSavedColors()
+      .then((data) => {
+        const saved = (data || []).map((c) => c.hex_code);
+        if (saved.length > 0) setHistory((prev) => [...new Set([...saved, ...prev])].slice(0, 8));
+      })
+      .catch((err) => showToast(err.message, "error"));
+  }, [user]);
+
   const handleColorChange = (newColor) => {
     setColor(newColor);
     setHistory((prev) =>
       prev.includes(newColor) ? prev : [newColor, ...prev].slice(0, 8)
     );
+  };
+
+  const handleAddColor = async (newColor) => {
+    handleColorChange(newColor);
+    if (!user) return;
+
+    try {
+      await createSavedColor({ hex_code: newColor, rgb_code: hexToRgb(newColor) });
+    } catch (err) {
+      showToast(err.message, "error");
+    }
   };
 
   const handleCopy = (text) => {
@@ -101,7 +125,7 @@ export default function ColorPickerPage() {
             <div className="flex gap-3 mt-2 text-base">
                 <button
                   onClick={() => {
-                      handleColorChange(color);
+                      handleAddColor(color);
                       setIsColorInputOpen(false);
                   }}
                   className="px-5 py-2 rounded-full bg-slate-200 hover:bg-slate-300/90 text-gray-700 transition-all duration-200 font-medium border border-slate-300/40 active:scale-95"

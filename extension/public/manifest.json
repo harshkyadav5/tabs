@@ -16,17 +16,11 @@
     "48": "icons/tabs-logo.png",
     "128": "icons/tabs-logo.png"
   },
-  "permissions": ["tabs", "storage"],
+  "permissions": ["tabs", "storage", "scripting"],
+  "host_permissions": ["http://localhost/*"],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["http://localhost/*"],
-      "js": ["contentScript.js"],
-      "run_at": "document_idle"
-    }
-  ],
   "externally_connectable": {
     "matches": ["http://localhost/*"]
   }

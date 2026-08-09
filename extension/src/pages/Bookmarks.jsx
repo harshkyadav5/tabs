@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { icons } from "../components/icons";
 import Navbar from "../components/Navbar";
 import Dropdown from "../components/Dropdown";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { createBookmark, getBookmarkFolders } from "../services/bookmarkService";
 
 export default function Bookmarks() {
+  const { user } = useAuth();
+  const { showToast } = useToast();
+
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [favicon, setFavicon] = useState("");
@@ -11,12 +17,8 @@ export default function Bookmarks() {
   const [folder, setFolder] = useState(null);
   const [tagsInput, setTagsInput] = useState("");
   const [tags, setTags] = useState([]);
-
-  const folders = [
-    { value: "1", label: "Work" },
-    { value: "2", label: "Personal" },
-    { value: "3", label: "Read Later" },
-  ];
+  const [folders, setFolders] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (chrome?.tabs) {
@@ -33,6 +35,15 @@ export default function Bookmarks() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!user) return;
+    getBookmarkFolders()
+      .then((data) =>
+        setFolders((data || []).map((f) => ({ value: String(f.id), label: f.name })))
+      )
+      .catch((err) => showToast(err.message, "error"));
+  }, [user]);
+
   const handleAddTag = (e) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
@@ -47,6 +58,45 @@ export default function Bookmarks() {
   const handleRemoveTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
+
+  const handleSaveBookmark = async () => {
+    if (!url.trim()) {
+      showToast("URL is required", "error");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await createBookmark({
+        url: url.trim(),
+        title: title.trim() || null,
+        description: description.trim() || null,
+        folder_id: folder ? Number(folder.value) : null,
+        tags,
+      });
+      showToast("Bookmark saved", "success");
+      setDescription("");
+      setTags([]);
+      setFolder(null);
+    } catch (err) {
+      showToast(err.message, "error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="bg-slate-100 relative w-[600px] p-5 overflow-hidden font-montserrat">
+        <div className="z-10 p-8 rounded-2xl bg-white shadow-lg h-full">
+          <Navbar />
+          <p className="text-slate-600 text-base text-center py-10">
+            Sign in on the Tabs website to save bookmarks.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-slate-100 relative w-[600px] p-5 overflow-hidden font-montserrat">
@@ -146,8 +196,12 @@ export default function Bookmarks() {
         <div className="flex justify-end">
           <div className="relative group w-fit rounded-3xl">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-indigo-500 via-blue-400 to-indigo-300 blur-md opacity-0 group-hover:opacity-60 transition-opacity duration-300 z-0 pointer-events-none" />
-            <button className="relative z-10 flex items-center justify-center gap-2 px-4 py-2 bg-indigo-400 text-indigo-950 hover:text-indigo-200 hover:bg-indigo-500 font-medium text-base tracking-wide rounded-3xl shadow-md border border-indigo-500/50 backdrop-blur-sm transition-all duration-200">
-              Save Bookmark
+            <button
+              onClick={handleSaveBookmark}
+              disabled={submitting}
+              className="relative z-10 flex items-center justify-center gap-2 px-4 py-2 bg-indigo-400 text-indigo-950 hover:text-indigo-200 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed font-medium text-base tracking-wide rounded-3xl shadow-md border border-indigo-500/50 backdrop-blur-sm transition-all duration-200"
+            >
+              {submitting ? "Saving..." : "Save Bookmark"}
             </button>
           </div>
         </div>

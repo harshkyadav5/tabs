@@ -1,26 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { icons } from "../components/icons";
 import Navbar from "../components/Navbar";
 import Dropdown from "../components/Dropdown";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { createNote, getNoteFolders } from "../services/noteService";
 
 export default function Notes() {
+  const { user } = useAuth();
+  const { showToast } = useToast();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [tagsInput, setTagsInput] = useState("");
   const [tags, setTags] = useState([]);
+  const [folders, setFolders] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
 
-  const folders = [
-    { value: "1", label: "Work" },
-    { value: "2", label: "Personal" },
-    { value: "3", label: "dsfvdf" },
-    { value: "4", label: "Persdfvonal" },
-    { value: "5", label: "b" },
-    { value: "6", label: "hjmhmj" },
-    { value: "7", label: "hjmgh" },
-    { value: "8", label: "rtgvrve" },
-    { value: "9", label: "tytyr" },
-  ];
+  useEffect(() => {
+    if (!user) return;
+    getNoteFolders()
+      .then((data) =>
+        setFolders((data || []).map((f) => ({ value: String(f.id), label: f.name })))
+      )
+      .catch((err) => showToast(err.message, "error"));
+  }, [user]);
 
   const handleAddTag = (e) => {
     if (e.key === "Enter" || e.key === ",") {
@@ -36,6 +41,45 @@ export default function Notes() {
   const handleRemoveTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
+
+  const handleSaveNote = async () => {
+    if (!title.trim()) {
+      showToast("Title is required", "error");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await createNote({
+        title: title.trim(),
+        content: content.trim() || null,
+        folder_id: selectedFolder ? Number(selectedFolder.value) : null,
+        tags,
+      });
+      showToast("Note saved", "success");
+      setTitle("");
+      setContent("");
+      setTags([]);
+      setSelectedFolder(null);
+    } catch (err) {
+      showToast(err.message, "error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="bg-slate-100 relative w-[600px] p-5 overflow-hidden font-montserrat">
+        <div className="z-10 p-8 rounded-2xl bg-white shadow-lg h-full">
+          <Navbar />
+          <p className="text-slate-600 text-base text-center py-10">
+            Sign in on the Tabs website to create notes.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-slate-100 relative w-[600px] p-5 overflow-hidden font-montserrat">
@@ -117,15 +161,17 @@ export default function Notes() {
           </div>
         )}
 
-        {/* Submit (disabled for now) */}
+        {/* Submit */}
         <div className="flex justify-end">
           <div className="relative group w-fit rounded-3xl">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-yellow-400 via-orange-400 to-amber-500 blur-md opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-0 pointer-events-none" />
 
             <button
-              className="relative z-10 w-full cursor-not-allowed flex items-center justify-center gap-2 px-4 py-2 bg-amber-200 text-amber-950 hover:bg-amber-300 font-medium text-base tracking-wide rounded-3xl shadow-md border border-yellow-300/50 backdrop-blur-sm transition-all duration-200"
+              onClick={handleSaveNote}
+              disabled={submitting}
+              className="relative z-10 w-full flex items-center justify-center gap-2 px-4 py-2 bg-amber-200 text-amber-950 hover:bg-amber-300 disabled:opacity-60 disabled:cursor-not-allowed font-medium text-base tracking-wide rounded-3xl shadow-md border border-yellow-300/50 backdrop-blur-sm transition-all duration-200"
             >
-              Save
+              {submitting ? "Saving..." : "Save"}
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { icons } from "./icons";
 
-export default function ClipboardItem({ item, onCopy, onEditDescription }) {
+export default function ClipboardItem({ item, onCopy, onEditDescription, onDelete }) {
   const [editingItemId, setEditingItemId] = useState(null);
   const [editedDescription, setEditedDescription] = useState(item.description);
   const [showMenuId, setShowMenuId] = useState(null);
@@ -47,7 +47,10 @@ export default function ClipboardItem({ item, onCopy, onEditDescription }) {
                 Edit
               </button>
               <button
-                onClick={() => console.log("Delete", item.id)}
+                onClick={() => {
+                  setShowMenuId(null);
+                  onDelete(item.id);
+                }}
                 className="block px-4 py-2 text-sm text-red-500 hover:bg-red-50 w-full text-left"
               >
                 Delete

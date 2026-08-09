@@ -1,46 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import ClipboardItem from "../components/ClipboardItem";
+import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-
-const dummyClipboard = [
-  { id: 1, description: "Email Template", content: "Hello, thank you for reaching out..." },
-  { id: 2, description: "Link to Docs", content: "https://docs.example.com" },
-  { id: 3, description: "", content: "This one has a lot more text so the height will be bigger.\nLine 2\nLine 3\nLine 4" },
-  { id: 4, description: "Short note", content: "Tiny" },
-  { id: 5, description: "Big content", content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent mollis felis sit amet ex sollicitudin, eget fringilla turpis hendrerit.\nAnother line.\nMore lines.\nEven more lines.\nThis will be tall. oij fiuuhufh uuc hreh iev eh erhyeh yhvyh eryh yhvyh verhy hrrehcyh fh yi" },
-];
+import axiosInstance from "../utils/axiosInstance";
 
 export default function Clipboard() {
-  const [items, setItems] = useState(dummyClipboard);
+  const { user } = useAuth();
   const { showToast } = useToast();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+    axiosInstance
+      .get("/clipboard", { params: { is_deleted: false, is_archived: false } })
+      .then((res) => setItems(res.data || []))
+      .catch(() => showToast("Failed to load clipboard", "error"))
+      .finally(() => setLoading(false));
+  }, [user]);
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
     showToast("Copied to Clipboard!", "success");
   };
 
-  const handleEditDescription = (id, newDescription) => {
+  const handleEditDescription = async (id, newDescription) => {
+    const original = items.find((item) => item.id === id);
+    if (!original || newDescription === original.description) return;
+
     setItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, description: newDescription } : item))
     );
+
+    try {
+      await axiosInstance.put(`/clipboard/${id}`, {
+        description: newDescription,
+        content: original.content,
+        is_pinned: original.is_pinned,
+      });
+    } catch {
+      showToast("Failed to save", "error");
+    }
   };
+
+  const handleDelete = async (id) => {
+    try {
+      await axiosInstance.delete(`/clipboard/${id}`);
+      setItems((prev) => prev.filter((item) => item.id !== id));
+      showToast("Item deleted", "success");
+    } catch {
+      showToast("Failed to delete", "error");
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="bg-slate-100 relative w-[600px] p-5 overflow-hidden font-montserrat">
+        <div className="p-8 rounded-2xl bg-white shadow-lg h-full">
+          <Navbar />
+          <p className="text-slate-600 text-base text-center py-10">
+            Sign in on the Tabs website to view your clipboard.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-slate-100 relative w-[600px] p-5 overflow-hidden font-montserrat">
       <div className="p-8 rounded-2xl bg-white shadow-lg h-full">
         <Navbar />
 
-        <div className="mt-4 columns-3 gap-3 space-y-3">
-          {items.map((item) => (
-            <ClipboardItem
-              key={item.id}
-              item={item}
-              onCopy={handleCopy}
-              onEditDescription={handleEditDescription}
-            />
-          ))}
-        </div>
+        {!loading && items.length === 0 ? (
+          <p className="text-slate-500 text-base text-center py-10">No clipboard items yet.</p>
+        ) : (
+          <div className="mt-4 columns-3 gap-3 space-y-3">
+            {items.map((item) => (
+              <ClipboardItem
+                key={item.id}
+                item={item}
+                onCopy={handleCopy}
+                onEditDescription={handleEditDescription}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -26,3 +26,14 @@ export const notifyExtensionLogout = () => {
     // Extension not installed or unreachable — ignore, the web app doesn't depend on it.
   }
 };
+
+export const listenForExtensionAuthSync = (onSync) => {
+  const handleMessage = (event) => {
+    if (event.source !== window || event.origin !== window.location.origin) return;
+    if (event.data?.source !== "tabs-extension" || event.data?.type !== "AUTH_SYNC") return;
+    onSync(event.data);
+  };
+
+  window.addEventListener("message", handleMessage);
+  return () => window.removeEventListener("message", handleMessage);
+};

@@ -82,7 +82,7 @@ export default function Profile() {
 					) : (
 						<>
 							<img
-								src="/profile-pics/profile-picture.jpg"
+								src="/profile-pics/profile-picture-01.jpg"
 								alt="Profile"
 								className="w-[25%] h-auto sm:w-28 sm:h-28 md:w-64 md:h-64 lg:w-74 lg:h-74 rounded-full object-cover shadow-md ring-2 ring-gray-200 transition-all duration-200"
 							/>

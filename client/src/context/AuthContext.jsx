@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from "react";
-import { notifyExtensionLogin, notifyExtensionLogout } from "../utils/extensionBridge";
+import { createContext, useContext, useEffect, useState } from "react";
+import { notifyExtensionLogin, notifyExtensionLogout, listenForExtensionAuthSync } from "../utils/extensionBridge";
 
 const AuthContext = createContext();
 
@@ -28,6 +28,22 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     notifyExtensionLogout();
   };
+
+  useEffect(() => {
+    return listenForExtensionAuthSync(({ user: syncedUser, token: syncedToken }) => {
+      if (syncedUser === null && syncedToken === null) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        setUser(null);
+        setToken(null);
+      } else if (syncedUser && syncedToken) {
+        localStorage.setItem("user", JSON.stringify(syncedUser));
+        localStorage.setItem("token", syncedToken);
+        setUser(syncedUser);
+        setToken(syncedToken);
+      }
+    });
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>

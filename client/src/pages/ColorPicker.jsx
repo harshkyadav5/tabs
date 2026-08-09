@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ColorCard from "../components/ColorCard";
 import Modal from "../components/ui/Modal";
 import Input from "../components/ui/Input";
@@ -13,6 +13,7 @@ import {
   deleteSavedColor,
 } from "../services/colorService";
 import { archiveItem } from "../services/archiveService";
+import { listenForExtensionDataSync } from "../utils/extensionBridge";
 import { PlusIcon } from "../components/icons";
 
 const addColorIcon = <PlusIcon />;
@@ -84,21 +85,24 @@ export default function ColorPicker() {
     );
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (isLoggedIn) {
-        try {
-          const data = await getSavedColors({ is_archived: false });
-          setSavedColors(data || []);
-        } catch (err) {
-          showToast(err.message || "Failed to load saved colors", "error");
-        }
-      } else {
-        setSavedColors(readLocal().filter((c) => !c.is_archived));
+  const fetchData = useCallback(async () => {
+    if (isLoggedIn) {
+      try {
+        const data = await getSavedColors({ is_archived: false });
+        setSavedColors(data || []);
+      } catch (err) {
+        showToast(err.message || "Failed to load saved colors", "error");
       }
-    };
-    fetchData();
+    } else {
+      setSavedColors(readLocal().filter((c) => !c.is_archived));
+    }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => listenForExtensionDataSync("colors", fetchData), [fetchData]);
 
   const openAddModal = () => {
     setForm(EMPTY_FORM);

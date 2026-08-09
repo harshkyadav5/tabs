@@ -5,6 +5,7 @@ import Dropdown from "../components/Dropdown";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { createNote, getNoteFolders } from "../services/noteService";
+import { notifyDataChange } from "../utils/notifyDataChange";
 
 export default function Notes() {
   const { user } = useAuth();
@@ -56,6 +57,7 @@ export default function Notes() {
         folder_id: selectedFolder ? Number(selectedFolder.value) : null,
         tags,
       });
+      notifyDataChange("notes");
       showToast("Note saved", "success");
       setTitle("");
       setContent("");

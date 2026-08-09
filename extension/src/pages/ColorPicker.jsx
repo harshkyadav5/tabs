@@ -5,6 +5,7 @@ import { icons } from "../components/icons";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { getSavedColors, createSavedColor } from "../services/colorService";
+import { notifyDataChange } from "../utils/notifyDataChange";
 
 export default function ColorPickerPage() {
   const { user } = useAuth();
@@ -43,6 +44,7 @@ export default function ColorPickerPage() {
 
     try {
       await createSavedColor({ hex_code: newColor, rgb_code: hexToRgb(newColor) });
+      notifyDataChange("colors");
     } catch (err) {
       showToast(err.message, "error");
     }

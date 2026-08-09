@@ -37,3 +37,15 @@ export const listenForExtensionAuthSync = (onSync) => {
   window.addEventListener("message", handleMessage);
   return () => window.removeEventListener("message", handleMessage);
 };
+
+export const listenForExtensionDataSync = (entity, onSync) => {
+  const handleMessage = (event) => {
+    if (event.source !== window || event.origin !== window.location.origin) return;
+    if (event.data?.source !== "tabs-extension" || event.data?.type !== "DATA_SYNC") return;
+    if (event.data.entity !== entity) return;
+    onSync();
+  };
+
+  window.addEventListener("message", handleMessage);
+  return () => window.removeEventListener("message", handleMessage);
+};

@@ -4,6 +4,7 @@ import ClipboardItem from "../components/ClipboardItem";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import axiosInstance from "../utils/axiosInstance";
+import { notifyDataChange } from "../utils/notifyDataChange";
 
 export default function Clipboard() {
   const { user } = useAuth();
@@ -42,6 +43,7 @@ export default function Clipboard() {
         content: original.content,
         is_pinned: original.is_pinned,
       });
+      notifyDataChange("clipboard");
     } catch {
       showToast("Failed to save", "error");
     }
@@ -51,6 +53,7 @@ export default function Clipboard() {
     try {
       await axiosInstance.delete(`/clipboard/${id}`);
       setItems((prev) => prev.filter((item) => item.id !== id));
+      notifyDataChange("clipboard");
       showToast("Item deleted", "success");
     } catch {
       showToast("Failed to delete", "error");

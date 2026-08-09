@@ -5,6 +5,7 @@ import Dropdown from "../components/Dropdown";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { createBookmark, getBookmarkFolders } from "../services/bookmarkService";
+import { notifyDataChange } from "../utils/notifyDataChange";
 
 export default function Bookmarks() {
   const { user } = useAuth();
@@ -74,6 +75,7 @@ export default function Bookmarks() {
         folder_id: folder ? Number(folder.value) : null,
         tags,
       });
+      notifyDataChange("bookmarks");
       showToast("Bookmark saved", "success");
       setDescription("");
       setTags([]);

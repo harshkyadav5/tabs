@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import FolderItem from "../components/FolderItem";
 import BookmarkList from "../components/BookmarkList";
 import Modal from "../components/ui/Modal";
@@ -18,6 +18,7 @@ import {
   createBookmarkFolder,
 } from "../services/bookmarkService";
 import { archiveItem } from "../services/archiveService";
+import { listenForExtensionDataSync } from "../utils/extensionBridge";
 import { AddBookmarkIcon, AddFolderIcon, FolderIcon, StarIcon } from "../components/icons";
 
 const addBookmarkIcon = <AddBookmarkIcon />;
@@ -85,29 +86,32 @@ export default function Bookmarks() {
     return () => el.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (isLoggedIn) {
-        try {
-          const [bookmarkData, folderData] = await Promise.all([
-            getBookmarks({ is_deleted: false, is_archived: false }),
-            getBookmarkFolders(),
-          ]);
-          setBookmarks(bookmarkData || []);
-          setFolders(folderData || []);
-        } catch (err) {
-          showToast(err.message || "Failed to load bookmarks", "error");
-        }
-      } else {
-        const localBookmarks = readLocal(LOCAL_BOOKMARKS_KEY).filter(
-          (b) => !b.is_deleted && !b.is_archived
-        );
-        setBookmarks(localBookmarks);
-        setFolders(readLocal(LOCAL_FOLDERS_KEY));
+  const fetchData = useCallback(async () => {
+    if (isLoggedIn) {
+      try {
+        const [bookmarkData, folderData] = await Promise.all([
+          getBookmarks({ is_deleted: false, is_archived: false }),
+          getBookmarkFolders(),
+        ]);
+        setBookmarks(bookmarkData || []);
+        setFolders(folderData || []);
+      } catch (err) {
+        showToast(err.message || "Failed to load bookmarks", "error");
       }
-    };
-    fetchData();
+    } else {
+      const localBookmarks = readLocal(LOCAL_BOOKMARKS_KEY).filter(
+        (b) => !b.is_deleted && !b.is_archived
+      );
+      setBookmarks(localBookmarks);
+      setFolders(readLocal(LOCAL_FOLDERS_KEY));
+    }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => listenForExtensionDataSync("bookmarks", fetchData), [fetchData]);
 
   const openAddModal = () => {
     setEditingBookmark(null);

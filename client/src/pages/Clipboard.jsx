@@ -7,6 +7,7 @@ import { archiveItem } from "../services/archiveService";
 import MenuModal from "../components/MenuModal";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { PinIcon, UnpinIcon, CopyIcon, EditIcon, ArchiveIcon, TrashIcon, EllipsisHorizontalIcon, PlusIcon } from "../components/icons";
+import { listenForExtensionDataSync } from "../utils/extensionBridge";
 
 const pinIcon = <PinIcon />;
 const unpinIcon = <UnpinIcon />;
@@ -96,6 +97,11 @@ export default function Clipboard() {
   useEffect(() => {
     fetchClipboardItems();
   }, [isLoggedIn]);
+
+  useEffect(
+    () => listenForExtensionDataSync("clipboard", fetchClipboardItems),
+    [isLoggedIn]
+  );
 
   useEffect(() => {
     distributeItems();

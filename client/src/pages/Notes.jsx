@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import FolderItem from "../components/FolderItem";
 import NotesList from "../components/NotesList";
 import NoteDetail from "../components/NoteDetail";
@@ -18,6 +18,7 @@ import {
   createNoteFolder,
 } from "../services/noteService";
 import { AddNoteIcon, AddFolderIcon, FolderIcon, StarIcon } from "../components/icons";
+import { listenForExtensionDataSync } from "../utils/extensionBridge";
 
 const addNoteIcon = <AddNoteIcon />;
 const addFolderIcon = <AddFolderIcon />;
@@ -93,30 +94,33 @@ export default function Notes() {
     return () => el.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (isLoggedIn) {
-        try {
-          const [noteData, folderData] = await Promise.all([
-            getNotes({ is_deleted: false, is_archived: false }),
-            getNoteFolders(),
-          ]);
-          setNotes(noteData || []);
-          setFolders(folderData || []);
-        } catch (err) {
-          showToast(err.message || "Failed to load notes", "error");
-        }
-      } else {
-        const localNotes = readLocal(LOCAL_NOTES_KEY).filter(
-          (n) => !n.is_deleted && !n.is_archived
-        );
-        setNotes(localNotes);
-        setFolders(readLocal(LOCAL_NOTE_FOLDERS_KEY));
+  const fetchData = useCallback(async () => {
+    if (isLoggedIn) {
+      try {
+        const [noteData, folderData] = await Promise.all([
+          getNotes({ is_deleted: false, is_archived: false }),
+          getNoteFolders(),
+        ]);
+        setNotes(noteData || []);
+        setFolders(folderData || []);
+      } catch (err) {
+        showToast(err.message || "Failed to load notes", "error");
       }
-    };
-    fetchData();
+    } else {
+      const localNotes = readLocal(LOCAL_NOTES_KEY).filter(
+        (n) => !n.is_deleted && !n.is_archived
+      );
+      setNotes(localNotes);
+      setFolders(readLocal(LOCAL_NOTE_FOLDERS_KEY));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => listenForExtensionDataSync("notes", fetchData), [fetchData]);
 
   const openAddNoteModal = () => {
     setNoteForm(EMPTY_FORM);

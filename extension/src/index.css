@@ -2,6 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+html, body, #root {
+  width: fit-content;
+  margin: 0;
+}
+
 @theme {
   --font-dm-sans: "DM Sans", sans-serif;
   --font-montserrat: "Montserrat", sans-serif;

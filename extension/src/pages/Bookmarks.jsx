@@ -112,11 +112,13 @@ export default function Bookmarks() {
           <label className="block text-sm font-medium mb-1 text-slate-700">URL</label>
           <div className="flex items-center gap-3 bg-white/70 border border-slate-300 rounded-xl px-3 py-2 focus-within:ring-1 focus-within:ring-indigo-500">
             {favicon && (
-              <img
-                src={favicon}
-                alt={`${title || url} logo`}
-                className="w-7 h-7 rounded-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] object-contain"
-              />
+              <div className="w-7 h-7 shrink-0 rounded-sm bg-white border border-slate-200 flex items-center justify-center overflow-hidden">
+                <img
+                  src={favicon}
+                  alt={`${title || url} logo`}
+                  className="w-5 h-5 object-contain"
+                />
+              </div>
             )}
             <input
               type="text"

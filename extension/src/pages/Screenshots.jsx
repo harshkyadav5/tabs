@@ -15,7 +15,7 @@ export default function ScreenshotPage() {
       setScreenshot(fakeScreenshotUrl);
       setHistory((prev) => [fakeScreenshotUrl, ...prev].slice(0, 8));
       setIsCaptureMenuOpen(false);
-    } catch (error) {
+    } catch {
       showToast("Failed to capture screenshot", "error");
     }
   };

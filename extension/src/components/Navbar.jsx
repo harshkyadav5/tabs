@@ -69,7 +69,7 @@ export default function Navbar() {
                   <button
                     onClick={() => {
                       setDropdownOpen(false);
-                      navigate("/profile");
+                      openInNewTab("http://localhost:5173/profile");
                     }}
                     className="w-full text-left px-4 py-2 text-sm rounded-lg hover:bg-gray-100"
                   >
